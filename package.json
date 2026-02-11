@@ -58,12 +58,22 @@
         "command": "mastra-trace-viewer.closeAllTraces",
         "title": "Mastra: Close All Trace Tabs",
         "icon": "$(close-all)"
+      },
+      {
+        "command": "mastraTraceViewer.openSettings",
+        "title": "Mastra: Open Settings",
+        "icon": "$(gear)"
       }
     ],
     "menus": {
       "view/title": [
         {
           "command": "mastraTraceViewer.refresh",
+          "when": "view == mastraTraceList",
+          "group": "navigation"
+        },
+        {
+          "command": "mastraTraceViewer.openSettings",
           "when": "view == mastraTraceList",
           "group": "navigation"
         }

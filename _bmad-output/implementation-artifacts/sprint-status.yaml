@@ -75,8 +75,8 @@ development_status:
   epic-4-retrospective: optional
 
   # Epic 5: Trace Search & Navigation
-  epic-5: backlog
-  5-1-client-side-search-implementation: backlog
-  5-2-search-results-highlighting: backlog
-  5-3-navigate-through-search-results: backlog
+  epic-5: in-progress
+  5-1-client-side-search-implementation: review
+  5-2-search-results-highlighting: review
+  5-3-navigate-through-search-results: review
   epic-5-retrospective: optional

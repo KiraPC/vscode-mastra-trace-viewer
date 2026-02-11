@@ -12,6 +12,7 @@ import {
   focusedSpanId,
   selectedSpanId,
   scrollPosition,
+  viewMode,
   setLoading,
   clearLoading,
   setError,
@@ -27,6 +28,8 @@ import {
   setScrollPosition,
   getState,
   restoreState,
+  toggleViewMode,
+  setViewMode,
 } from './uiStore';
 
 describe('uiStore', () => {
@@ -357,6 +360,34 @@ describe('uiStore', () => {
       expect(get(expandedSpans).has('new-span')).toBe(true);
       expect(get(selectedSpanId)).toBe('new-span');
       expect(get(scrollPosition)).toBe(100);
+    });
+  });
+
+  describe('viewMode', () => {
+    beforeEach(() => {
+      setViewMode('tree');
+    });
+
+    it('should default to tree mode', () => {
+      expect(get(viewMode)).toBe('tree');
+    });
+
+    it('should toggle from tree to json', () => {
+      toggleViewMode();
+      expect(get(viewMode)).toBe('json');
+    });
+
+    it('should toggle from json to tree', () => {
+      setViewMode('json');
+      toggleViewMode();
+      expect(get(viewMode)).toBe('tree');
+    });
+
+    it('should set mode explicitly', () => {
+      setViewMode('json');
+      expect(get(viewMode)).toBe('json');
+      setViewMode('tree');
+      expect(get(viewMode)).toBe('tree');
     });
   });
 });

@@ -3,13 +3,16 @@
    * App.svelte - Root component for trace viewer webview
    * Handles message communication with extension and state management
    */
-  import { onMount } from 'svelte';
+  import { onMount, tick } from 'svelte';
+  import { get } from 'svelte/store';
   import { traceStore, setTrace, clearTrace } from './stores/traceStore';
   import { 
     loadingStore, 
     loadingMessageStore, 
     errorStore, 
     selectedSpanId,
+    expandedSpans,
+    viewMode,
     setLoading, 
     setError, 
     clearUIState,
@@ -21,12 +24,15 @@
   import { onMessage, sendMessage } from './utils/messageHandler';
   import { initStateHandler } from './utils/stateHandler';
   import { buildTree } from '../utils/spanTreeBuilder';
+  import { flattenVisibleNodes } from './utils/flattenTree';
   import type { SpanTreeNode } from '../models/tree.types';
   import LoadingSpinner from './components/LoadingSpinner.svelte';
   import ErrorDisplay from './components/ErrorDisplay.svelte';
   import SpanTree from './components/SpanTree.svelte';
   import TraceToolbar from './components/TraceToolbar.svelte';
+  import TraceSearch from './components/TraceSearch.svelte';
   import SpanDetails from './components/SpanDetails.svelte';
+  import JsonViewer from './components/JsonViewer.svelte';
   
   // Build tree from trace spans (cached via $derived)
   const spanTree = $derived<SpanTreeNode[]>(
@@ -76,6 +82,45 @@
       }
     }
     return null;
+  }
+  
+  // Item height for virtual scrolling (must match SpanTree)
+  const ITEM_HEIGHT = 32;
+  
+  /**
+   * Navigate to a span: expand path, scroll into view, and select
+   */
+  async function handleNavigateToSpan(spanId: string): Promise<void> {
+    // 1. Find path to the span and expand all ancestors
+    const path = findPathToSpan(spanTree, spanId);
+    if (path && path.length > 0) {
+      const currentExpanded = get(expandedSpans);
+      const newExpanded = new Set([...currentExpanded, ...path]);
+      expandedSpans.set(newExpanded);
+    }
+    
+    // 2. Wait for DOM to update after expansion
+    await tick();
+    
+    // 3. Calculate scroll position based on flattened list
+    const currentExpanded = get(expandedSpans);
+    const flatItems = flattenVisibleNodes(spanTree, currentExpanded);
+    const index = flatItems.findIndex(item => item.node.spanId === spanId);
+    
+    if (index >= 0) {
+      // Find the scroll container
+      const scrollContainer = document.querySelector('.span-tree [style*="overflow"]') as HTMLElement;
+      if (scrollContainer) {
+        const scrollTop = index * ITEM_HEIGHT;
+        // Center the item in view if possible
+        const containerHeight = scrollContainer.clientHeight;
+        const centeredScroll = Math.max(0, scrollTop - containerHeight / 2 + ITEM_HEIGHT / 2);
+        scrollContainer.scrollTop = centeredScroll;
+      }
+    }
+    
+    // 4. Select the span
+    setSelectedSpan(spanId);
   }
   
   // Threshold for showing large trace warning
@@ -154,12 +199,23 @@
   {:else if $traceStore}
     <div class="trace-layout">
       <div class="tree-panel">
+        {#if $viewMode === 'tree'}
+          <TraceSearch spans={$traceStore.spans || []} onNavigate={handleNavigateToSpan} />
+        {/if}
         <TraceToolbar tree={spanTree} />
-        <SpanTree tree={spanTree} />
+        {#if $viewMode === 'tree'}
+          <SpanTree tree={spanTree} />
+        {:else}
+          <div class="json-panel">
+            <JsonViewer data={$traceStore} label="Trace" maxLength={10000} />
+          </div>
+        {/if}
       </div>
-      <div class="details-panel">
-        <SpanDetails span={selectedSpan} />
-      </div>
+      {#if $viewMode === 'tree'}
+        <div class="details-panel">
+          <SpanDetails span={selectedSpan} />
+        </div>
+      {/if}
     </div>
   {:else}
     <div class="empty-state">
@@ -170,8 +226,12 @@
 
 <style>
   .app {
-    height: 100%;
-    min-height: 100vh;
+    height: 100vh;
+    width: 100%;
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    overflow: hidden;
     background-color: var(--vscode-editor-background, #1e1e1e);
     color: var(--vscode-editor-foreground, #cccccc);
     font-family: var(--vscode-font-family, -apple-system, BlinkMacSystemFont, sans-serif);
@@ -180,7 +240,8 @@
 
   .trace-layout {
     display: flex;
-    height: 100vh;
+    height: 100%;
+    width: 100%;
     overflow: hidden;
   }
 
@@ -190,12 +251,21 @@
     flex-direction: column;
     min-width: 300px;
     overflow: hidden;
+    padding: 8px 12px 16px 12px;
   }
 
   .details-panel {
     width: 400px;
     flex-shrink: 0;
     overflow: hidden;
+    padding-bottom: 16px;
+  }
+
+  .json-panel {
+    flex: 1;
+    overflow: auto;
+    padding: 8px 8px 16px 8px;
+    background-color: var(--vscode-editor-background, #1e1e1e);
   }
 
   .empty-state {
@@ -203,7 +273,7 @@
     align-items: center;
     justify-content: center;
     height: 100%;
-    min-height: 200px;
+    width: 100%;
     color: var(--vscode-descriptionForeground, #8b8b8b);
   }
 </style>

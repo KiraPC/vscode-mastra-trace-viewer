@@ -285,11 +285,7 @@ export class TraceViewerPanel {
   <title>Trace: ${this._traceId}</title>
 </head>
 <body>
-  <div id="app">
-    <div class="loading">
-      <p>Loading trace...</p>
-    </div>
-  </div>
+  <div id="app"></div>
   <script nonce="${nonce}" src="${scriptUri}"></script>
 </body>
 </html>`;

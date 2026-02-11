@@ -7,6 +7,7 @@
   import type { SpanTreeNode } from '../../models/tree.types';
   import { formatDuration, getSpanTypeIcon, getSpanTypeColor } from '../../utils/spanTreeBuilder';
   import { expandedSpans, toggleExpand, selectedSpanId, setSelectedSpan } from '../stores/uiStore';
+  import { results, currentIndex } from '../stores/searchStore';
   import SpanNode from './SpanNode.svelte';
   
   interface Props {
@@ -60,6 +61,47 @@
   // Whether to show children (never in virtual mode - handled by virtual list)
   const showChildren = $derived(!virtualMode && hasChildren && isExpanded);
   
+  // Check if this span matches the current search
+  const isMatch = $derived($results.includes(node.spanId));
+  
+  // Check if this is the currently focused search result
+  const isCurrentMatch = $derived(
+    isMatch && $currentIndex >= 0 && $results[$currentIndex] === node.spanId
+  );
+  
+  /**
+   * Count hidden matches in collapsed children
+   */
+  function countHiddenMatches(
+    children: SpanTreeNode[],
+    searchResults: string[],
+    expanded: Set<string>
+  ): number {
+    if (children.length === 0) return 0;
+    
+    let count = 0;
+    function traverse(nodes: SpanTreeNode[]): void {
+      for (const n of nodes) {
+        if (searchResults.includes(n.spanId)) count++;
+        // Only traverse children if this node is NOT expanded
+        if (n.children.length > 0 && !expanded.has(n.spanId)) {
+          traverse(n.children);
+        } else if (n.children.length > 0 && expanded.has(n.spanId)) {
+          // If expanded, still count but we need to check if children are collapsed
+          traverse(n.children);
+        }
+      }
+    }
+    traverse(children);
+    return count;
+  }
+  
+  // Calculate hidden match count when this node is collapsed
+  const hiddenMatchCount = $derived(
+    !isExpanded && hasChildren 
+      ? countHiddenMatches(node.children, $results, $expandedSpans)
+      : 0
+  );
 
   // Check if this node is selected
   let isSelected = $derived($selectedSpanId === node.spanId);
@@ -114,6 +156,8 @@
   <div 
     class="span-row {statusClass}"
     class:selected={isSelected}
+    class:search-match={isMatch}
+    class:current-match={isCurrentMatch}
     style="border-left-color: {spanColor};"
     role="treeitem"
     tabindex={0}
@@ -139,6 +183,17 @@
     <span class="duration">{duration}</span>
     {#if node.status === 'error'}
       <span class="error-indicator" title="Error">⚠</span>
+    {/if}
+    {#if hiddenMatchCount > 0}
+      <button 
+        type="button"
+        class="match-badge"
+        onclick={handleChevronClick}
+        title="{hiddenMatchCount} match{hiddenMatchCount > 1 ? 'es' : ''} in collapsed children"
+        aria-label="{hiddenMatchCount} hidden search matches, click to expand"
+      >
+        {hiddenMatchCount}
+      </button>
     {/if}
   </div>
   
@@ -183,6 +238,32 @@
 
   .span-row.selected:hover {
     background-color: var(--vscode-list-activeSelectionBackground, #094771);
+  }
+
+  /* Search result highlighting */
+  .span-row.search-match {
+    background-color: var(--vscode-editor-findMatchBackground, rgba(234, 92, 0, 0.33));
+  }
+
+  .span-row.search-match:hover {
+    background-color: var(--vscode-editor-findMatchBackground, rgba(234, 92, 0, 0.45));
+  }
+
+  .span-row.current-match {
+    background-color: var(--vscode-editor-findMatchHighlightBackground, rgba(255, 140, 0, 0.5));
+    outline: 1px solid var(--vscode-editor-findMatchHighlightBorder, #ffb700);
+    outline-offset: -1px;
+  }
+
+  .span-row.current-match:hover {
+    background-color: var(--vscode-editor-findMatchHighlightBackground, rgba(255, 140, 0, 0.6));
+  }
+
+  /* Selection takes precedence over search highlight */
+  .span-row.selected.search-match,
+  .span-row.selected.current-match {
+    background-color: var(--vscode-list-activeSelectionBackground, #094771);
+    outline: none;
   }
 
   .span-row.error {
@@ -286,5 +367,33 @@
   .children {
     border-left: 1px solid var(--vscode-editorIndentGuide-background, #404040);
     margin-left: 8px;
+  }
+
+  .match-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 18px;
+    height: 18px;
+    padding: 0 5px;
+    border-radius: 9px;
+    font-size: 11px;
+    font-weight: 600;
+    background-color: var(--vscode-badge-background, #4d4d4d);
+    color: var(--vscode-badge-foreground, #ffffff);
+    border: none;
+    cursor: pointer;
+    flex-shrink: 0;
+    margin-left: 4px;
+    transition: filter 0.1s;
+  }
+
+  .match-badge:hover {
+    filter: brightness(1.2);
+  }
+
+  .match-badge:focus {
+    outline: 1px solid var(--vscode-focusBorder, #007acc);
+    outline-offset: 1px;
   }
 </style>

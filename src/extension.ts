@@ -154,6 +154,18 @@ export async function activate(context: vscode.ExtensionContext) {
 	);
 	context.subscriptions.push(closeAllTracesCommand);
 
+	// Register open settings command
+	const openSettingsCommand = vscode.commands.registerCommand(
+		'mastraTraceViewer.openSettings',
+		() => {
+			vscode.commands.executeCommand(
+				'workbench.action.openSettings',
+				'mastraTraceViewer'
+			);
+		}
+	);
+	context.subscriptions.push(openSettingsCommand);
+
 	// Register open JSON command (click on item)
 	const openJsonCommand = vscode.commands.registerCommand(
 		'mastraTraceViewer.openJson',

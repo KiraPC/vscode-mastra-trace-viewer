@@ -6,9 +6,29 @@ import { writable, get } from 'svelte/store';
 import type { WebviewState } from '../../models/webviewState.types';
 
 /**
- * Loading state - true while waiting for trace data
+ * View mode - 'tree' for hierarchical view, 'json' for raw JSON
  */
-export const loadingStore = writable<boolean>(true);
+export type ViewMode = 'tree' | 'json';
+export const viewMode = writable<ViewMode>('tree');
+
+/**
+ * Toggle view mode between tree and JSON
+ */
+export function toggleViewMode(): void {
+  viewMode.update(mode => mode === 'tree' ? 'json' : 'tree');
+}
+
+/**
+ * Set view mode explicitly
+ */
+export function setViewMode(mode: ViewMode): void {
+  viewMode.set(mode);
+}
+
+/**
+ * Loading state - false by default, set to true when loading starts
+ */
+export const loadingStore = writable<boolean>(false);
 
 /**
  * Loading message to display
