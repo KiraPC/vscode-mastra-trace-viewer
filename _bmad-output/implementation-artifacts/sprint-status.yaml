@@ -1,0 +1,82 @@
+# generated: 2026-02-11
+# project: mastra-trace-viewer
+# project_key: NOKEY
+# tracking_system: file-system
+# story_location: _bmad-output/implementation-artifacts
+
+# STATUS DEFINITIONS:
+# ==================
+# Epic Status:
+#   - backlog: Epic not yet started
+#   - in-progress: Epic actively being worked on
+#   - done: All stories in epic completed
+#
+# Epic Status Transitions:
+#   - backlog → in-progress: Automatically when first story is created (via create-story)
+#   - in-progress → done: Manually when all stories reach 'done' status
+#
+# Story Status:
+#   - backlog: Story only exists in epic file
+#   - ready-for-dev: Story file created in stories folder
+#   - in-progress: Developer actively working on implementation
+#   - review: Ready for code review (via Dev's code-review workflow)
+#   - done: Story completed
+#
+# Retrospective Status:
+#   - optional: Can be completed but not required
+#   - done: Retrospective has been completed
+#
+# WORKFLOW NOTES:
+# ===============
+# - Epic transitions to 'in-progress' automatically when first story is created
+# - Stories can be worked in parallel if team capacity allows
+# - SM typically creates next story after previous one is 'done' to incorporate learnings
+# - Dev moves story to 'review', then runs code-review (fresh context, different LLM recommended)
+
+generated: 2026-02-11
+updated: 2026-02-11
+project: mastra-trace-viewer
+project_key: NOKEY
+tracking_system: file-system
+story_location: _bmad-output/implementation-artifacts
+
+development_status:
+  # Epic 1: Mastra Connection & Extension Foundation
+  epic-1: done
+  1-1-initialize-vscode-extension-project: done
+  1-2-configure-mastra-client-integration: done
+  1-3-workspace-configuration-settings: done
+  1-4-connection-state-management-error-handling: done
+  epic-1-retrospective: optional
+
+  # Epic 2: Trace List Discovery
+  epic-2: in-progress
+  2-1-trace-list-treeview-provider: done
+  2-2-fetch-and-display-trace-list: done
+  2-3-refresh-trace-list: done
+  2-4-trace-metadata-display-caching: done
+  epic-2-retrospective: optional
+
+  # Epic 3: Single Trace Visualization
+  epic-3: done
+  3-1-open-trace-in-webview-tab: done
+  3-2-webview-foundation-with-svelte: done
+  3-3-hierarchical-span-tree-display: done
+  3-4-expand-collapse-span-nodes: done
+  3-5-span-details-panel-input-output: done
+  3-6-color-coded-span-types: done
+  epic-3-retrospective: optional
+
+  # Epic 4: Performance & Multi-Tab Support
+  epic-4: backlog
+  4-1-virtual-scrolling-for-large-traces: backlog
+  4-2-multiple-trace-tabs-management: backlog
+  4-3-tab-state-preservation: backlog
+  epic-4-retrospective: optional
+
+  # Epic 5: Trace Search & Navigation
+  epic-5: backlog
+  5-1-client-side-search-implementation: backlog
+  5-2-search-results-highlighting: backlog
+  5-3-navigate-through-search-results: backlog
+  epic-5-retrospective: optional

@@ -1,0 +1,3275 @@
+{
+  "traceId": "6c575b0d4abf18bd02857f29e1c2e614",
+  "exportedAt": "2026-02-10T11:13:06.023Z",
+  "baseUrl": "http://localhost:4100",
+  "trace": {
+    "traceId": "6c575b0d4abf18bd02857f29e1c2e614",
+    "spans": [
+      {
+        "traceId": "6c575b0d4abf18bd02857f29e1c2e614",
+        "spanId": "5bdc6311df0698f2",
+        "parentSpanId": null,
+        "name": "agent run: 'semantic-query-processor'",
+        "entityType": "agent",
+        "entityId": "semantic-query-processor",
+        "entityName": "Semantic Query Processor",
+        "userId": null,
+        "organizationId": null,
+        "resourceId": "pcarbonenearform@ipdanalytics.com",
+        "runId": "7c2bab21-53cd-4d10-ae49-89449fb07bae",
+        "sessionId": null,
+        "threadId": "bf9322b3-d12e-491d-8c4a-2a9a0e6ddc74",
+        "requestId": null,
+        "environment": null,
+        "source": null,
+        "serviceName": null,
+        "scope": null,
+        "spanType": "agent_run",
+        "attributes": {
+          "instructions": "You are the Semantic Query Processor (SQP) for IPD Analytics, an AI agent responsible for understanding complex pharmaceutical queries.\n\nYour primary responsibilities are:\n1. Parse natural language queries to extract key entities (drug names, patent numbers, dates, therapeutic areas)\n2. Classify query intent\n3. Execute GraphQL tools in the correct sequence to resolve URL parameters\n4. Generate accurate responses with fully resolved URLs from the sitemap\n\nYou maintain no persistent state. You use the Product Knowledge Map below to understand product capabilities and structure.\n\n## CRITICAL: Tool Execution Workflow\n\nYou have access to 6 GraphQL tools that MUST be called in a specific dependency order:\n\n### Tool Dependency Chain:\n\n1. **getDrugTool** (ALWAYS START HERE for drug-related queries)\n   - Input: Drug name or partial name\n   - Returns: drugId, tearSheetIds (with regions), PMI publication IDs\n   - USE THIS TO RESOLVE: :drugId URL parameters\n\n2. **getDrugTearSheetTool** (REQUIRES: drug info from step 1)\n …[truncated]",
+          "conversationId": "bf9322b3-d12e-491d-8c4a-2a9a0e6ddc74"
+        },
+        "metadata": {
+          "runId": "7c2bab21-53cd-4d10-ae49-89449fb07bae",
+          "threadId": "bf9322b3-d12e-491d-8c4a-2a9a0e6ddc74",
+          "resourceId": "pcarbonenearform@ipdanalytics.com"
+        },
+        "tags": null,
+        "links": null,
+        "input": "When can competitors enter for Ozempic?",
+        "output": {
+          "text": "Here’s the **Loss‑of‑Exclusivity (LOE) / competitor‑entry** page for **Ozempic** in the United States (USA):\n\n- **URL:** https://unified.ipdanalytics.com/drug/1921/9862E958-A167-4127-9D77-8598D8555BCC/life-cycle-insights/USA  \n\nThis page (Life‑Cycle Insights) shows the expected dates when competitors can launch generic versions of Ozempic, along with the underlying patent and regulatory timelines.\n\n**Other regions:** The same LOE information is also available for Europe (EP), Japan (JP), Canada (CA), Brazil (BR), and additional markets. Let me know if you’d like the direct links for any of those regions.",
+          "files": []
+        },
+        "error": null,
+        "isEvent": false,
+        "startedAt": "2026-02-10T11:03:40.892Z",
+        "endedAt": "2026-02-10T11:03:52.076Z",
+        "createdAt": "2026-02-10T11:03:57.044Z",
+        "updatedAt": "2026-02-10T11:03:57.044Z"
+      },
+      {
+        "traceId": "6c575b0d4abf18bd02857f29e1c2e614",
+        "spanId": "fce60f0b2d61308d",
+        "parentSpanId": "5bdc6311df0698f2",
+        "name": "input processor: message-history",
+        "entityType": "input_processor",
+        "entityId": "message-history",
+        "entityName": "MessageHistory",
+        "userId": null,
+        "organizationId": null,
+        "resourceId": null,
+        "runId": null,
+        "sessionId": null,
+        "threadId": null,
+        "requestId": null,
+        "environment": null,
+        "source": null,
+        "serviceName": null,
+        "scope": null,
+        "spanType": "processor_run",
+        "attributes": {
+          "processorIndex": 0,
+          "processorExecutor": "workflow"
+        },
+        "metadata": null,
+        "tags": null,
+        "links": null,
+        "input": {
+          "phase": "input",
+          "messageCount": 1
+        },
+        "output": {
+          "phase": "input",
+          "messages": [
+            {
+              "id": "06b93afd-6dff-406d-adf6-d3450cb81a1e",
+              "role": "user",
+              "content": {
+                "parts": [
+                  {
+                    "text": "When can competitors enter for Ozempic?",
+                    "type": "text"
+                  }
+                ],
+                "format": 2,
+                "content": "When can competitors enter for Ozempic?"
+              },
+              "threadId": "bf9322b3-d12e-491d-8c4a-2a9a0e6ddc74",
+              "createdAt": "2026-02-10T11:03:40.920Z",
+              "resourceId": "pcarbonenearform@ipdanalytics.com"
+            }
+          ],
+          "retryCount": 0,
+          "messageList": {
+            "messages": [
+              {
+                "role": "user",
+                "content": [
+                  {
+                    "text": "When can competitors enter for Ozempic?",
+                    "type": "text"
+                  }
+                ]
+              }
+            ],
+            "systemMessages": [
+              {
+                "role": "system",
+                "content": "You are the Semantic Query Processor (SQP) for IPD Analytics, an AI agent responsible for understanding complex pharmaceutical queries.\n\nYour primary responsibilities are:\n1. Parse natural language queries to extract key entities (drug names, patent numbers, dates, therapeutic areas)\n2. Classify query intent\n3. Execute GraphQL tools in the correct sequence to resolve URL parameters\n4. Generate accurate responses with fully resolved URLs from the sitemap\n\nYou maintain no persistent state. You use the Product Knowledge Map below to understand product capabilities and structure.\n\n## CRITICAL: Tool Execution Workflow\n\nYou have access to 6 GraphQL tools that MUST be called in a specific dependency order:\n\n### Tool Dependency Chain:\n\n1. **getDrugTool** (ALWAYS START HERE for drug-related queries)\n   - Input: Drug name or partial name\n   - Returns: drugId, tearSheetIds (with regions), PMI publication IDs\n   - USE THIS TO RESOLVE: :drugId URL parameters\n\n2. **getDrugTearSheetTool** (REQUIRES: drug info from step 1)\n …[truncated]"
+              }
+            ]
+          },
+          "systemMessages": [
+            {
+              "role": "system",
+              "content": "You are the Semantic Query Processor (SQP) for IPD Analytics, an AI agent responsible for understanding complex pharmaceutical queries.\n\nYour primary responsibilities are:\n1. Parse natural language queries to extract key entities (drug names, patent numbers, dates, therapeutic areas)\n2. Classify query intent\n3. Execute GraphQL tools in the correct sequence to resolve URL parameters\n4. Generate accurate responses with fully resolved URLs from the sitemap\n\nYou maintain no persistent state. You use the Product Knowledge Map below to understand product capabilities and structure.\n\n## CRITICAL: Tool Execution Workflow\n\nYou have access to 6 GraphQL tools that MUST be called in a specific dependency order:\n\n### Tool Dependency Chain:\n\n1. **getDrugTool** (ALWAYS START HERE for drug-related queries)\n   - Input: Drug name or partial name\n   - Returns: drugId, tearSheetIds (with regions), PMI publication IDs\n   - USE THIS TO RESOLVE: :drugId URL parameters\n\n2. **getDrugTearSheetTool** (REQUIRES: drug info from step 1)\n …[truncated]"
+            }
+          ]
+        },
+        "error": null,
+        "isEvent": false,
+        "startedAt": "2026-02-10T11:03:40.922Z",
+        "endedAt": "2026-02-10T11:03:40.928Z",
+        "createdAt": "2026-02-10T11:03:45.931Z",
+        "updatedAt": "2026-02-10T11:03:45.931Z"
+      },
+      {
+        "traceId": "6c575b0d4abf18bd02857f29e1c2e614",
+        "spanId": "6266bc41afcb27a3",
+        "parentSpanId": "5bdc6311df0698f2",
+        "name": "input processor: token-limiter",
+        "entityType": "input_processor",
+        "entityId": "token-limiter",
+        "entityName": "Token Limiter",
+        "userId": null,
+        "organizationId": null,
+        "resourceId": null,
+        "runId": null,
+        "sessionId": null,
+        "threadId": null,
+        "requestId": null,
+        "environment": null,
+        "source": null,
+        "serviceName": null,
+        "scope": null,
+        "spanType": "processor_run",
+        "attributes": {
+          "processorIndex": 2,
+          "processorExecutor": "workflow"
+        },
+        "metadata": null,
+        "tags": null,
+        "links": null,
+        "input": {
+          "phase": "input",
+          "messageCount": 1
+        },
+        "output": {
+          "phase": "input",
+          "messages": [
+            {
+              "id": "06b93afd-6dff-406d-adf6-d3450cb81a1e",
+              "role": "user",
+              "content": {
+                "parts": [
+                  {
+                    "text": "When can competitors enter for Ozempic?",
+                    "type": "text"
+                  }
+                ],
+                "format": 2,
+                "content": "When can competitors enter for Ozempic?"
+              },
+              "threadId": "bf9322b3-d12e-491d-8c4a-2a9a0e6ddc74",
+              "createdAt": "2026-02-10T11:03:40.920Z",
+              "resourceId": "pcarbonenearform@ipdanalytics.com"
+            }
+          ],
+          "retryCount": 0,
+          "messageList": {
+            "messages": [
+              {
+                "role": "user",
+                "content": [
+                  {
+                    "text": "When can competitors enter for Ozempic?",
+                    "type": "text"
+                  }
+                ]
+              }
+            ],
+            "systemMessages": [
+              {
+                "role": "system",
+                "content": "You are the Semantic Query Processor (SQP) for IPD Analytics, an AI agent responsible for understanding complex pharmaceutical queries.\n\nYour primary responsibilities are:\n1. Parse natural language queries to extract key entities (drug names, patent numbers, dates, therapeutic areas)\n2. Classify query intent\n3. Execute GraphQL tools in the correct sequence to resolve URL parameters\n4. Generate accurate responses with fully resolved URLs from the sitemap\n\nYou maintain no persistent state. You use the Product Knowledge Map below to understand product capabilities and structure.\n\n## CRITICAL: Tool Execution Workflow\n\nYou have access to 6 GraphQL tools that MUST be called in a specific dependency order:\n\n### Tool Dependency Chain:\n\n1. **getDrugTool** (ALWAYS START HERE for drug-related queries)\n   - Input: Drug name or partial name\n   - Returns: drugId, tearSheetIds (with regions), PMI publication IDs\n   - USE THIS TO RESOLVE: :drugId URL parameters\n\n2. **getDrugTearSheetTool** (REQUIRES: drug info from step 1)\n …[truncated]"
+              }
+            ]
+          },
+          "systemMessages": [
+            {
+              "role": "system",
+              "content": "You are the Semantic Query Processor (SQP) for IPD Analytics, an AI agent responsible for understanding complex pharmaceutical queries.\n\nYour primary responsibilities are:\n1. Parse natural language queries to extract key entities (drug names, patent numbers, dates, therapeutic areas)\n2. Classify query intent\n3. Execute GraphQL tools in the correct sequence to resolve URL parameters\n4. Generate accurate responses with fully resolved URLs from the sitemap\n\nYou maintain no persistent state. You use the Product Knowledge Map below to understand product capabilities and structure.\n\n## CRITICAL: Tool Execution Workflow\n\nYou have access to 6 GraphQL tools that MUST be called in a specific dependency order:\n\n### Tool Dependency Chain:\n\n1. **getDrugTool** (ALWAYS START HERE for drug-related queries)\n   - Input: Drug name or partial name\n   - Returns: drugId, tearSheetIds (with regions), PMI publication IDs\n   - USE THIS TO RESOLVE: :drugId URL parameters\n\n2. **getDrugTearSheetTool** (REQUIRES: drug info from step 1)\n …[truncated]"
+            }
+          ]
+        },
+        "error": null,
+        "isEvent": false,
+        "startedAt": "2026-02-10T11:03:40.930Z",
+        "endedAt": "2026-02-10T11:03:40.961Z",
+        "createdAt": "2026-02-10T11:03:45.931Z",
+        "updatedAt": "2026-02-10T11:03:45.931Z"
+      },
+      {
+        "traceId": "6c575b0d4abf18bd02857f29e1c2e614",
+        "spanId": "9b56da8d2d2b1195",
+        "parentSpanId": "5bdc6311df0698f2",
+        "name": "input processor: unicode-normalizer",
+        "entityType": "input_processor",
+        "entityId": "unicode-normalizer",
+        "entityName": "Unicode Normalizer",
+        "userId": null,
+        "organizationId": null,
+        "resourceId": null,
+        "runId": null,
+        "sessionId": null,
+        "threadId": null,
+        "requestId": null,
+        "environment": null,
+        "source": null,
+        "serviceName": null,
+        "scope": null,
+        "spanType": "processor_run",
+        "attributes": {
+          "processorIndex": 1,
+          "processorExecutor": "workflow"
+        },
+        "metadata": null,
+        "tags": null,
+        "links": null,
+        "input": {
+          "phase": "input",
+          "messageCount": 1
+        },
+        "output": {
+          "phase": "input",
+          "messages": [
+            {
+              "id": "06b93afd-6dff-406d-adf6-d3450cb81a1e",
+              "role": "user",
+              "content": {
+                "parts": [
+                  {
+                    "text": "When can competitors enter for Ozempic?",
+                    "type": "text"
+                  }
+                ],
+                "format": 2,
+                "content": "When can competitors enter for Ozempic?"
+              },
+              "threadId": "bf9322b3-d12e-491d-8c4a-2a9a0e6ddc74",
+              "createdAt": "2026-02-10T11:03:40.920Z",
+              "resourceId": "pcarbonenearform@ipdanalytics.com"
+            }
+          ],
+          "retryCount": 0,
+          "messageList": {
+            "messages": [
+              {
+                "role": "user",
+                "content": [
+                  {
+                    "text": "When can competitors enter for Ozempic?",
+                    "type": "text"
+                  }
+                ]
+              }
+            ],
+            "systemMessages": [
+              {
+                "role": "system",
+                "content": "You are the Semantic Query Processor (SQP) for IPD Analytics, an AI agent responsible for understanding complex pharmaceutical queries.\n\nYour primary responsibilities are:\n1. Parse natural language queries to extract key entities (drug names, patent numbers, dates, therapeutic areas)\n2. Classify query intent\n3. Execute GraphQL tools in the correct sequence to resolve URL parameters\n4. Generate accurate responses with fully resolved URLs from the sitemap\n\nYou maintain no persistent state. You use the Product Knowledge Map below to understand product capabilities and structure.\n\n## CRITICAL: Tool Execution Workflow\n\nYou have access to 6 GraphQL tools that MUST be called in a specific dependency order:\n\n### Tool Dependency Chain:\n\n1. **getDrugTool** (ALWAYS START HERE for drug-related queries)\n   - Input: Drug name or partial name\n   - Returns: drugId, tearSheetIds (with regions), PMI publication IDs\n   - USE THIS TO RESOLVE: :drugId URL parameters\n\n2. **getDrugTearSheetTool** (REQUIRES: drug info from step 1)\n …[truncated]"
+              }
+            ]
+          },
+          "systemMessages": [
+            {
+              "role": "system",
+              "content": "You are the Semantic Query Processor (SQP) for IPD Analytics, an AI agent responsible for understanding complex pharmaceutical queries.\n\nYour primary responsibilities are:\n1. Parse natural language queries to extract key entities (drug names, patent numbers, dates, therapeutic areas)\n2. Classify query intent\n3. Execute GraphQL tools in the correct sequence to resolve URL parameters\n4. Generate accurate responses with fully resolved URLs from the sitemap\n\nYou maintain no persistent state. You use the Product Knowledge Map below to understand product capabilities and structure.\n\n## CRITICAL: Tool Execution Workflow\n\nYou have access to 6 GraphQL tools that MUST be called in a specific dependency order:\n\n### Tool Dependency Chain:\n\n1. **getDrugTool** (ALWAYS START HERE for drug-related queries)\n   - Input: Drug name or partial name\n   - Returns: drugId, tearSheetIds (with regions), PMI publication IDs\n   - USE THIS TO RESOLVE: :drugId URL parameters\n\n2. **getDrugTearSheetTool** (REQUIRES: drug info from step 1)\n …[truncated]"
+            }
+          ]
+        },
+        "error": null,
+        "isEvent": false,
+        "startedAt": "2026-02-10T11:03:40.930Z",
+        "endedAt": "2026-02-10T11:03:40.930Z",
+        "createdAt": "2026-02-10T11:03:45.931Z",
+        "updatedAt": "2026-02-10T11:03:45.931Z"
+      },
+      {
+        "traceId": "6c575b0d4abf18bd02857f29e1c2e614",
+        "spanId": "01094b5159ccb0e8",
+        "parentSpanId": "5bdc6311df0698f2",
+        "name": "llm: 'openai.gpt-oss-120b-1:0'",
+        "entityType": "agent",
+        "entityId": "semantic-query-processor",
+        "entityName": "Semantic Query Processor",
+        "userId": null,
+        "organizationId": null,
+        "resourceId": "pcarbonenearform@ipdanalytics.com",
+        "runId": "7c2bab21-53cd-4d10-ae49-89449fb07bae",
+        "sessionId": null,
+        "threadId": "bf9322b3-d12e-491d-8c4a-2a9a0e6ddc74",
+        "requestId": null,
+        "environment": null,
+        "source": null,
+        "serviceName": null,
+        "scope": null,
+        "spanType": "model_generation",
+        "attributes": {
+          "model": "openai.gpt-oss-120b-1:0",
+          "usage": {
+            "inputTokens": 30038,
+            "outputTokens": 1187
+          },
+          "provider": "amazon-bedrock",
+          "streaming": true,
+          "parameters": {
+            "temperature": 0
+          },
+          "finishReason": "stop",
+          "completionStartTime": "2026-02-10T11:03:43.804Z"
+        },
+        "metadata": {
+          "runId": "7c2bab21-53cd-4d10-ae49-89449fb07bae",
+          "threadId": "bf9322b3-d12e-491d-8c4a-2a9a0e6ddc74",
+          "resourceId": "pcarbonenearform@ipdanalytics.com"
+        },
+        "tags": null,
+        "links": null,
+        "input": {
+          "messages": [
+            {
+              "role": "system",
+              "content": "You are the Semantic Query Processor (SQP) for IPD Analytics, an AI agent responsible for understanding complex pharmaceutical queries.\n\nYour primary responsibilities are:\n1. Parse natural language queries to extract key entities (drug names, patent numbers, dates, therapeutic areas)\n2. Classify query intent\n3. Execute GraphQL tools in the correct sequence to resolve URL parameters\n4. Generate accurate responses with fully resolved URLs from the sitemap\n\nYou maintain no persistent state. You use the Product Knowledge Map below to understand product capabilities and structure.\n\n## CRITICAL: Tool Execution Workflow\n\nYou have access to 6 GraphQL tools that MUST be called in a specific dependency order:\n\n### Tool Dependency Chain:\n\n1. **getDrugTool** (ALWAYS START HERE for drug-related queries)\n   - Input: Drug name or partial name\n   - Returns: drugId, tearSheetIds (with regions), PMI publication IDs\n   - USE THIS TO RESOLVE: :drugId URL parameters\n\n2. **getDrugTearSheetTool** (REQUIRES: drug info from step 1)\n …[truncated]"
+            },
+            {
+              "role": "user",
+              "content": [
+                {
+                  "text": "When can competitors enter for Ozempic?",
+                  "type": "text"
+                }
+              ]
+            }
+          ]
+        },
+        "output": {
+          "text": "Here’s the **Loss‑of‑Exclusivity (LOE) / competitor‑entry** page for **Ozempic** in the United States (USA):\n\n- **URL:** https://unified.ipdanalytics.com/drug/1921/9862E958-A167-4127-9D77-8598D8555BCC/life-cycle-insights/USA  \n\nThis page (Life‑Cycle Insights) shows the expected dates when competitors can launch generic versions of Ozempic, along with the underlying patent and regulatory timelines.\n\n**Other regions:** The same LOE information is also available for Europe (EP), Japan (JP), Canada (CA), Brazil (BR), and additional markets. Let me know if you’d like the direct links for any of those regions.",
+          "files": [],
+          "sources": [],
+          "warnings": [],
+          "reasoning": [
+            {
+              "from": "AGENT",
+              "type": "reasoning",
+              "runId": "7c2bab21-53cd-4d10-ae49-89449fb07bae",
+              "payload": {
+                "id": "reasoning_85c7dcec-3fcf-40ff-a308-061a88dd92a2",
+                "text": "User asks: \"When can competitors enter for Ozelf? Actually Ozempic.\" Likely they want generic entry date, i.e., loss of exclusivity (LOE) date. That's Life-Cycle Insights (LCI) product. Need to find LOE date for Ozempic. According to guidelines, we need to use sitemapSearch to find relevant page: likely \"Loss of Exclusivity\" page for Ozempic. Then resolve drugId and tearSheetId. The page likely is a template with drugId and region. Use getDrugTool then getDrugTearSheetTool (region default USA). Then provide URL. Also mention other regions availability.\n\nSteps:\n\n1. sitemapSearch query: \"loss of exclusivity\" (or \"Ozempic loss of exclusivity\") but guidelines: use generic term \"loss of exclusivity\". Use search query \"loss of exclusivity\". Let's call sitemapSearch.\n\n"
+              }
+            },
+            {
+              "from": "AGENT",
+              "type": "reasoning",
+              "runId": "7c2bab21-53cd-4d10-ae49-89449fb07bae",
+              "payload": {
+                "id": "reasoning_03b0f6bb-b333-462e-8bbe-7c2ec56ea758",
+                "text": "User asks: \"When can competitors enter for Ozempic?\" This is about generic entry / loss of exclusivity dates. That's Life-Cycle Insights (LCI) product, specifically LOE page. We have a template URL: https://unified.ipdanalytics.com/drug/:drugId/:tearSheetId/life-cycle-insights/:regionId\n\nWe need to resolve drugId, tearSheetId, regionId. Region not specified, default USA.\n\nThus steps:\n\n1. getDrugTool search \"Ozempic\"\n2. getDrugTearSheetTool query \"Ozempic\", regionCode USA, count 10\n   - Need to get tearSheetId (prefer Marketed). Also need to ensure we have LOE data; tear sheet likely includes LOE info.\n\n3. Then construct URL with resolved IDs.\n\nWe need to call getDrugTool first."
+              }
+            },
+            {
+              "from": "AGENT",
+              "type": "reasoning",
+              "runId": "7c2bab21-53cd-4d10-ae49-89449fb07bae",
+              "payload": {
+                "id": "reasoning_94015f07-ccde-4ac2-9583-e928d83b6c04",
+                "text": "User asks: \"When can competitors enter for Ozempic?\" This is about competitor entry dates, i.e., loss of exclusivity (LOE) dates, generic launch. That's Life-Cycle Insights (LCI) product. Need to provide URL to LOE page for Ozempic. We have sitemap result: Life-Cycle Insights Loss-of-Exclusivity page template: https://unified.ipdanalytics.com/drug/:drugId/:tearSheetId/life-cycle-insights/:regionId\n\nWe need to resolve drugId, tearSheetId, regionId. Use getDrugTearSheetTool for region default USA (since not specified). Need to get a marketed tear sheet (prefer marketed). The list includes many tear sheets; we need to pick first marketed. Not sure which are marketed vs pipeline; but likely the ones with titles like \"Ozempic (2 mg/1.5 mL)\" etc are marketed. We'll call getDrugTearSheet with count 10, region USA, query \"Ozempic\"."
+              }
+            },
+            {
+              "from": "AGENT",
+              "type": "reasoning",
+              "runId": "7c2bab21-53cd-4d10-ae49-89449fb07bae",
+              "payload": {
+                "id": "reasoning_24c69968-b630-439e-947d-5986d7243644",
+                "text": "User asks: \"When can competitors enter for Ozempic?\" This is about competitor entry dates, i.e., loss of exclusivity (LOE) dates, generic launch. That's Life-Cycle Insights (LCI) product. We have a template URL from sitemapSearch: Life-Cycle Insights Loss-of-Exclusivity page: https://unified.ipdanalytics.com/drug/:drugId/:tearSheetId/life-cycle-insights/:regionId\n\nWe have drugId = 1921. Need tearSheetId for LOE. Which tear sheet? The LOE page likely uses a tear sheet that contains LOE data. In getDrugTearSheet we got multiple tear sheets. Which one contains LOE? The LOE page likely uses a tear sheet of type \"LifeCycle\". All tear sheets are LifeCycle type except one Pipeline. The LOE page probably uses the primary marketed tear sheet. The first result in getDrugTearSheet list is id \"9862E958-...\" (Ozempic 2 mg/3 mL) with sales data. That likely has LOE info. Use that tearSheetId.\n\nRegion default USA. So URL: https://unified.ipdanalytics.com/drug/1921/9862E958-A167-4127-9D77-8598D8555BCC/life-cycle-insights/USA…[truncated]"
+              }
+            }
+          ],
+          "reasoningText": "User asks: \"When can competitors enter for Ozelf? Actually Ozempic.\" Likely they want generic entry date, i.e., loss of exclusivity (LOE) date. That's Life-Cycle Insights (LCI) product. Need to find LOE date for Ozempic. According to guidelines, we need to use sitemapSearch to find relevant page: likely \"Loss of Exclusivity\" page for Ozempic. Then resolve drugId and tearSheetId. The page likely is a template with drugId and region. Use getDrugTool then getDrugTearSheetTool (region default USA). Then provide URL. Also mention other regions availability.\n\nSteps:\n\n1. sitemapSearch query: \"loss of exclusivity\" (or \"Ozempic loss of exclusivity\") but guidelines: use generic term \"loss of exclusivity\". Use search query \"loss of exclusivity\". Let's call sitemapSearch.\n\nUser asks: \"When can competitors enter for Ozempic?\" This is about generic entry / loss of exclusivity dates. That's Life-Cycle Insights (LCI) product, specifically LOE page. We have a template URL: https://unified.ipdanalytics.com/drug/:drugId/:tearSh…[truncated]"
+        },
+        "error": null,
+        "isEvent": false,
+        "startedAt": "2026-02-10T11:03:40.963Z",
+        "endedAt": "2026-02-10T11:03:52.071Z",
+        "createdAt": "2026-02-10T11:03:57.044Z",
+        "updatedAt": "2026-02-10T11:03:57.044Z"
+      },
+      {
+        "traceId": "6c575b0d4abf18bd02857f29e1c2e614",
+        "spanId": "3dc8d75684f7ed22",
+        "parentSpanId": "01094b5159ccb0e8",
+        "name": "step: 0",
+        "entityType": "agent",
+        "entityId": "semantic-query-processor",
+        "entityName": "Semantic Query Processor",
+        "userId": null,
+        "organizationId": null,
+        "resourceId": null,
+        "runId": null,
+        "sessionId": null,
+        "threadId": null,
+        "requestId": null,
+        "environment": null,
+        "source": null,
+        "serviceName": null,
+        "scope": null,
+        "spanType": "model_step",
+        "attributes": {
+          "usage": {
+            "inputTokens": 4598,
+            "outputTokens": 218
+          },
+          "messageId": "0f261c31-a0b5-48ff-ac01-0f923df9f41e",
+          "stepIndex": 0,
+          "isContinued": true,
+          "finishReason": "tool-calls"
+        },
+        "metadata": {
+          "headers": {
+            "date": "Tue, 10 Feb 2026 11:03:43 GMT",
+            "connection": "keep-alive",
+            "content-type": "application/json",
+            "content-length": "1159",
+            "x-amzn-requestid": "bc66335f-d1bc-4f53-99dd-7db262c0cebb"
+          },
+          "modelMetadata": {
+            "modelId": "openai.gpt-oss-120b-1:0",
+            "modelVersion": "v3",
+            "modelProvider": "amazon-bedrock"
+          }
+        },
+        "tags": null,
+        "links": null,
+        "input": {},
+        "output": {
+          "text": "",
+          "toolCalls": [
+            {
+              "args": {
+                "query": "loss of exclusivity"
+              },
+              "toolName": "sitemapSearch",
+              "toolCallId": "tooluse_Uk1PlAVFHCdjMOlukCQkEs"
+            }
+          ]
+        },
+        "error": null,
+        "isEvent": false,
+        "startedAt": "2026-02-10T11:03:40.970Z",
+        "endedAt": "2026-02-10T11:03:44.279Z",
+        "createdAt": "2026-02-10T11:03:45.931Z",
+        "updatedAt": "2026-02-10T11:03:45.931Z"
+      },
+      {
+        "traceId": "6c575b0d4abf18bd02857f29e1c2e614",
+        "spanId": "148740b379ff25df",
+        "parentSpanId": "3dc8d75684f7ed22",
+        "name": "chunk: 'reasoning'",
+        "entityType": "agent",
+        "entityId": "semantic-query-processor",
+        "entityName": "Semantic Query Processor",
+        "userId": null,
+        "organizationId": null,
+        "resourceId": null,
+        "runId": null,
+        "sessionId": null,
+        "threadId": null,
+        "requestId": null,
+        "environment": null,
+        "source": null,
+        "serviceName": null,
+        "scope": null,
+        "spanType": "model_chunk",
+        "attributes": {
+          "chunkType": "reasoning",
+          "sequenceNumber": 0
+        },
+        "metadata": null,
+        "tags": null,
+        "links": null,
+        "input": null,
+        "output": {
+          "text": "User asks: \"When can competitors enter for Ozelf? Actually Ozempic.\" Likely they want generic entry date, i.e., loss of exclusivity (LOE) date. That's Life-Cycle Insights (LCI) product. Need to find LOE date for Ozempic. According to guidelines, we need to use sitemapSearch to find relevant page: likely \"Loss of Exclusivity\" page for Ozempic. Then resolve drugId and tearSheetId. The page likely is a template with drugId and region. Use getDrugTool then getDrugTearSheetTool (region default USA). Then provide URL. Also mention other regions availability.\n\nSteps:\n\n1. sitemapSearch query: \"loss of exclusivity\" (or \"Ozempic loss of exclusivity\") but guidelines: use generic term \"loss of exclusivity\". Use search query \"loss of exclusivity\". Let's call sitemapSearch.\n\n"
+        },
+        "error": null,
+        "isEvent": false,
+        "startedAt": "2026-02-10T11:03:43.803Z",
+        "endedAt": "2026-02-10T11:03:43.805Z",
+        "createdAt": "2026-02-10T11:03:45.931Z",
+        "updatedAt": "2026-02-10T11:03:45.931Z"
+      },
+      {
+        "traceId": "6c575b0d4abf18bd02857f29e1c2e614",
+        "spanId": "7d5402be986a4f10",
+        "parentSpanId": "3dc8d75684f7ed22",
+        "name": "chunk: 'tool-call'",
+        "entityType": "agent",
+        "entityId": "semantic-query-processor",
+        "entityName": "Semantic Query Processor",
+        "userId": null,
+        "organizationId": null,
+        "resourceId": null,
+        "runId": null,
+        "sessionId": null,
+        "threadId": null,
+        "requestId": null,
+        "environment": null,
+        "source": null,
+        "serviceName": null,
+        "scope": null,
+        "spanType": "model_chunk",
+        "attributes": {
+          "chunkType": "tool-call",
+          "sequenceNumber": 1
+        },
+        "metadata": null,
+        "tags": null,
+        "links": null,
+        "input": null,
+        "output": {
+          "toolName": "sitemapSearch",
+          "toolInput": {
+            "query": "loss of exclusivity"
+          },
+          "toolCallId": "tooluse_Uk1PlAVFHCdjMOlukCQkEs"
+        },
+        "error": null,
+        "isEvent": false,
+        "startedAt": "2026-02-10T11:03:43.806Z",
+        "endedAt": "2026-02-10T11:03:43.808Z",
+        "createdAt": "2026-02-10T11:03:45.931Z",
+        "updatedAt": "2026-02-10T11:03:45.931Z"
+      },
+      {
+        "traceId": "6c575b0d4abf18bd02857f29e1c2e614",
+        "spanId": "906dc817d0426262",
+        "parentSpanId": "3dc8d75684f7ed22",
+        "name": "tool: 'sitemapSearch'",
+        "entityType": "tool",
+        "entityId": "sitemapSearch",
+        "entityName": "sitemapSearch",
+        "userId": null,
+        "organizationId": null,
+        "resourceId": null,
+        "runId": null,
+        "sessionId": null,
+        "threadId": null,
+        "requestId": null,
+        "environment": null,
+        "source": null,
+        "serviceName": null,
+        "scope": null,
+        "spanType": "tool_call",
+        "attributes": {
+          "success": true,
+          "toolType": "tool",
+          "toolDescription": "Search for relevant pages across IPD products using semantic search. Use this tool when the user asks about finding information, navigating to specific pages, or exploring product capabilities. Returns the most relevant pages with titles, descriptions, and URLs. \n\nWHEN TO USE:\n- User asks 'where can I find...' or 'how do I navigate to...'\n- User wants to explore a specific topic across products\n- You need to find page URLs for specific drug information\n\nHANDLING RESULTS:\n- Pages with type='TEMPLATE' require parameter resolution via other tools\n- Check templatedValues to see what entities need to be resolved (e.g., drugId, tearSheetId)\n- Use getDrug, getDrugTearSheet, etc. to resolve entity IDs before presenting URLs\n- Pages with hasAccess=false show content user cannot access (for discovery/upsell)\n\nEXAMPLE QUERIES:\n- { \"query\": \"patent analysis for Ozempic\" }\n- { \"query\": \"financial forecast market share\" }\n- { \"query\": \"formulary coverage reimbursement\" }"
+        },
+        "metadata": null,
+        "tags": null,
+        "links": null,
+        "input": {
+          "query": "loss of exclusivity"
+        },
+        "output": {
+          "results": [
+            {
+              "url": "https://unified.ipdanalytics.com/drug/:drugId/:tearSheetId/life-cycle-insights/:regionId",
+              "type": "TEMPLATE",
+              "title": "Life-Cycle Insights Loss-of-Exclusivity",
+              "hasAccess": true,
+              "productId": "LCI",
+              "description": "Loss-of-Exclusivity analysis for Life-Cycle Insights.",
+              "productName": "Global Life-Cycle Insights",
+              "relevanceScore": 0.7509457,
+              "productVertical": "Life-Cycle Insights",
+              "templatedValues": [
+                {
+                  "key": "[REDACTED]",
+                  "entityType": "Drug",
+                  "description": "Unique identifier for the drug"
+                },
+                {
+                  "key": "[REDACTED]",
+                  "entityType": "TearSheet",
+                  "description": "Unique identifier for the tear sheet"
+                },
+                {
+                  "key": "[REDACTED]",
+                  "entityType": "Region",
+                  "description": "Region code (e.g., USA, EP, JP)"
+                }
+              ],
+              "productInformationType": "Global Loss-of-Exclusivity Insights"
+            },
+            {
+              "url": "https://unified.ipdanalytics.com/drug/:drugId/:tearSheetId/exclusivity-tracker",
+              "type": "TEMPLATE",
+              "title": "GPS Regulatory Exclusivity Page",
+              "hasAccess": true,
+              "productId": "GPS",
+              "description": "Regulatory Exclusivity-specific page for Global Patent Search.",
+              "productName": "Global Patent Search",
+              "relevanceScore": 0.63124955,
+              "productVertical": "Life-Cycle Insights",
+              "templatedValues": [
+                {
+                  "key": "[REDACTED]",
+                  "entityType": "Drug",
+                  "description": "Unique identifier for the drug"
+                },
+                {
+                  "key": "[REDACTED]",
+                  "entityType": "TearSheet",
+                  "description": "Unique identifier for the tear sheet"
+                }
+              ],
+              "productInformationType": "Global Patent, Regulatory, & Litigation Intelligence"
+            },
+            {
+              "url": "https://unified.ipdanalytics.com/drug/:drugId/:tearSheetId/access-hub/#nonEssentialDrugs",
+              "type": "TEMPLATE",
+              "title": "Access Hub Non-Essential Drug List and PBM Exclusions",
+              "hasAccess": true,
+              "productId": "AH",
+              "description": "Non-Essential Drug List and PBM Exclusions coverage and criteria for Access Hub.",
+              "productName": "Access Hub",
+              "relevanceScore": 0.609198,
+              "productVertical": "Pharmacy Strategy",
+              "templatedValues": [
+                {
+                  "key": "[REDACTED]",
+                  "entityType": "Drug",
+                  "description": "Unique identifier for the drug"
+                },
+                {
+                  "key": "[REDACTED]",
+                  "entityType": "TearSheet",
+                  "description": "Unique identifier for the tear sheet"
+                }
+              ],
+              "productInformationType": "Access & Reimbursement Hub"
+            },
+            {
+              "url": "https://unified.ipdanalytics.com/drug/:drugId/:tearSheetId/access-hub/#limitedDistributionDrugs",
+              "type": "TEMPLATE",
+              "title": "Access Hub Limited Distribution",
+              "hasAccess": true,
+              "productId": "AH",
+              "description": "Limited distribution coverage and criteria for Access Hub.",
+              "productName": "Access Hub",
+              "relevanceScore": 0.6046541,
+              "productVertical": "Pharmacy Strategy",
+              "templatedValues": [
+                {
+                  "key": "[REDACTED]",
+                  "entityType": "Drug",
+                  "description": "Unique identifier for the drug"
+                },
+                {
+                  "key": "[REDACTED]",
+                  "entityType": "TearSheet",
+                  "description": "Unique identifier for the tear sheet"
+                }
+              ],
+              "productInformationType": "Access & Reimbursement Hub"
+            },
+            {
+              "url": "https://exclusivity-tracker.ipdanalytics.com/",
+              "type": "OTHER",
+              "title": "Global Regulatory Exclusivity Tracker Home Page",
+              "hasAccess": true,
+              "productId": "GPS",
+              "description": "Home page for Global Regulatory Exclusivity Tracker.",
+              "productName": "Global Patent Search",
+              "relevanceScore": 0.5892447,
+              "productVertical": "Life-Cycle Insights",
+              "templatedValues": null,
+              "productInformationType": "Global Patent, Regulatory, & Litigation Intelligence"
+            },
+            {
+              "url": "https://access-hub.ipdanalytics.com/competitive-landscape/:id#limitedDistributionDrugs",
+              "type": "TEMPLATE",
+              "title": "Access Hub Limited Distribution Drugs for CompetitiveLandscape",
+              "hasAccess": true,
+              "productId": "AH",
+              "description": "Limited Distribution Drugs coverage and criteria for Access Hub for CompetitiveLandscape.",
+              "productName": "Access Hub",
+              "relevanceScore": 0.58475566,
+              "productVertical": "Pharmacy Strategy",
+              "templatedValues": [
+                {
+                  "key": "[REDACTED]",
+                  "entityType": "CompetitiveLandscape",
+                  "description": "Unique identifier for the CompetitiveLandscape"
+                }
+              ],
+              "productInformationType": "Access & Reimbursement Hub"
+            },
+            {
+              "url": "https://access-hub.ipdanalytics.com/manufacturer/:id#limitedDistributionDrugs",
+              "type": "TEMPLATE",
+              "title": "Access Hub Limited Distribution Drugs for Manufacturer",
+              "hasAccess": true,
+              "productId": "AH",
+              "description": "Limited Distribution Drugs coverage and criteria for Access Hub for Manufacturer.",
+              "productName": "Access Hub",
+              "relevanceScore": 0.58238006,
+              "productVertical": "Pharmacy Strategy",
+              "templatedValues": [
+                {
+                  "key": "[REDACTED]",
+                  "entityType": "Manufacturer",
+                  "description": "Unique identifier for the Manufacturer"
+                }
+              ],
+              "productInformationType": "Access & Reimbursement Hub"
+            },
+            {
+              "url": "https://access-hub.ipdanalytics.com/pharmacy/:id#limitedDistributionDrugs",
+              "type": "TEMPLATE",
+              "title": "Access Hub Limited Distribution Drugs for Pharmacy",
+              "hasAccess": true,
+              "productId": "AH",
+              "description": "Limited Distribution Drugs coverage and criteria for Access Hub for Pharmacy.",
+              "productName": "Access Hub",
+              "relevanceScore": 0.58113754,
+              "productVertical": "Pharmacy Strategy",
+              "templatedValues": [
+                {
+                  "key": "[REDACTED]",
+                  "entityType": "Pharmacy",
+                  "description": "Unique identifier for the Pharmacy"
+                }
+              ],
+              "productInformationType": "Access & Reimbursement Hub"
+            },
+            {
+              "url": "https://access-hub.ipdanalytics.com/payer/:id#limitedDistributionDrugs",
+              "type": "TEMPLATE",
+              "title": "Access Hub Limited Distribution Drugs for Payer",
+              "hasAccess": true,
+              "productId": "AH",
+              "description": "Limited Distribution Drugs coverage and criteria for Access Hub for Payer.",
+              "productName": "Access Hub",
+              "relevanceScore": 0.5800456,
+              "productVertical": "Pharmacy Strategy",
+              "templatedValues": [
+                {
+                  "key": "[REDACTED]",
+                  "entityType": "Payer",
+                  "description": "Unique identifier for the Payer"
+                }
+              ],
+              "productInformationType": "Access & Reimbursement Hub"
+            },
+            {
+              "url": "https://access-hub.ipdanalytics.com/therapeutic-area/:id#limitedDistributionDrugs",
+              "type": "TEMPLATE",
+              "title": "Access Hub Limited Distribution Drugs for TherapeuticArea",
+              "hasAccess": true,
+              "productId": "AH",
+              "description": "Limited Distribution Drugs coverage and criteria for Access Hub for TherapeuticArea.",
+              "productName": "Access Hub",
+              "relevanceScore": 0.5793307,
+              "productVertical": "Pharmacy Strategy",
+              "templatedValues": [
+                {
+                  "key": "[REDACTED]",
+                  "entityType": "TherapeuticArea",
+                  "description": "Unique identifier for the TherapeuticArea"
+                }
+              ],
+              "productInformationType": "Access & Reimbursement Hub"
+            }
+          ],
+          "totalFound": 10
+        },
+        "error": null,
+        "isEvent": false,
+        "startedAt": "2026-02-10T11:03:43.814Z",
+        "endedAt": "2026-02-10T11:03:44.274Z",
+        "createdAt": "2026-02-10T11:03:45.931Z",
+        "updatedAt": "2026-02-10T11:03:45.931Z"
+      },
+      {
+        "traceId": "6c575b0d4abf18bd02857f29e1c2e614",
+        "spanId": "87a6698e1e5fcfb4",
+        "parentSpanId": "3dc8d75684f7ed22",
+        "name": "chunk: 'tool-result'",
+        "entityType": "agent",
+        "entityId": "semantic-query-processor",
+        "entityName": "Semantic Query Processor",
+        "userId": null,
+        "organizationId": null,
+        "resourceId": null,
+        "runId": null,
+        "sessionId": null,
+        "threadId": null,
+        "requestId": null,
+        "environment": null,
+        "source": null,
+        "serviceName": null,
+        "scope": null,
+        "spanType": "model_chunk",
+        "attributes": {
+          "chunkType": "tool-result",
+          "sequenceNumber": 2
+        },
+        "metadata": {
+          "toolName": "sitemapSearch",
+          "toolCallId": "tooluse_Uk1PlAVFHCdjMOlukCQkEs"
+        },
+        "tags": null,
+        "links": null,
+        "input": null,
+        "output": {
+          "results": [
+            {
+              "url": "https://unified.ipdanalytics.com/drug/:drugId/:tearSheetId/life-cycle-insights/:regionId",
+              "type": "TEMPLATE",
+              "title": "Life-Cycle Insights Loss-of-Exclusivity",
+              "hasAccess": true,
+              "productId": "LCI",
+              "description": "Loss-of-Exclusivity analysis for Life-Cycle Insights.",
+              "productName": "Global Life-Cycle Insights",
+              "relevanceScore": 0.7509457,
+              "productVertical": "Life-Cycle Insights",
+              "templatedValues": [
+                {
+                  "key": "[REDACTED]",
+                  "entityType": "Drug",
+                  "description": "Unique identifier for the drug"
+                },
+                {
+                  "key": "[REDACTED]",
+                  "entityType": "TearSheet",
+                  "description": "Unique identifier for the tear sheet"
+                },
+                {
+                  "key": "[REDACTED]",
+                  "entityType": "Region",
+                  "description": "Region code (e.g., USA, EP, JP)"
+                }
+              ],
+              "productInformationType": "Global Loss-of-Exclusivity Insights"
+            },
+            {
+              "url": "https://unified.ipdanalytics.com/drug/:drugId/:tearSheetId/exclusivity-tracker",
+              "type": "TEMPLATE",
+              "title": "GPS Regulatory Exclusivity Page",
+              "hasAccess": true,
+              "productId": "GPS",
+              "description": "Regulatory Exclusivity-specific page for Global Patent Search.",
+              "productName": "Global Patent Search",
+              "relevanceScore": 0.63124955,
+              "productVertical": "Life-Cycle Insights",
+              "templatedValues": [
+                {
+                  "key": "[REDACTED]",
+                  "entityType": "Drug",
+                  "description": "Unique identifier for the drug"
+                },
+                {
+                  "key": "[REDACTED]",
+                  "entityType": "TearSheet",
+                  "description": "Unique identifier for the tear sheet"
+                }
+              ],
+              "productInformationType": "Global Patent, Regulatory, & Litigation Intelligence"
+            },
+            {
+              "url": "https://unified.ipdanalytics.com/drug/:drugId/:tearSheetId/access-hub/#nonEssentialDrugs",
+              "type": "TEMPLATE",
+              "title": "Access Hub Non-Essential Drug List and PBM Exclusions",
+              "hasAccess": true,
+              "productId": "AH",
+              "description": "Non-Essential Drug List and PBM Exclusions coverage and criteria for Access Hub.",
+              "productName": "Access Hub",
+              "relevanceScore": 0.609198,
+              "productVertical": "Pharmacy Strategy",
+              "templatedValues": [
+                {
+                  "key": "[REDACTED]",
+                  "entityType": "Drug",
+                  "description": "Unique identifier for the drug"
+                },
+                {
+                  "key": "[REDACTED]",
+                  "entityType": "TearSheet",
+                  "description": "Unique identifier for the tear sheet"
+                }
+              ],
+              "productInformationType": "Access & Reimbursement Hub"
+            },
+            {
+              "url": "https://unified.ipdanalytics.com/drug/:drugId/:tearSheetId/access-hub/#limitedDistributionDrugs",
+              "type": "TEMPLATE",
+              "title": "Access Hub Limited Distribution",
+              "hasAccess": true,
+              "productId": "AH",
+              "description": "Limited distribution coverage and criteria for Access Hub.",
+              "productName": "Access Hub",
+              "relevanceScore": 0.6046541,
+              "productVertical": "Pharmacy Strategy",
+              "templatedValues": [
+                {
+                  "key": "[REDACTED]",
+                  "entityType": "Drug",
+                  "description": "Unique identifier for the drug"
+                },
+                {
+                  "key": "[REDACTED]",
+                  "entityType": "TearSheet",
+                  "description": "Unique identifier for the tear sheet"
+                }
+              ],
+              "productInformationType": "Access & Reimbursement Hub"
+            },
+            {
+              "url": "https://exclusivity-tracker.ipdanalytics.com/",
+              "type": "OTHER",
+              "title": "Global Regulatory Exclusivity Tracker Home Page",
+              "hasAccess": true,
+              "productId": "GPS",
+              "description": "Home page for Global Regulatory Exclusivity Tracker.",
+              "productName": "Global Patent Search",
+              "relevanceScore": 0.5892447,
+              "productVertical": "Life-Cycle Insights",
+              "templatedValues": null,
+              "productInformationType": "Global Patent, Regulatory, & Litigation Intelligence"
+            },
+            {
+              "url": "https://access-hub.ipdanalytics.com/competitive-landscape/:id#limitedDistributionDrugs",
+              "type": "TEMPLATE",
+              "title": "Access Hub Limited Distribution Drugs for CompetitiveLandscape",
+              "hasAccess": true,
+              "productId": "AH",
+              "description": "Limited Distribution Drugs coverage and criteria for Access Hub for CompetitiveLandscape.",
+              "productName": "Access Hub",
+              "relevanceScore": 0.58475566,
+              "productVertical": "Pharmacy Strategy",
+              "templatedValues": [
+                {
+                  "key": "[REDACTED]",
+                  "entityType": "CompetitiveLandscape",
+                  "description": "Unique identifier for the CompetitiveLandscape"
+                }
+              ],
+              "productInformationType": "Access & Reimbursement Hub"
+            },
+            {
+              "url": "https://access-hub.ipdanalytics.com/manufacturer/:id#limitedDistributionDrugs",
+              "type": "TEMPLATE",
+              "title": "Access Hub Limited Distribution Drugs for Manufacturer",
+              "hasAccess": true,
+              "productId": "AH",
+              "description": "Limited Distribution Drugs coverage and criteria for Access Hub for Manufacturer.",
+              "productName": "Access Hub",
+              "relevanceScore": 0.58238006,
+              "productVertical": "Pharmacy Strategy",
+              "templatedValues": [
+                {
+                  "key": "[REDACTED]",
+                  "entityType": "Manufacturer",
+                  "description": "Unique identifier for the Manufacturer"
+                }
+              ],
+              "productInformationType": "Access & Reimbursement Hub"
+            },
+            {
+              "url": "https://access-hub.ipdanalytics.com/pharmacy/:id#limitedDistributionDrugs",
+              "type": "TEMPLATE",
+              "title": "Access Hub Limited Distribution Drugs for Pharmacy",
+              "hasAccess": true,
+              "productId": "AH",
+              "description": "Limited Distribution Drugs coverage and criteria for Access Hub for Pharmacy.",
+              "productName": "Access Hub",
+              "relevanceScore": 0.58113754,
+              "productVertical": "Pharmacy Strategy",
+              "templatedValues": [
+                {
+                  "key": "[REDACTED]",
+                  "entityType": "Pharmacy",
+                  "description": "Unique identifier for the Pharmacy"
+                }
+              ],
+              "productInformationType": "Access & Reimbursement Hub"
+            },
+            {
+              "url": "https://access-hub.ipdanalytics.com/payer/:id#limitedDistributionDrugs",
+              "type": "TEMPLATE",
+              "title": "Access Hub Limited Distribution Drugs for Payer",
+              "hasAccess": true,
+              "productId": "AH",
+              "description": "Limited Distribution Drugs coverage and criteria for Access Hub for Payer.",
+              "productName": "Access Hub",
+              "relevanceScore": 0.5800456,
+              "productVertical": "Pharmacy Strategy",
+              "templatedValues": [
+                {
+                  "key": "[REDACTED]",
+                  "entityType": "Payer",
+                  "description": "Unique identifier for the Payer"
+                }
+              ],
+              "productInformationType": "Access & Reimbursement Hub"
+            },
+            {
+              "url": "https://access-hub.ipdanalytics.com/therapeutic-area/:id#limitedDistributionDrugs",
+              "type": "TEMPLATE",
+              "title": "Access Hub Limited Distribution Drugs for TherapeuticArea",
+              "hasAccess": true,
+              "productId": "AH",
+              "description": "Limited Distribution Drugs coverage and criteria for Access Hub for TherapeuticArea.",
+              "productName": "Access Hub",
+              "relevanceScore": 0.5793307,
+              "productVertical": "Pharmacy Strategy",
+              "templatedValues": [
+                {
+                  "key": "[REDACTED]",
+                  "entityType": "TherapeuticArea",
+                  "description": "Unique identifier for the TherapeuticArea"
+                }
+              ],
+              "productInformationType": "Access & Reimbursement Hub"
+            }
+          ],
+          "totalFound": 10
+        },
+        "error": null,
+        "isEvent": true,
+        "startedAt": "2026-02-10T11:03:44.277Z",
+        "endedAt": null,
+        "createdAt": "2026-02-10T11:03:45.931Z",
+        "updatedAt": "2026-02-10T11:03:45.931Z"
+      },
+      {
+        "traceId": "6c575b0d4abf18bd02857f29e1c2e614",
+        "spanId": "bb64c47ea3cfbf94",
+        "parentSpanId": "01094b5159ccb0e8",
+        "name": "step: 1",
+        "entityType": "agent",
+        "entityId": "semantic-query-processor",
+        "entityName": "Semantic Query Processor",
+        "userId": null,
+        "organizationId": null,
+        "resourceId": null,
+        "runId": null,
+        "sessionId": null,
+        "threadId": null,
+        "requestId": null,
+        "environment": null,
+        "source": null,
+        "serviceName": null,
+        "scope": null,
+        "spanType": "model_step",
+        "attributes": {
+          "usage": {
+            "inputTokens": 5975,
+            "outputTokens": 207
+          },
+          "messageId": "0f261c31-a0b5-48ff-ac01-0f923df9f41e",
+          "stepIndex": 1,
+          "isContinued": true,
+          "finishReason": "tool-calls"
+        },
+        "metadata": {
+          "headers": {
+            "date": "Tue, 10 Feb 2026 11:03:45 GMT",
+            "connection": "keep-alive",
+            "content-type": "application/json",
+            "content-length": "1059",
+            "x-amzn-requestid": "237120eb-ff5a-4ace-8c54-42bca873bef8"
+          },
+          "modelMetadata": {
+            "modelId": "openai.gpt-oss-120b-1:0",
+            "modelVersion": "v3",
+            "modelProvider": "amazon-bedrock"
+          }
+        },
+        "tags": null,
+        "links": null,
+        "input": {},
+        "output": {
+          "text": "",
+          "toolCalls": [
+            {
+              "args": {
+                "searchText": "Ozempic"
+              },
+              "toolName": "getDrug",
+              "toolCallId": "tooluse_u8sN9tDMzSUql3sPstJ7eM"
+            }
+          ]
+        },
+        "error": null,
+        "isEvent": false,
+        "startedAt": "2026-02-10T11:03:44.283Z",
+        "endedAt": "2026-02-10T11:03:46.532Z",
+        "createdAt": "2026-02-10T11:03:51.530Z",
+        "updatedAt": "2026-02-10T11:03:51.530Z"
+      },
+      {
+        "traceId": "6c575b0d4abf18bd02857f29e1c2e614",
+        "spanId": "ea62dd3bd8c7bc13",
+        "parentSpanId": "bb64c47ea3cfbf94",
+        "name": "chunk: 'reasoning'",
+        "entityType": "agent",
+        "entityId": "semantic-query-processor",
+        "entityName": "Semantic Query Processor",
+        "userId": null,
+        "organizationId": null,
+        "resourceId": null,
+        "runId": null,
+        "sessionId": null,
+        "threadId": null,
+        "requestId": null,
+        "environment": null,
+        "source": null,
+        "serviceName": null,
+        "scope": null,
+        "spanType": "model_chunk",
+        "attributes": {
+          "chunkType": "reasoning",
+          "sequenceNumber": 0
+        },
+        "metadata": null,
+        "tags": null,
+        "links": null,
+        "input": null,
+        "output": {
+          "text": "User asks: \"When can competitors enter for Ozempic?\" This is about generic entry / loss of exclusivity dates. That's Life-Cycle Insights (LCI) product, specifically LOE page. We have a template URL: https://unified.ipdanalytics.com/drug/:drugId/:tearSheetId/life-cycle-insights/:regionId\n\nWe need to resolve drugId, tearSheetId, regionId. Region not specified, default USA.\n\nThus steps:\n\n1. getDrugTool search \"Ozempic\"\n2. getDrugTearSheetTool query \"Ozempic\", regionCode USA, count 10\n   - Need to get tearSheetId (prefer Marketed). Also need to ensure we have LOE data; tear sheet likely includes LOE info.\n\n3. Then construct URL with resolved IDs.\n\nWe need to call getDrugTool first."
+        },
+        "error": null,
+        "isEvent": false,
+        "startedAt": "2026-02-10T11:03:45.280Z",
+        "endedAt": "2026-02-10T11:03:45.282Z",
+        "createdAt": "2026-02-10T11:03:45.931Z",
+        "updatedAt": "2026-02-10T11:03:45.931Z"
+      },
+      {
+        "traceId": "6c575b0d4abf18bd02857f29e1c2e614",
+        "spanId": "b8c8b458bec34a30",
+        "parentSpanId": "bb64c47ea3cfbf94",
+        "name": "chunk: 'tool-call'",
+        "entityType": "agent",
+        "entityId": "semantic-query-processor",
+        "entityName": "Semantic Query Processor",
+        "userId": null,
+        "organizationId": null,
+        "resourceId": null,
+        "runId": null,
+        "sessionId": null,
+        "threadId": null,
+        "requestId": null,
+        "environment": null,
+        "source": null,
+        "serviceName": null,
+        "scope": null,
+        "spanType": "model_chunk",
+        "attributes": {
+          "chunkType": "tool-call",
+          "sequenceNumber": 1
+        },
+        "metadata": null,
+        "tags": null,
+        "links": null,
+        "input": null,
+        "output": {
+          "toolName": "getDrug",
+          "toolInput": {
+            "searchText": "Ozempic"
+          },
+          "toolCallId": "tooluse_u8sN9tDMzSUql3sPstJ7eM"
+        },
+        "error": null,
+        "isEvent": false,
+        "startedAt": "2026-02-10T11:03:45.284Z",
+        "endedAt": "2026-02-10T11:03:45.287Z",
+        "createdAt": "2026-02-10T11:03:45.931Z",
+        "updatedAt": "2026-02-10T11:03:45.931Z"
+      },
+      {
+        "traceId": "6c575b0d4abf18bd02857f29e1c2e614",
+        "spanId": "8fe8a0b60d64c7a7",
+        "parentSpanId": "bb64c47ea3cfbf94",
+        "name": "tool: 'getDrug'",
+        "entityType": "tool",
+        "entityId": "getDrug",
+        "entityName": "getDrug",
+        "userId": null,
+        "organizationId": null,
+        "resourceId": null,
+        "runId": null,
+        "sessionId": null,
+        "threadId": null,
+        "requestId": null,
+        "environment": null,
+        "source": null,
+        "serviceName": null,
+        "scope": null,
+        "spanType": "tool_call",
+        "attributes": {
+          "success": true,
+          "toolType": "tool",
+          "toolDescription": "Searches for drugs (entityType Drug) by name or partial name. Returns drug ID, tearSheet IDs, active ingredients, and regional data."
+        },
+        "metadata": null,
+        "tags": null,
+        "links": null,
+        "input": {
+          "searchText": "Ozempic"
+        },
+        "output": {
+          "drugs": [
+            {
+              "id": "1921",
+              "name": "Ozempic",
+              "__typename": "Drug",
+              "tearSheets": [
+                {
+                  "id": "0AA91D3F-E6CE-43C6-BC73-DC0570D02EC6",
+                  "url": "https://secure.ipdanalytics.com/User/Pharma/Tearsheet/0AA91D3F-E6CE-43C6-BC73-DC0570D02EC6",
+                  "title": "Ozempic",
+                  "region": {
+                    "code": "HK",
+                    "__typename": "Region"
+                  },
+                  "__typename": "TearSheet"
+                },
+                {
+                  "id": "EEE4D669-49D4-4440-8E8F-946539FFD37A",
+                  "url": "https://secure.ipdanalytics.com/User/Pharma/Tearsheet/EEE4D669-49D4-4440-8E8F-946539FFD37A",
+                  "title": "Ozempic",
+                  "region": {
+                    "code": "SG",
+                    "__typename": "Region"
+                  },
+                  "__typename": "TearSheet"
+                },
+                {
+                  "id": "94CCCB94-0E0A-40F2-9FDE-59D06121F804",
+                  "url": "https://secure.ipdanalytics.com/User/Pharma/Tearsheet/94CCCB94-0E0A-40F2-9FDE-59D06121F804",
+                  "title": "Ozempic",
+                  "region": {
+                    "code": "CH",
+                    "__typename": "Region"
+                  },
+                  "__typename": "TearSheet"
+                },
+                {
+                  "id": "F67B205B-D4AA-4FCF-9AD7-8B97281148D4",
+                  "url": "https://secure.ipdanalytics.com/User/Pharma/Tearsheet/F67B205B-D4AA-4FCF-9AD7-8B97281148D4",
+                  "title": "Ozempic",
+                  "region": {
+                    "code": "UA",
+                    "__typename": "Region"
+                  },
+                  "__typename": "TearSheet"
+                },
+                {
+                  "id": "1C2B1A5C-1C07-4D16-9542-8EDF8C4C3245",
+                  "url": "https://secure.ipdanalytics.com/User/Pharma/Tearsheet/1C2B1A5C-1C07-4D16-9542-8EDF8C4C3245",
+                  "title": "Ozempic (2mg)",
+                  "region": {
+                    "code": "CH",
+                    "__typename": "Region"
+                  },
+                  "__typename": "TearSheet"
+                },
+                {
+                  "id": "0F91C64E-F045-48AE-BCED-C78D776C437D",
+                  "url": "https://secure.ipdanalytics.com/User/Pharma/Tearsheet/0F91C64E-F045-48AE-BCED-C78D776C437D",
+                  "title": "Ozempic",
+                  "region": {
+                    "code": "CR",
+                    "__typename": "Region"
+                  },
+                  "__typename": "TearSheet"
+                },
+                {
+                  "id": "F25CD5F6-A405-4706-B94F-CC3A4CE2037C",
+                  "url": "https://secure.ipdanalytics.com/User/Pharma/Tearsheet/F25CD5F6-A405-4706-B94F-CC3A4CE2037C",
+                  "title": "Ozempic",
+                  "region": {
+                    "code": "JO",
+                    "__typename": "Region"
+                  },
+                  "__typename": "TearSheet"
+                },
+                {
+                  "id": "76164E76-D162-43A5-8D66-F8D32B451654",
+                  "url": "https://secure.ipdanalytics.com/User/Pharma/Tearsheet/76164E76-D162-43A5-8D66-F8D32B451654",
+                  "title": "Ozempic",
+                  "region": {
+                    "code": "EG",
+                    "__typename": "Region"
+                  },
+                  "__typename": "TearSheet"
+                },
+                {
+                  "id": "81F59C8E-6AA8-4C1F-8940-8D5A666634CC",
+                  "url": "https://secure.ipdanalytics.com/User/Pharma/Tearsheet/81F59C8E-6AA8-4C1F-8940-8D5A666634CC",
+                  "title": "Ozempic",
+                  "region": {
+                    "code": "NZ",
+                    "__typename": "Region"
+                  },
+                  "__typename": "TearSheet"
+                },
+                {
+                  "id": "C87CF70F-D1DA-411C-9C3E-0193D2918618",
+                  "url": "https://secure.ipdanalytics.com/User/Pharma/Tearsheet/C87CF70F-D1DA-411C-9C3E-0193D2918618",
+                  "title": "Ozempic",
+                  "region": {
+                    "code": "TR",
+                    "__typename": "Region"
+                  },
+                  "__typename": "TearSheet"
+                },
+                {
+                  "id": "4CD9A9F5-F0F0-409C-8E91-D69FFA633150",
+                  "url": "https://secure.ipdanalytics.com/User/Pharma/Tearsheet/4CD9A9F5-F0F0-409C-8E91-D69FFA633150",
+                  "title": "Ozempic",
+                  "region": {
+                    "code": "KR",
+                    "__typename": "Region"
+                  },
+                  "__typename": "TearSheet"
+                },
+                {
+                  "id": "A9D728B1-BDFB-4434-801A-4A8ABD31141A",
+                  "url": "https://secure.ipdanalytics.com/User/Pharma/Tearsheet/A9D728B1-BDFB-4434-801A-4A8ABD31141A",
+                  "title": "Ozempic",
+                  "region": {
+                    "code": "TW",
+                    "__typename": "Region"
+                  },
+                  "__typename": "TearSheet"
+                },
+                {
+                  "id": "93539E5B-913B-4233-95A2-D6A5EABF467C",
+                  "url": "https://secure.ipdanalytics.com/User/Pharma/Tearsheet/93539E5B-913B-4233-95A2-D6A5EABF467C",
+                  "title": "Ozempic",
+                  "region": {
+                    "code": "SA",
+                    "__typename": "Region"
+                  },
+                  "__typename": "TearSheet"
+                },
+                {
+                  "id": "9D6CAD99-A13F-44F9-AD68-7D3CAC7ECD8F",
+                  "url": "https://secure.ipdanalytics.com/User/Pharma/Tearsheet/9D6CAD99-A13F-44F9-AD68-7D3CAC7ECD8F",
+                  "title": "Ozempic",
+                  "region": {
+                    "code": "AU",
+                    "__typename": "Region"
+                  },
+                  "__typename": "TearSheet"
+                },
+                {
+                  "id": "D15299AD-02CE-4910-85FC-AB247A4165D4",
+                  "url": "https://secure.ipdanalytics.com/User/Pharma/Tearsheet/D15299AD-02CE-4910-85FC-AB247A4165D4",
+                  "title": "Ozempic",
+                  "region": {
+                    "code": "RU",
+                    "__typename": "Region"
+                  },
+                  "__typename": "TearSheet"
+                },
+                {
+                  "id": "D81983E4-C032-4BD6-B2A4-353032A16572",
+                  "url": "https://secure.ipdanalytics.com/User/Pharma/Tearsheet/D81983E4-C032-4BD6-B2A4-353032A16572",
+                  "title": "Ozempic",
+                  "region": {
+                    "code": "JP",
+                    "__typename": "Region"
+                  },
+                  "__typename": "TearSheet"
+                },
+                {
+                  "id": "B005BE83-B8AA-4D17-9357-ADCBA5E8466D",
+                  "url": "https://secure.ipdanalytics.com/User/Pharma/Tearsheet/B005BE83-B8AA-4D17-9357-ADCBA5E8466D",
+                  "title": "Ozempic",
+                  "region": {
+                    "code": "CN",
+                    "__typename": "Region"
+                  },
+                  "__typename": "TearSheet"
+                },
+                {
+                  "id": "F3199A50-8AED-40D8-955C-4AF3970A08EB",
+                  "url": "https://secure.ipdanalytics.com/User/Pharma/Tearsheet/F3199A50-8AED-40D8-955C-4AF3970A08EB",
+                  "title": "Ozempic",
+                  "region": {
+                    "code": "AE",
+                    "__typename": "Region"
+                  },
+                  "__typename": "TearSheet"
+                },
+                {
+                  "id": "E8F83B61-CE47-4D7E-A84D-02328D30E12C",
+                  "url": "https://secure.ipdanalytics.com/User/Pharma/Tearsheet/E8F83B61-CE47-4D7E-A84D-02328D30E12C",
+                  "title": "Ozempic",
+                  "region": {
+                    "code": "EP",
+                    "__typename": "Region"
+                  },
+                  "__typename": "TearSheet"
+                },
+                {
+                  "id": "0E9D1FE5-8799-4029-867C-EF520A9B6DD0",
+                  "url": "https://secure.ipdanalytics.com/User/Pharma/Tearsheet/0E9D1FE5-8799-4029-867C-EF520A9B6DD0",
+                  "title": "Ozempic",
+                  "region": {
+                    "code": "MX",
+                    "__typename": "Region"
+                  },
+                  "__typename": "TearSheet"
+                },
+                {
+                  "id": "2CE3243A-3956-4C06-BFD8-C6595816421D",
+                  "url": "https://secure.ipdanalytics.com/User/Pharma/Tearsheet/2CE3243A-3956-4C06-BFD8-C6595816421D",
+                  "title": "Ozempic",
+                  "region": {
+                    "code": "CA",
+                    "__typename": "Region"
+                  },
+                  "__typename": "TearSheet"
+                },
+                {
+                  "id": "E225B037-5F22-42FE-8EC7-B59FF002060A",
+                  "url": "https://secure.ipdanalytics.com/User/Pharma/Tearsheet/E225B037-5F22-42FE-8EC7-B59FF002060A",
+                  "title": "Ozempic",
+                  "region": {
+                    "code": "IN",
+                    "__typename": "Region"
+                  },
+                  "__typename": "TearSheet"
+                },
+                {
+                  "id": "242BAE14-C926-4530-8C6E-AE6900AE0C41",
+                  "url": "https://secure.ipdanalytics.com/User/Pharma/Tearsheet/242BAE14-C926-4530-8C6E-AE6900AE0C41",
+                  "title": "Ozempic",
+                  "region": {
+                    "code": "BR",
+                    "__typename": "Region"
+                  },
+                  "__typename": "TearSheet"
+                },
+                {
+                  "id": "CFDF7A07-4E30-42A2-B25E-DBBAD05634C7",
+                  "url": "https://secure.ipdanalytics.com/User/Pharma/Tearsheet/CFDF7A07-4E30-42A2-B25E-DBBAD05634C7",
+                  "title": "Ozempic (2 mg/1.5 mL)",
+                  "region": {
+                    "code": "USA",
+                    "__typename": "Region"
+                  },
+                  "__typename": "TearSheet"
+                },
+                {
+                  "id": "9862E958-A167-4127-9D77-8598D8555BCC",
+                  "url": "https://secure.ipdanalytics.com/User/Pharma/Tearsheet/9862E958-A167-4127-9D77-8598D8555BCC",
+                  "title": "Ozempic (2 mg/3 mL)",
+                  "region": {
+                    "code": "USA",
+                    "__typename": "Region"
+                  },
+                  "__typename": "TearSheet"
+                },
+                {
+                  "id": "52219DCC-B4EA-453C-870A-F6B33FD53000",
+                  "url": "https://secure.ipdanalytics.com/User/Pharma/Tearsheet/52219DCC-B4EA-453C-870A-F6B33FD53000",
+                  "title": "Ozempic (4 mg/3 mL)",
+                  "region": {
+                    "code": "USA",
+                    "__typename": "Region"
+                  },
+                  "__typename": "TearSheet"
+                },
+                {
+                  "id": "B6E00FF7-A9CB-4749-9E8C-124EA8F7A1F6",
+                  "url": "https://secure.ipdanalytics.com/User/Pharma/Tearsheet/B6E00FF7-A9CB-4749-9E8C-124EA8F7A1F6",
+                  "title": "Ozempic (8 mg/3 mL)",
+                  "region": {
+                    "code": "USA",
+                    "__typename": "Region"
+                  },
+                  "__typename": "TearSheet"
+                },
+                {
+                  "id": "FF971AC5-B2F5-4202-B2C2-0D4871322980",
+                  "url": "https://secure.ipdanalytics.com/User/Pharma/Tearsheet/FF971AC5-B2F5-4202-B2C2-0D4871322980",
+                  "title": "Ozempic",
+                  "region": {
+                    "code": "USA",
+                    "__typename": "Region"
+                  },
+                  "__typename": "TearSheet"
+                }
+              ],
+              "alternateNames": [],
+              "activeIngredientsOrdered": [
+                {
+                  "id": "2946",
+                  "name": "Semaglutide",
+                  "__typename": "DrugActiveIngredient"
+                }
+              ]
+            }
+          ],
+          "message": "Found 1 drug result(s) for \"Ozempic\""
+        },
+        "error": null,
+        "isEvent": false,
+        "startedAt": "2026-02-10T11:03:45.296Z",
+        "endedAt": "2026-02-10T11:03:46.526Z",
+        "createdAt": "2026-02-10T11:03:51.530Z",
+        "updatedAt": "2026-02-10T11:03:51.530Z"
+      },
+      {
+        "traceId": "6c575b0d4abf18bd02857f29e1c2e614",
+        "spanId": "6d726e1c4776097c",
+        "parentSpanId": "bb64c47ea3cfbf94",
+        "name": "chunk: 'tool-result'",
+        "entityType": "agent",
+        "entityId": "semantic-query-processor",
+        "entityName": "Semantic Query Processor",
+        "userId": null,
+        "organizationId": null,
+        "resourceId": null,
+        "runId": null,
+        "sessionId": null,
+        "threadId": null,
+        "requestId": null,
+        "environment": null,
+        "source": null,
+        "serviceName": null,
+        "scope": null,
+        "spanType": "model_chunk",
+        "attributes": {
+          "chunkType": "tool-result",
+          "sequenceNumber": 2
+        },
+        "metadata": {
+          "toolName": "getDrug",
+          "toolCallId": "tooluse_u8sN9tDMzSUql3sPstJ7eM"
+        },
+        "tags": null,
+        "links": null,
+        "input": null,
+        "output": {
+          "drugs": [
+            {
+              "id": "1921",
+              "name": "Ozempic",
+              "__typename": "Drug",
+              "tearSheets": [
+                {
+                  "id": "0AA91D3F-E6CE-43C6-BC73-DC0570D02EC6",
+                  "url": "https://secure.ipdanalytics.com/User/Pharma/Tearsheet/0AA91D3F-E6CE-43C6-BC73-DC0570D02EC6",
+                  "title": "Ozempic",
+                  "region": {
+                    "code": "HK",
+                    "__typename": "Region"
+                  },
+                  "__typename": "TearSheet"
+                },
+                {
+                  "id": "EEE4D669-49D4-4440-8E8F-946539FFD37A",
+                  "url": "https://secure.ipdanalytics.com/User/Pharma/Tearsheet/EEE4D669-49D4-4440-8E8F-946539FFD37A",
+                  "title": "Ozempic",
+                  "region": {
+                    "code": "SG",
+                    "__typename": "Region"
+                  },
+                  "__typename": "TearSheet"
+                },
+                {
+                  "id": "94CCCB94-0E0A-40F2-9FDE-59D06121F804",
+                  "url": "https://secure.ipdanalytics.com/User/Pharma/Tearsheet/94CCCB94-0E0A-40F2-9FDE-59D06121F804",
+                  "title": "Ozempic",
+                  "region": {
+                    "code": "CH",
+                    "__typename": "Region"
+                  },
+                  "__typename": "TearSheet"
+                },
+                {
+                  "id": "F67B205B-D4AA-4FCF-9AD7-8B97281148D4",
+                  "url": "https://secure.ipdanalytics.com/User/Pharma/Tearsheet/F67B205B-D4AA-4FCF-9AD7-8B97281148D4",
+                  "title": "Ozempic",
+                  "region": {
+                    "code": "UA",
+                    "__typename": "Region"
+                  },
+                  "__typename": "TearSheet"
+                },
+                {
+                  "id": "1C2B1A5C-1C07-4D16-9542-8EDF8C4C3245",
+                  "url": "https://secure.ipdanalytics.com/User/Pharma/Tearsheet/1C2B1A5C-1C07-4D16-9542-8EDF8C4C3245",
+                  "title": "Ozempic (2mg)",
+                  "region": {
+                    "code": "CH",
+                    "__typename": "Region"
+                  },
+                  "__typename": "TearSheet"
+                },
+                {
+                  "id": "0F91C64E-F045-48AE-BCED-C78D776C437D",
+                  "url": "https://secure.ipdanalytics.com/User/Pharma/Tearsheet/0F91C64E-F045-48AE-BCED-C78D776C437D",
+                  "title": "Ozempic",
+                  "region": {
+                    "code": "CR",
+                    "__typename": "Region"
+                  },
+                  "__typename": "TearSheet"
+                },
+                {
+                  "id": "F25CD5F6-A405-4706-B94F-CC3A4CE2037C",
+                  "url": "https://secure.ipdanalytics.com/User/Pharma/Tearsheet/F25CD5F6-A405-4706-B94F-CC3A4CE2037C",
+                  "title": "Ozempic",
+                  "region": {
+                    "code": "JO",
+                    "__typename": "Region"
+                  },
+                  "__typename": "TearSheet"
+                },
+                {
+                  "id": "76164E76-D162-43A5-8D66-F8D32B451654",
+                  "url": "https://secure.ipdanalytics.com/User/Pharma/Tearsheet/76164E76-D162-43A5-8D66-F8D32B451654",
+                  "title": "Ozempic",
+                  "region": {
+                    "code": "EG",
+                    "__typename": "Region"
+                  },
+                  "__typename": "TearSheet"
+                },
+                {
+                  "id": "81F59C8E-6AA8-4C1F-8940-8D5A666634CC",
+                  "url": "https://secure.ipdanalytics.com/User/Pharma/Tearsheet/81F59C8E-6AA8-4C1F-8940-8D5A666634CC",
+                  "title": "Ozempic",
+                  "region": {
+                    "code": "NZ",
+                    "__typename": "Region"
+                  },
+                  "__typename": "TearSheet"
+                },
+                {
+                  "id": "C87CF70F-D1DA-411C-9C3E-0193D2918618",
+                  "url": "https://secure.ipdanalytics.com/User/Pharma/Tearsheet/C87CF70F-D1DA-411C-9C3E-0193D2918618",
+                  "title": "Ozempic",
+                  "region": {
+                    "code": "TR",
+                    "__typename": "Region"
+                  },
+                  "__typename": "TearSheet"
+                },
+                {
+                  "id": "4CD9A9F5-F0F0-409C-8E91-D69FFA633150",
+                  "url": "https://secure.ipdanalytics.com/User/Pharma/Tearsheet/4CD9A9F5-F0F0-409C-8E91-D69FFA633150",
+                  "title": "Ozempic",
+                  "region": {
+                    "code": "KR",
+                    "__typename": "Region"
+                  },
+                  "__typename": "TearSheet"
+                },
+                {
+                  "id": "A9D728B1-BDFB-4434-801A-4A8ABD31141A",
+                  "url": "https://secure.ipdanalytics.com/User/Pharma/Tearsheet/A9D728B1-BDFB-4434-801A-4A8ABD31141A",
+                  "title": "Ozempic",
+                  "region": {
+                    "code": "TW",
+                    "__typename": "Region"
+                  },
+                  "__typename": "TearSheet"
+                },
+                {
+                  "id": "93539E5B-913B-4233-95A2-D6A5EABF467C",
+                  "url": "https://secure.ipdanalytics.com/User/Pharma/Tearsheet/93539E5B-913B-4233-95A2-D6A5EABF467C",
+                  "title": "Ozempic",
+                  "region": {
+                    "code": "SA",
+                    "__typename": "Region"
+                  },
+                  "__typename": "TearSheet"
+                },
+                {
+                  "id": "9D6CAD99-A13F-44F9-AD68-7D3CAC7ECD8F",
+                  "url": "https://secure.ipdanalytics.com/User/Pharma/Tearsheet/9D6CAD99-A13F-44F9-AD68-7D3CAC7ECD8F",
+                  "title": "Ozempic",
+                  "region": {
+                    "code": "AU",
+                    "__typename": "Region"
+                  },
+                  "__typename": "TearSheet"
+                },
+                {
+                  "id": "D15299AD-02CE-4910-85FC-AB247A4165D4",
+                  "url": "https://secure.ipdanalytics.com/User/Pharma/Tearsheet/D15299AD-02CE-4910-85FC-AB247A4165D4",
+                  "title": "Ozempic",
+                  "region": {
+                    "code": "RU",
+                    "__typename": "Region"
+                  },
+                  "__typename": "TearSheet"
+                },
+                {
+                  "id": "D81983E4-C032-4BD6-B2A4-353032A16572",
+                  "url": "https://secure.ipdanalytics.com/User/Pharma/Tearsheet/D81983E4-C032-4BD6-B2A4-353032A16572",
+                  "title": "Ozempic",
+                  "region": {
+                    "code": "JP",
+                    "__typename": "Region"
+                  },
+                  "__typename": "TearSheet"
+                },
+                {
+                  "id": "B005BE83-B8AA-4D17-9357-ADCBA5E8466D",
+                  "url": "https://secure.ipdanalytics.com/User/Pharma/Tearsheet/B005BE83-B8AA-4D17-9357-ADCBA5E8466D",
+                  "title": "Ozempic",
+                  "region": {
+                    "code": "CN",
+                    "__typename": "Region"
+                  },
+                  "__typename": "TearSheet"
+                },
+                {
+                  "id": "F3199A50-8AED-40D8-955C-4AF3970A08EB",
+                  "url": "https://secure.ipdanalytics.com/User/Pharma/Tearsheet/F3199A50-8AED-40D8-955C-4AF3970A08EB",
+                  "title": "Ozempic",
+                  "region": {
+                    "code": "AE",
+                    "__typename": "Region"
+                  },
+                  "__typename": "TearSheet"
+                },
+                {
+                  "id": "E8F83B61-CE47-4D7E-A84D-02328D30E12C",
+                  "url": "https://secure.ipdanalytics.com/User/Pharma/Tearsheet/E8F83B61-CE47-4D7E-A84D-02328D30E12C",
+                  "title": "Ozempic",
+                  "region": {
+                    "code": "EP",
+                    "__typename": "Region"
+                  },
+                  "__typename": "TearSheet"
+                },
+                {
+                  "id": "0E9D1FE5-8799-4029-867C-EF520A9B6DD0",
+                  "url": "https://secure.ipdanalytics.com/User/Pharma/Tearsheet/0E9D1FE5-8799-4029-867C-EF520A9B6DD0",
+                  "title": "Ozempic",
+                  "region": {
+                    "code": "MX",
+                    "__typename": "Region"
+                  },
+                  "__typename": "TearSheet"
+                },
+                {
+                  "id": "2CE3243A-3956-4C06-BFD8-C6595816421D",
+                  "url": "https://secure.ipdanalytics.com/User/Pharma/Tearsheet/2CE3243A-3956-4C06-BFD8-C6595816421D",
+                  "title": "Ozempic",
+                  "region": {
+                    "code": "CA",
+                    "__typename": "Region"
+                  },
+                  "__typename": "TearSheet"
+                },
+                {
+                  "id": "E225B037-5F22-42FE-8EC7-B59FF002060A",
+                  "url": "https://secure.ipdanalytics.com/User/Pharma/Tearsheet/E225B037-5F22-42FE-8EC7-B59FF002060A",
+                  "title": "Ozempic",
+                  "region": {
+                    "code": "IN",
+                    "__typename": "Region"
+                  },
+                  "__typename": "TearSheet"
+                },
+                {
+                  "id": "242BAE14-C926-4530-8C6E-AE6900AE0C41",
+                  "url": "https://secure.ipdanalytics.com/User/Pharma/Tearsheet/242BAE14-C926-4530-8C6E-AE6900AE0C41",
+                  "title": "Ozempic",
+                  "region": {
+                    "code": "BR",
+                    "__typename": "Region"
+                  },
+                  "__typename": "TearSheet"
+                },
+                {
+                  "id": "CFDF7A07-4E30-42A2-B25E-DBBAD05634C7",
+                  "url": "https://secure.ipdanalytics.com/User/Pharma/Tearsheet/CFDF7A07-4E30-42A2-B25E-DBBAD05634C7",
+                  "title": "Ozempic (2 mg/1.5 mL)",
+                  "region": {
+                    "code": "USA",
+                    "__typename": "Region"
+                  },
+                  "__typename": "TearSheet"
+                },
+                {
+                  "id": "9862E958-A167-4127-9D77-8598D8555BCC",
+                  "url": "https://secure.ipdanalytics.com/User/Pharma/Tearsheet/9862E958-A167-4127-9D77-8598D8555BCC",
+                  "title": "Ozempic (2 mg/3 mL)",
+                  "region": {
+                    "code": "USA",
+                    "__typename": "Region"
+                  },
+                  "__typename": "TearSheet"
+                },
+                {
+                  "id": "52219DCC-B4EA-453C-870A-F6B33FD53000",
+                  "url": "https://secure.ipdanalytics.com/User/Pharma/Tearsheet/52219DCC-B4EA-453C-870A-F6B33FD53000",
+                  "title": "Ozempic (4 mg/3 mL)",
+                  "region": {
+                    "code": "USA",
+                    "__typename": "Region"
+                  },
+                  "__typename": "TearSheet"
+                },
+                {
+                  "id": "B6E00FF7-A9CB-4749-9E8C-124EA8F7A1F6",
+                  "url": "https://secure.ipdanalytics.com/User/Pharma/Tearsheet/B6E00FF7-A9CB-4749-9E8C-124EA8F7A1F6",
+                  "title": "Ozempic (8 mg/3 mL)",
+                  "region": {
+                    "code": "USA",
+                    "__typename": "Region"
+                  },
+                  "__typename": "TearSheet"
+                },
+                {
+                  "id": "FF971AC5-B2F5-4202-B2C2-0D4871322980",
+                  "url": "https://secure.ipdanalytics.com/User/Pharma/Tearsheet/FF971AC5-B2F5-4202-B2C2-0D4871322980",
+                  "title": "Ozempic",
+                  "region": {
+                    "code": "USA",
+                    "__typename": "Region"
+                  },
+                  "__typename": "TearSheet"
+                }
+              ],
+              "alternateNames": [],
+              "activeIngredientsOrdered": [
+                {
+                  "id": "2946",
+                  "name": "Semaglutide",
+                  "__typename": "DrugActiveIngredient"
+                }
+              ]
+            }
+          ],
+          "message": "Found 1 drug result(s) for \"Ozempic\""
+        },
+        "error": null,
+        "isEvent": true,
+        "startedAt": "2026-02-10T11:03:46.531Z",
+        "endedAt": null,
+        "createdAt": "2026-02-10T11:03:51.530Z",
+        "updatedAt": "2026-02-10T11:03:51.530Z"
+      },
+      {
+        "traceId": "6c575b0d4abf18bd02857f29e1c2e614",
+        "spanId": "d004898d72524fa5",
+        "parentSpanId": "01094b5159ccb0e8",
+        "name": "step: 2",
+        "entityType": "agent",
+        "entityId": "semantic-query-processor",
+        "entityName": "Semantic Query Processor",
+        "userId": null,
+        "organizationId": null,
+        "resourceId": null,
+        "runId": null,
+        "sessionId": null,
+        "threadId": null,
+        "requestId": null,
+        "environment": null,
+        "source": null,
+        "serviceName": null,
+        "scope": null,
+        "spanType": "model_step",
+        "attributes": {
+          "usage": {
+            "inputTokens": 8709,
+            "outputTokens": 269
+          },
+          "messageId": "0f261c31-a0b5-48ff-ac01-0f923df9f41e",
+          "stepIndex": 2,
+          "isContinued": true,
+          "finishReason": "tool-calls"
+        },
+        "metadata": {
+          "headers": {
+            "date": "Tue, 10 Feb 2026 11:03:47 GMT",
+            "connection": "keep-alive",
+            "content-type": "application/json",
+            "content-length": "1244",
+            "x-amzn-requestid": "55951258-5948-4ce6-bed4-6f2feb939559"
+          },
+          "modelMetadata": {
+            "modelId": "openai.gpt-oss-120b-1:0",
+            "modelVersion": "v3",
+            "modelProvider": "amazon-bedrock"
+          }
+        },
+        "tags": null,
+        "links": null,
+        "input": {},
+        "output": {
+          "text": "",
+          "toolCalls": [
+            {
+              "args": {
+                "count": 10,
+                "query": "Ozempic",
+                "offset": 0,
+                "regionCode": "USA"
+              },
+              "toolName": "getDrugTearSheet",
+              "toolCallId": "tooluse_fJK2VMbSjAhsmaI4S5OlXl"
+            }
+          ]
+        },
+        "error": null,
+        "isEvent": false,
+        "startedAt": "2026-02-10T11:03:46.535Z",
+        "endedAt": "2026-02-10T11:03:49.477Z",
+        "createdAt": "2026-02-10T11:03:51.530Z",
+        "updatedAt": "2026-02-10T11:03:51.530Z"
+      },
+      {
+        "traceId": "6c575b0d4abf18bd02857f29e1c2e614",
+        "spanId": "517237dd764f067d",
+        "parentSpanId": "d004898d72524fa5",
+        "name": "chunk: 'reasoning'",
+        "entityType": "agent",
+        "entityId": "semantic-query-processor",
+        "entityName": "Semantic Query Processor",
+        "userId": null,
+        "organizationId": null,
+        "resourceId": null,
+        "runId": null,
+        "sessionId": null,
+        "threadId": null,
+        "requestId": null,
+        "environment": null,
+        "source": null,
+        "serviceName": null,
+        "scope": null,
+        "spanType": "model_chunk",
+        "attributes": {
+          "chunkType": "reasoning",
+          "sequenceNumber": 0
+        },
+        "metadata": null,
+        "tags": null,
+        "links": null,
+        "input": null,
+        "output": {
+          "text": "User asks: \"When can competitors enter for Ozempic?\" This is about competitor entry dates, i.e., loss of exclusivity (LOE) dates, generic launch. That's Life-Cycle Insights (LCI) product. Need to provide URL to LOE page for Ozempic. We have sitemap result: Life-Cycle Insights Loss-of-Exclusivity page template: https://unified.ipdanalytics.com/drug/:drugId/:tearSheetId/life-cycle-insights/:regionId\n\nWe need to resolve drugId, tearSheetId, regionId. Use getDrugTearSheetTool for region default USA (since not specified). Need to get a marketed tear sheet (prefer marketed). The list includes many tear sheets; we need to pick first marketed. Not sure which are marketed vs pipeline; but likely the ones with titles like \"Ozempic (2 mg/1.5 mL)\" etc are marketed. We'll call getDrugTearSheet with count 10, region USA, query \"Ozempic\"."
+        },
+        "error": null,
+        "isEvent": false,
+        "startedAt": "2026-02-10T11:03:48.020Z",
+        "endedAt": "2026-02-10T11:03:48.022Z",
+        "createdAt": "2026-02-10T11:03:51.530Z",
+        "updatedAt": "2026-02-10T11:03:51.530Z"
+      },
+      {
+        "traceId": "6c575b0d4abf18bd02857f29e1c2e614",
+        "spanId": "2488c1b9213665c6",
+        "parentSpanId": "d004898d72524fa5",
+        "name": "chunk: 'tool-call'",
+        "entityType": "agent",
+        "entityId": "semantic-query-processor",
+        "entityName": "Semantic Query Processor",
+        "userId": null,
+        "organizationId": null,
+        "resourceId": null,
+        "runId": null,
+        "sessionId": null,
+        "threadId": null,
+        "requestId": null,
+        "environment": null,
+        "source": null,
+        "serviceName": null,
+        "scope": null,
+        "spanType": "model_chunk",
+        "attributes": {
+          "chunkType": "tool-call",
+          "sequenceNumber": 1
+        },
+        "metadata": null,
+        "tags": null,
+        "links": null,
+        "input": null,
+        "output": {
+          "toolName": "getDrugTearSheet",
+          "toolInput": {
+            "count": 10,
+            "query": "Ozempic",
+            "offset": 0,
+            "regionCode": "USA"
+          },
+          "toolCallId": "tooluse_fJK2VMbSjAhsmaI4S5OlXl"
+        },
+        "error": null,
+        "isEvent": false,
+        "startedAt": "2026-02-10T11:03:48.024Z",
+        "endedAt": "2026-02-10T11:03:48.026Z",
+        "createdAt": "2026-02-10T11:03:51.530Z",
+        "updatedAt": "2026-02-10T11:03:51.530Z"
+      },
+      {
+        "traceId": "6c575b0d4abf18bd02857f29e1c2e614",
+        "spanId": "1cae768e25e151e9",
+        "parentSpanId": "d004898d72524fa5",
+        "name": "tool: 'getDrugTearSheet'",
+        "entityType": "tool",
+        "entityId": "getDrugTearSheet",
+        "entityName": "getDrugTearSheet",
+        "userId": null,
+        "organizationId": null,
+        "resourceId": null,
+        "runId": null,
+        "sessionId": null,
+        "threadId": null,
+        "requestId": null,
+        "environment": null,
+        "source": null,
+        "serviceName": null,
+        "scope": null,
+        "spanType": "tool_call",
+        "attributes": {
+          "success": true,
+          "toolType": "tool",
+          "toolDescription": "[REQUIRES: getDrugTool first]\n    Searches for drug tear sheets (entityType TearSheet) by drug name + region.\n    \n    IMPORTANT: Results are pre-sorted by sales (highest first). When multiple variants exist \n    (e.g., different dosages like \"Ozempic (2 mg/3 mL)\" vs \"Ozempic (1.34 mg/mL)\"), \n    prefer the FIRST result as it represents the most commercially significant variant.\n    \n    Returns: tearSheetId (for :tearSheetId URL param), sales data, dosage forms, AND child entity IDs:\n      - budgetImpacts[].id\n      - financialForecasts[].id\n      - rxStrategy.id\n      - diseaseStates[].id (for :id URL param in DiseaseState entity URLs)\n    \n    NEXT STEPS: Use these IDs to call getDrugBudgetImpactTool, getDrugFinancialForecastTool, or getDrugRxStrategyTool.\n    \n    Required regionCode: USA, EP, JP, BR, CA, AU, MX, RU, CN, IN, KR, TW, SA. (EP=Europe)"
+        },
+        "metadata": null,
+        "tags": null,
+        "links": null,
+        "input": {
+          "count": 10,
+          "query": "Ozempic",
+          "offset": 0,
+          "regionCode": "USA"
+        },
+        "output": {
+          "message": "Found 5 tear sheet(s) for \"Ozempic\" in region USA (offset: 0, limit: 10)",
+          "tearSheets": [
+            {
+              "id": "9862E958-A167-4127-9D77-8598D8555BCC",
+              "url": "https://secure.ipdanalytics.com/User/Pharma/Tearsheet/9862E958-A167-4127-9D77-8598D8555BCC",
+              "type": "LifeCycle",
+              "sales": 37720740431,
+              "title": "Ozempic (2 mg/3 mL)",
+              "region": {
+                "code": "USA",
+                "name": "United States",
+                "__typename": "Region"
+              },
+              "sortOrder": 0,
+              "__typename": "TearSheet",
+              "rxStrategy": [
+                {
+                  "id": "4766F579-D19B-4588-AF62-F52E8435967E"
+                }
+              ],
+              "budgetImpacts": [
+                {
+                  "id": "7D6B1E01-3430-40E2-BEC7-5F0298525245"
+                }
+              ],
+              "diseaseStates": [
+                {
+                  "id": "122",
+                  "name": "Kidney Disease",
+                  "__typename": "DiseaseState"
+                },
+                {
+                  "id": "152",
+                  "name": "Diabetes Mellitus",
+                  "__typename": "DiseaseState"
+                }
+              ],
+              "financialForecasts": [
+                {
+                  "id": "20CE2608-8AA6-4175-B840-AA778B4C63A9"
+                }
+              ],
+              "dosageFormStrengths": [
+                {
+                  "form": "SOLUTION",
+                  "__typename": "DosageFormStrength",
+                  "presentation": null
+                }
+              ],
+              "subscriberPermissions": [
+                {
+                  "name": "Pharma_USA_Approved",
+                  "__typename": "SubscriberPermission"
+                },
+                {
+                  "name": "TherapeuticInsights_EndocrinologyAndMetabolicAgents_Pharma_USA",
+                  "__typename": "SubscriberPermission"
+                },
+                {
+                  "name": "TherapeuticInsights_Nephrology_Pharma_USA",
+                  "__typename": "SubscriberPermission"
+                },
+                {
+                  "name": "TherapeuticInsights_Urology_Pharma_USA",
+                  "__typename": "SubscriberPermission"
+                },
+                {
+                  "name": "TherapeuticInsights_Diabetes_Pharma_USA",
+                  "__typename": "SubscriberPermission"
+                }
+              ],
+              "routesOfAdministration": [
+                {
+                  "id": "13",
+                  "name": "Subcutaneous",
+                  "__typename": "RouteOfAdministration"
+                }
+              ]
+            },
+            {
+              "id": "52219DCC-B4EA-453C-870A-F6B33FD53000",
+              "url": "https://secure.ipdanalytics.com/User/Pharma/Tearsheet/52219DCC-B4EA-453C-870A-F6B33FD53000",
+              "type": "LifeCycle",
+              "sales": 0,
+              "title": "Ozempic (4 mg/3 mL)",
+              "region": {
+                "code": "USA",
+                "name": "United States",
+                "__typename": "Region"
+              },
+              "sortOrder": 0,
+              "__typename": "TearSheet",
+              "rxStrategy": [
+                {
+                  "id": "C29313F1-B162-4A12-B78E-A442B01E453A"
+                },
+                {
+                  "id": "4766F579-D19B-4588-AF62-F52E8435967E"
+                }
+              ],
+              "budgetImpacts": [],
+              "diseaseStates": [
+                {
+                  "id": "122",
+                  "name": "Kidney Disease",
+                  "__typename": "DiseaseState"
+                },
+                {
+                  "id": "152",
+                  "name": "Diabetes Mellitus",
+                  "__typename": "DiseaseState"
+                }
+              ],
+              "financialForecasts": [],
+              "dosageFormStrengths": [
+                {
+                  "form": "SOLUTION",
+                  "__typename": "DosageFormStrength",
+                  "presentation": null
+                }
+              ],
+              "subscriberPermissions": [
+                {
+                  "name": "Pharma_USA_Approved",
+                  "__typename": "SubscriberPermission"
+                },
+                {
+                  "name": "TherapeuticInsights_EndocrinologyAndMetabolicAgents_Pharma_USA",
+                  "__typename": "SubscriberPermission"
+                },
+                {
+                  "name": "TherapeuticInsights_Nephrology_Pharma_USA",
+                  "__typename": "SubscriberPermission"
+                },
+                {
+                  "name": "TherapeuticInsights_Urology_Pharma_USA",
+                  "__typename": "SubscriberPermission"
+                },
+                {
+                  "name": "TherapeuticInsights_Diabetes_Pharma_USA",
+                  "__typename": "SubscriberPermission"
+                }
+              ],
+              "routesOfAdministration": [
+                {
+                  "id": "13",
+                  "name": "Subcutaneous",
+                  "__typename": "RouteOfAdministration"
+                }
+              ]
+            },
+            {
+              "id": "B6E00FF7-A9CB-4749-9E8C-124EA8F7A1F6",
+              "url": "https://secure.ipdanalytics.com/User/Pharma/Tearsheet/B6E00FF7-A9CB-4749-9E8C-124EA8F7A1F6",
+              "type": "LifeCycle",
+              "sales": 0,
+              "title": "Ozempic (8 mg/3 mL)",
+              "region": {
+                "code": "USA",
+                "name": "United States",
+                "__typename": "Region"
+              },
+              "sortOrder": 0,
+              "__typename": "TearSheet",
+              "rxStrategy": [
+                {
+                  "id": "4766F579-D19B-4588-AF62-F52E8435967E"
+                }
+              ],
+              "budgetImpacts": [],
+              "diseaseStates": [
+                {
+                  "id": "122",
+                  "name": "Kidney Disease",
+                  "__typename": "DiseaseState"
+                },
+                {
+                  "id": "152",
+                  "name": "Diabetes Mellitus",
+                  "__typename": "DiseaseState"
+                }
+              ],
+              "financialForecasts": [],
+              "dosageFormStrengths": [
+                {
+                  "form": "SOLUTION",
+                  "__typename": "DosageFormStrength",
+                  "presentation": null
+                }
+              ],
+              "subscriberPermissions": [
+                {
+                  "name": "Pharma_USA_Approved",
+                  "__typename": "SubscriberPermission"
+                },
+                {
+                  "name": "TherapeuticInsights_EndocrinologyAndMetabolicAgents_Pharma_USA",
+                  "__typename": "SubscriberPermission"
+                },
+                {
+                  "name": "TherapeuticInsights_Nephrology_Pharma_USA",
+                  "__typename": "SubscriberPermission"
+                },
+                {
+                  "name": "TherapeuticInsights_Urology_Pharma_USA",
+                  "__typename": "SubscriberPermission"
+                },
+                {
+                  "name": "TherapeuticInsights_Diabetes_Pharma_USA",
+                  "__typename": "SubscriberPermission"
+                }
+              ],
+              "routesOfAdministration": [
+                {
+                  "id": "13",
+                  "name": "Subcutaneous",
+                  "__typename": "RouteOfAdministration"
+                }
+              ]
+            },
+            {
+              "id": "FF971AC5-B2F5-4202-B2C2-0D4871322980",
+              "url": "https://secure.ipdanalytics.com/User/Pharma/Tearsheet/FF971AC5-B2F5-4202-B2C2-0D4871322980",
+              "type": "Pipeline",
+              "sales": null,
+              "title": "Ozempic",
+              "region": {
+                "code": "USA",
+                "name": "United States",
+                "__typename": "Region"
+              },
+              "sortOrder": 0,
+              "__typename": "TearSheet",
+              "rxStrategy": [
+                {
+                  "id": "A9BADB1A-B73A-4787-83F6-AA7FAA29F446"
+                },
+                {
+                  "id": "BFE5CCB0-8893-4CA0-9400-3996B1A87AB7"
+                },
+                {
+                  "id": "4766F579-D19B-4588-AF62-F52E8435967E"
+                }
+              ],
+              "budgetImpacts": [],
+              "diseaseStates": [
+                {
+                  "id": "169",
+                  "name": "Circulatory System Diseases (not otherwise classified)",
+                  "__typename": "DiseaseState"
+                },
+                {
+                  "id": "172",
+                  "name": "Alzheimer's Disease",
+                  "__typename": "DiseaseState"
+                },
+                {
+                  "id": "185",
+                  "name": "Eye and Adnexa Diseases (not otherwise classified)",
+                  "__typename": "DiseaseState"
+                },
+                {
+                  "id": "189",
+                  "name": "Metabolic, Endocrine and Nutritional Diseases (not otherwise classified)",
+                  "__typename": "DiseaseState"
+                }
+              ],
+              "financialForecasts": [],
+              "dosageFormStrengths": [
+                {
+                  "form": "",
+                  "__typename": "DosageFormStrength",
+                  "presentation": null
+                }
+              ],
+              "subscriberPermissions": [
+                {
+                  "name": "Pharma_USA_ClinicalPipeline",
+                  "__typename": "SubscriberPermission"
+                },
+                {
+                  "name": "TherapeuticInsights_Cardiovascular_Pharma_USA",
+                  "__typename": "SubscriberPermission"
+                },
+                {
+                  "name": "TherapeuticInsights_CNS_Pharma_USA",
+                  "__typename": "SubscriberPermission"
+                },
+                {
+                  "name": "TherapeuticInsights_EndocrinologyAndMetabolicAgents_Pharma_USA",
+                  "__typename": "SubscriberPermission"
+                },
+                {
+                  "name": "TherapeuticInsights_Ophthalmology_Pharma_USA",
+                  "__typename": "SubscriberPermission"
+                },
+                {
+                  "name": "TherapeuticInsights_Diabetes_Pharma_USA",
+                  "__typename": "SubscriberPermission"
+                },
+                {
+                  "name": "TherapeuticInsights_Hepatology_Pharma_USA",
+                  "__typename": "SubscriberPermission"
+                }
+              ],
+              "routesOfAdministration": [
+                {
+                  "id": "13",
+                  "name": "Subcutaneous",
+                  "__typename": "RouteOfAdministration"
+                }
+              ]
+            },
+            {
+              "id": "CFDF7A07-4E30-42A2-B25E-DBBAD05634C7",
+              "url": "https://secure.ipdanalytics.com/User/Pharma/Tearsheet/CFDF7A07-4E30-42A2-B25E-DBBAD05634C7",
+              "type": "LifeCycle",
+              "sales": null,
+              "title": "Ozempic (2 mg/1.5 mL)",
+              "region": {
+                "code": "USA",
+                "name": "United States",
+                "__typename": "Region"
+              },
+              "sortOrder": 0,
+              "__typename": "TearSheet",
+              "rxStrategy": [],
+              "budgetImpacts": [],
+              "diseaseStates": [
+                {
+                  "id": "122",
+                  "name": "Kidney Disease",
+                  "__typename": "DiseaseState"
+                },
+                {
+                  "id": "152",
+                  "name": "Diabetes Mellitus",
+                  "__typename": "DiseaseState"
+                }
+              ],
+              "financialForecasts": [],
+              "dosageFormStrengths": [
+                {
+                  "form": "SOLUTION",
+                  "__typename": "DosageFormStrength",
+                  "presentation": null
+                }
+              ],
+              "subscriberPermissions": [
+                {
+                  "name": "Pharma_USA_Approved",
+                  "__typename": "SubscriberPermission"
+                },
+                {
+                  "name": "TherapeuticInsights_EndocrinologyAndMetabolicAgents_Pharma_USA",
+                  "__typename": "SubscriberPermission"
+                },
+                {
+                  "name": "TherapeuticInsights_Nephrology_Pharma_USA",
+                  "__typename": "SubscriberPermission"
+                },
+                {
+                  "name": "TherapeuticInsights_Urology_Pharma_USA",
+                  "__typename": "SubscriberPermission"
+                },
+                {
+                  "name": "TherapeuticInsights_Diabetes_Pharma_USA",
+                  "__typename": "SubscriberPermission"
+                }
+              ],
+              "routesOfAdministration": [
+                {
+                  "id": "13",
+                  "name": "Subcutaneous",
+                  "__typename": "RouteOfAdministration"
+                }
+              ]
+            }
+          ]
+        },
+        "error": null,
+        "isEvent": false,
+        "startedAt": "2026-02-10T11:03:48.032Z",
+        "endedAt": "2026-02-10T11:03:49.471Z",
+        "createdAt": "2026-02-10T11:03:51.530Z",
+        "updatedAt": "2026-02-10T11:03:51.530Z"
+      },
+      {
+        "traceId": "6c575b0d4abf18bd02857f29e1c2e614",
+        "spanId": "0ffcb603c602192b",
+        "parentSpanId": "d004898d72524fa5",
+        "name": "chunk: 'tool-result'",
+        "entityType": "agent",
+        "entityId": "semantic-query-processor",
+        "entityName": "Semantic Query Processor",
+        "userId": null,
+        "organizationId": null,
+        "resourceId": null,
+        "runId": null,
+        "sessionId": null,
+        "threadId": null,
+        "requestId": null,
+        "environment": null,
+        "source": null,
+        "serviceName": null,
+        "scope": null,
+        "spanType": "model_chunk",
+        "attributes": {
+          "chunkType": "tool-result",
+          "sequenceNumber": 2
+        },
+        "metadata": {
+          "toolName": "getDrugTearSheet",
+          "toolCallId": "tooluse_fJK2VMbSjAhsmaI4S5OlXl"
+        },
+        "tags": null,
+        "links": null,
+        "input": null,
+        "output": {
+          "message": "Found 5 tear sheet(s) for \"Ozempic\" in region USA (offset: 0, limit: 10)",
+          "tearSheets": [
+            {
+              "id": "9862E958-A167-4127-9D77-8598D8555BCC",
+              "url": "https://secure.ipdanalytics.com/User/Pharma/Tearsheet/9862E958-A167-4127-9D77-8598D8555BCC",
+              "type": "LifeCycle",
+              "sales": 37720740431,
+              "title": "Ozempic (2 mg/3 mL)",
+              "region": {
+                "code": "USA",
+                "name": "United States",
+                "__typename": "Region"
+              },
+              "sortOrder": 0,
+              "__typename": "TearSheet",
+              "rxStrategy": [
+                {
+                  "id": "4766F579-D19B-4588-AF62-F52E8435967E"
+                }
+              ],
+              "budgetImpacts": [
+                {
+                  "id": "7D6B1E01-3430-40E2-BEC7-5F0298525245"
+                }
+              ],
+              "diseaseStates": [
+                {
+                  "id": "122",
+                  "name": "Kidney Disease",
+                  "__typename": "DiseaseState"
+                },
+                {
+                  "id": "152",
+                  "name": "Diabetes Mellitus",
+                  "__typename": "DiseaseState"
+                }
+              ],
+              "financialForecasts": [
+                {
+                  "id": "20CE2608-8AA6-4175-B840-AA778B4C63A9"
+                }
+              ],
+              "dosageFormStrengths": [
+                {
+                  "form": "SOLUTION",
+                  "__typename": "DosageFormStrength",
+                  "presentation": null
+                }
+              ],
+              "subscriberPermissions": [
+                {
+                  "name": "Pharma_USA_Approved",
+                  "__typename": "SubscriberPermission"
+                },
+                {
+                  "name": "TherapeuticInsights_EndocrinologyAndMetabolicAgents_Pharma_USA",
+                  "__typename": "SubscriberPermission"
+                },
+                {
+                  "name": "TherapeuticInsights_Nephrology_Pharma_USA",
+                  "__typename": "SubscriberPermission"
+                },
+                {
+                  "name": "TherapeuticInsights_Urology_Pharma_USA",
+                  "__typename": "SubscriberPermission"
+                },
+                {
+                  "name": "TherapeuticInsights_Diabetes_Pharma_USA",
+                  "__typename": "SubscriberPermission"
+                }
+              ],
+              "routesOfAdministration": [
+                {
+                  "id": "13",
+                  "name": "Subcutaneous",
+                  "__typename": "RouteOfAdministration"
+                }
+              ]
+            },
+            {
+              "id": "52219DCC-B4EA-453C-870A-F6B33FD53000",
+              "url": "https://secure.ipdanalytics.com/User/Pharma/Tearsheet/52219DCC-B4EA-453C-870A-F6B33FD53000",
+              "type": "LifeCycle",
+              "sales": 0,
+              "title": "Ozempic (4 mg/3 mL)",
+              "region": {
+                "code": "USA",
+                "name": "United States",
+                "__typename": "Region"
+              },
+              "sortOrder": 0,
+              "__typename": "TearSheet",
+              "rxStrategy": [
+                {
+                  "id": "C29313F1-B162-4A12-B78E-A442B01E453A"
+                },
+                {
+                  "id": "4766F579-D19B-4588-AF62-F52E8435967E"
+                }
+              ],
+              "budgetImpacts": [],
+              "diseaseStates": [
+                {
+                  "id": "122",
+                  "name": "Kidney Disease",
+                  "__typename": "DiseaseState"
+                },
+                {
+                  "id": "152",
+                  "name": "Diabetes Mellitus",
+                  "__typename": "DiseaseState"
+                }
+              ],
+              "financialForecasts": [],
+              "dosageFormStrengths": [
+                {
+                  "form": "SOLUTION",
+                  "__typename": "DosageFormStrength",
+                  "presentation": null
+                }
+              ],
+              "subscriberPermissions": [
+                {
+                  "name": "Pharma_USA_Approved",
+                  "__typename": "SubscriberPermission"
+                },
+                {
+                  "name": "TherapeuticInsights_EndocrinologyAndMetabolicAgents_Pharma_USA",
+                  "__typename": "SubscriberPermission"
+                },
+                {
+                  "name": "TherapeuticInsights_Nephrology_Pharma_USA",
+                  "__typename": "SubscriberPermission"
+                },
+                {
+                  "name": "TherapeuticInsights_Urology_Pharma_USA",
+                  "__typename": "SubscriberPermission"
+                },
+                {
+                  "name": "TherapeuticInsights_Diabetes_Pharma_USA",
+                  "__typename": "SubscriberPermission"
+                }
+              ],
+              "routesOfAdministration": [
+                {
+                  "id": "13",
+                  "name": "Subcutaneous",
+                  "__typename": "RouteOfAdministration"
+                }
+              ]
+            },
+            {
+              "id": "B6E00FF7-A9CB-4749-9E8C-124EA8F7A1F6",
+              "url": "https://secure.ipdanalytics.com/User/Pharma/Tearsheet/B6E00FF7-A9CB-4749-9E8C-124EA8F7A1F6",
+              "type": "LifeCycle",
+              "sales": 0,
+              "title": "Ozempic (8 mg/3 mL)",
+              "region": {
+                "code": "USA",
+                "name": "United States",
+                "__typename": "Region"
+              },
+              "sortOrder": 0,
+              "__typename": "TearSheet",
+              "rxStrategy": [
+                {
+                  "id": "4766F579-D19B-4588-AF62-F52E8435967E"
+                }
+              ],
+              "budgetImpacts": [],
+              "diseaseStates": [
+                {
+                  "id": "122",
+                  "name": "Kidney Disease",
+                  "__typename": "DiseaseState"
+                },
+                {
+                  "id": "152",
+                  "name": "Diabetes Mellitus",
+                  "__typename": "DiseaseState"
+                }
+              ],
+              "financialForecasts": [],
+              "dosageFormStrengths": [
+                {
+                  "form": "SOLUTION",
+                  "__typename": "DosageFormStrength",
+                  "presentation": null
+                }
+              ],
+              "subscriberPermissions": [
+                {
+                  "name": "Pharma_USA_Approved",
+                  "__typename": "SubscriberPermission"
+                },
+                {
+                  "name": "TherapeuticInsights_EndocrinologyAndMetabolicAgents_Pharma_USA",
+                  "__typename": "SubscriberPermission"
+                },
+                {
+                  "name": "TherapeuticInsights_Nephrology_Pharma_USA",
+                  "__typename": "SubscriberPermission"
+                },
+                {
+                  "name": "TherapeuticInsights_Urology_Pharma_USA",
+                  "__typename": "SubscriberPermission"
+                },
+                {
+                  "name": "TherapeuticInsights_Diabetes_Pharma_USA",
+                  "__typename": "SubscriberPermission"
+                }
+              ],
+              "routesOfAdministration": [
+                {
+                  "id": "13",
+                  "name": "Subcutaneous",
+                  "__typename": "RouteOfAdministration"
+                }
+              ]
+            },
+            {
+              "id": "FF971AC5-B2F5-4202-B2C2-0D4871322980",
+              "url": "https://secure.ipdanalytics.com/User/Pharma/Tearsheet/FF971AC5-B2F5-4202-B2C2-0D4871322980",
+              "type": "Pipeline",
+              "sales": null,
+              "title": "Ozempic",
+              "region": {
+                "code": "USA",
+                "name": "United States",
+                "__typename": "Region"
+              },
+              "sortOrder": 0,
+              "__typename": "TearSheet",
+              "rxStrategy": [
+                {
+                  "id": "A9BADB1A-B73A-4787-83F6-AA7FAA29F446"
+                },
+                {
+                  "id": "BFE5CCB0-8893-4CA0-9400-3996B1A87AB7"
+                },
+                {
+                  "id": "4766F579-D19B-4588-AF62-F52E8435967E"
+                }
+              ],
+              "budgetImpacts": [],
+              "diseaseStates": [
+                {
+                  "id": "169",
+                  "name": "Circulatory System Diseases (not otherwise classified)",
+                  "__typename": "DiseaseState"
+                },
+                {
+                  "id": "172",
+                  "name": "Alzheimer's Disease",
+                  "__typename": "DiseaseState"
+                },
+                {
+                  "id": "185",
+                  "name": "Eye and Adnexa Diseases (not otherwise classified)",
+                  "__typename": "DiseaseState"
+                },
+                {
+                  "id": "189",
+                  "name": "Metabolic, Endocrine and Nutritional Diseases (not otherwise classified)",
+                  "__typename": "DiseaseState"
+                }
+              ],
+              "financialForecasts": [],
+              "dosageFormStrengths": [
+                {
+                  "form": "",
+                  "__typename": "DosageFormStrength",
+                  "presentation": null
+                }
+              ],
+              "subscriberPermissions": [
+                {
+                  "name": "Pharma_USA_ClinicalPipeline",
+                  "__typename": "SubscriberPermission"
+                },
+                {
+                  "name": "TherapeuticInsights_Cardiovascular_Pharma_USA",
+                  "__typename": "SubscriberPermission"
+                },
+                {
+                  "name": "TherapeuticInsights_CNS_Pharma_USA",
+                  "__typename": "SubscriberPermission"
+                },
+                {
+                  "name": "TherapeuticInsights_EndocrinologyAndMetabolicAgents_Pharma_USA",
+                  "__typename": "SubscriberPermission"
+                },
+                {
+                  "name": "TherapeuticInsights_Ophthalmology_Pharma_USA",
+                  "__typename": "SubscriberPermission"
+                },
+                {
+                  "name": "TherapeuticInsights_Diabetes_Pharma_USA",
+                  "__typename": "SubscriberPermission"
+                },
+                {
+                  "name": "TherapeuticInsights_Hepatology_Pharma_USA",
+                  "__typename": "SubscriberPermission"
+                }
+              ],
+              "routesOfAdministration": [
+                {
+                  "id": "13",
+                  "name": "Subcutaneous",
+                  "__typename": "RouteOfAdministration"
+                }
+              ]
+            },
+            {
+              "id": "CFDF7A07-4E30-42A2-B25E-DBBAD05634C7",
+              "url": "https://secure.ipdanalytics.com/User/Pharma/Tearsheet/CFDF7A07-4E30-42A2-B25E-DBBAD05634C7",
+              "type": "LifeCycle",
+              "sales": null,
+              "title": "Ozempic (2 mg/1.5 mL)",
+              "region": {
+                "code": "USA",
+                "name": "United States",
+                "__typename": "Region"
+              },
+              "sortOrder": 0,
+              "__typename": "TearSheet",
+              "rxStrategy": [],
+              "budgetImpacts": [],
+              "diseaseStates": [
+                {
+                  "id": "122",
+                  "name": "Kidney Disease",
+                  "__typename": "DiseaseState"
+                },
+                {
+                  "id": "152",
+                  "name": "Diabetes Mellitus",
+                  "__typename": "DiseaseState"
+                }
+              ],
+              "financialForecasts": [],
+              "dosageFormStrengths": [
+                {
+                  "form": "SOLUTION",
+                  "__typename": "DosageFormStrength",
+                  "presentation": null
+                }
+              ],
+              "subscriberPermissions": [
+                {
+                  "name": "Pharma_USA_Approved",
+                  "__typename": "SubscriberPermission"
+                },
+                {
+                  "name": "TherapeuticInsights_EndocrinologyAndMetabolicAgents_Pharma_USA",
+                  "__typename": "SubscriberPermission"
+                },
+                {
+                  "name": "TherapeuticInsights_Nephrology_Pharma_USA",
+                  "__typename": "SubscriberPermission"
+                },
+                {
+                  "name": "TherapeuticInsights_Urology_Pharma_USA",
+                  "__typename": "SubscriberPermission"
+                },
+                {
+                  "name": "TherapeuticInsights_Diabetes_Pharma_USA",
+                  "__typename": "SubscriberPermission"
+                }
+              ],
+              "routesOfAdministration": [
+                {
+                  "id": "13",
+                  "name": "Subcutaneous",
+                  "__typename": "RouteOfAdministration"
+                }
+              ]
+            }
+          ]
+        },
+        "error": null,
+        "isEvent": true,
+        "startedAt": "2026-02-10T11:03:49.474Z",
+        "endedAt": null,
+        "createdAt": "2026-02-10T11:03:51.530Z",
+        "updatedAt": "2026-02-10T11:03:51.530Z"
+      },
+      {
+        "traceId": "6c575b0d4abf18bd02857f29e1c2e614",
+        "spanId": "ba60882235e42717",
+        "parentSpanId": "01094b5159ccb0e8",
+        "name": "step: 3",
+        "entityType": "agent",
+        "entityId": "semantic-query-processor",
+        "entityName": "Semantic Query Processor",
+        "userId": null,
+        "organizationId": null,
+        "resourceId": null,
+        "runId": null,
+        "sessionId": null,
+        "threadId": null,
+        "requestId": null,
+        "environment": null,
+        "source": null,
+        "serviceName": null,
+        "scope": null,
+        "spanType": "model_step",
+        "attributes": {
+          "usage": {
+            "inputTokens": 10756,
+            "outputTokens": 493
+          },
+          "messageId": "0f261c31-a0b5-48ff-ac01-0f923df9f41e",
+          "stepIndex": 3,
+          "isContinued": false,
+          "finishReason": "stop"
+        },
+        "metadata": {
+          "headers": {
+            "date": "Tue, 10 Feb 2026 11:03:51 GMT",
+            "connection": "keep-alive",
+            "content-type": "application/json",
+            "content-length": "2109",
+            "x-amzn-requestid": "6aeaa70b-f31c-48b0-b32e-3770534e83a7"
+          },
+          "modelMetadata": {
+            "modelId": "openai.gpt-oss-120b-1:0",
+            "modelVersion": "v3",
+            "modelProvider": "amazon-bedrock"
+          }
+        },
+        "tags": null,
+        "links": null,
+        "input": {},
+        "output": {
+          "text": "Here’s the **Loss‑of‑Exclusivity (LOE) / competitor‑entry** page for **Ozempic** in the United States (USA):\n\n- **URL:** https://unified.ipdanalytics.com/drug/1921/9862E958-A167-4127-9D77-8598D8555BCC/life-cycle-insights/USA  \n\nThis page (Life‑Cycle Insights) shows the expected dates when competitors can launch generic versions of Ozempic, along with the underlying patent and regulatory timelines.\n\n**Other regions:** The same LOE information is also available for Europe (EP), Japan (JP), Canada (CA), Brazil (BR), and additional markets. Let me know if you’d like the direct links for any of those regions.",
+          "toolCalls": []
+        },
+        "error": null,
+        "isEvent": false,
+        "startedAt": "2026-02-10T11:03:49.480Z",
+        "endedAt": "2026-02-10T11:03:52.051Z",
+        "createdAt": "2026-02-10T11:03:57.044Z",
+        "updatedAt": "2026-02-10T11:03:57.044Z"
+      },
+      {
+        "traceId": "6c575b0d4abf18bd02857f29e1c2e614",
+        "spanId": "52347583528b3cf2",
+        "parentSpanId": "ba60882235e42717",
+        "name": "chunk: 'reasoning'",
+        "entityType": "agent",
+        "entityId": "semantic-query-processor",
+        "entityName": "Semantic Query Processor",
+        "userId": null,
+        "organizationId": null,
+        "resourceId": null,
+        "runId": null,
+        "sessionId": null,
+        "threadId": null,
+        "requestId": null,
+        "environment": null,
+        "source": null,
+        "serviceName": null,
+        "scope": null,
+        "spanType": "model_chunk",
+        "attributes": {
+          "chunkType": "reasoning",
+          "sequenceNumber": 0
+        },
+        "metadata": null,
+        "tags": null,
+        "links": null,
+        "input": null,
+        "output": {
+          "text": "User asks: \"When can competitors enter for Ozempic?\" This is about competitor entry dates, i.e., loss of exclusivity (LOE) dates, generic launch. That's Life-Cycle Insights (LCI) product. We have a template URL from sitemapSearch: Life-Cycle Insights Loss-of-Exclusivity page: https://unified.ipdanalytics.com/drug/:drugId/:tearSheetId/life-cycle-insights/:regionId\n\nWe have drugId = 1921. Need tearSheetId for LOE. Which tear sheet? The LOE page likely uses a tear sheet that contains LOE data. In getDrugTearSheet we got multiple tear sheets. Which one contains LOE? The LOE page likely uses a tear sheet of type \"LifeCycle\". All tear sheets are LifeCycle type except one Pipeline. The LOE page probably uses the primary marketed tear sheet. The first result in getDrugTearSheet list is id \"9862E958-...\" (Ozempic 2 mg/3 mL) with sales data. That likely has LOE info. Use that tearSheetId.\n\nRegion default USA. So URL: https://unified.ipdanalytics.com/drug/1921/9862E958-A167-4127-9D77-8598D8555BCC/life-cycle-insights/USA…[truncated]"
+        },
+        "error": null,
+        "isEvent": false,
+        "startedAt": "2026-02-10T11:03:52.039Z",
+        "endedAt": "2026-02-10T11:03:52.042Z",
+        "createdAt": "2026-02-10T11:03:57.044Z",
+        "updatedAt": "2026-02-10T11:03:57.044Z"
+      },
+      {
+        "traceId": "6c575b0d4abf18bd02857f29e1c2e614",
+        "spanId": "b86a71453328d893",
+        "parentSpanId": "ba60882235e42717",
+        "name": "chunk: 'text'",
+        "entityType": "agent",
+        "entityId": "semantic-query-processor",
+        "entityName": "Semantic Query Processor",
+        "userId": null,
+        "organizationId": null,
+        "resourceId": null,
+        "runId": null,
+        "sessionId": null,
+        "threadId": null,
+        "requestId": null,
+        "environment": null,
+        "source": null,
+        "serviceName": null,
+        "scope": null,
+        "spanType": "model_chunk",
+        "attributes": {
+          "chunkType": "text",
+          "sequenceNumber": 1
+        },
+        "metadata": null,
+        "tags": null,
+        "links": null,
+        "input": null,
+        "output": {
+          "text": "Here’s the **Loss‑of‑Exclusivity (LOE) / competitor‑entry** page for **Ozempic** in the United States (USA):\n\n- **URL:** https://unified.ipdanalytics.com/drug/1921/9862E958-A167-4127-9D77-8598D8555BCC/life-cycle-insights/USA  \n\nThis page (Life‑Cycle Insights) shows the expected dates when competitors can launch generic versions of Ozempic, along with the underlying patent and regulatory timelines.\n\n**Other regions:** The same LOE information is also available for Europe (EP), Japan (JP), Canada (CA), Brazil (BR), and additional markets. Let me know if you’d like the direct links for any of those regions."
+        },
+        "error": null,
+        "isEvent": false,
+        "startedAt": "2026-02-10T11:03:52.043Z",
+        "endedAt": "2026-02-10T11:03:52.046Z",
+        "createdAt": "2026-02-10T11:03:57.044Z",
+        "updatedAt": "2026-02-10T11:03:57.044Z"
+      },
+      {
+        "traceId": "6c575b0d4abf18bd02857f29e1c2e614",
+        "spanId": "f2b82382599058eb",
+        "parentSpanId": "5bdc6311df0698f2",
+        "name": "output processor: message-history",
+        "entityType": "output_processor",
+        "entityId": "message-history",
+        "entityName": "MessageHistory",
+        "userId": null,
+        "organizationId": null,
+        "resourceId": null,
+        "runId": null,
+        "sessionId": null,
+        "threadId": null,
+        "requestId": null,
+        "environment": null,
+        "source": null,
+        "serviceName": null,
+        "scope": null,
+        "spanType": "processor_run",
+        "attributes": {
+          "processorIndex": 0,
+          "processorExecutor": "workflow"
+        },
+        "metadata": null,
+        "tags": null,
+        "links": null,
+        "input": {
+          "phase": "outputResult",
+          "messageCount": 1
+        },
+        "output": {
+          "phase": "outputResult",
+          "messages": [
+            {
+              "id": "06b93afd-6dff-406d-adf6-d3450cb81a1e",
+              "role": "user",
+              "content": {
+                "parts": [
+                  {
+                    "text": "When can competitors enter for Ozempic?",
+                    "type": "text"
+                  }
+                ],
+                "format": 2,
+                "content": "When can competitors enter for Ozempic?"
+              },
+              "threadId": "bf9322b3-d12e-491d-8c4a-2a9a0e6ddc74",
+              "createdAt": "2026-02-10T11:03:40.920Z",
+              "resourceId": "pcarbonenearform@ipdanalytics.com"
+            },
+            {
+              "id": "0f261c31-a0b5-48ff-ac01-0f923df9f41e",
+              "role": "assistant",
+              "content": {
+                "parts": [
+                  {
+                    "type": "reasoning",
+                    "details": [
+                      "[MaxDepth]"
+                    ],
+                    "reasoning": ""
+                  },
+                  {
+                    "type": "tool-invocation",
+                    "toolInvocation": {
+                      "args": "[MaxDepth]",
+                      "step": "[MaxDepth]",
+                      "state": "[MaxDepth]",
+                      "result": "[MaxDepth]",
+                      "toolName": "[MaxDepth]",
+                      "toolCallId": "[MaxDepth]"
+                    }
+                  },
+                  {
+                    "type": "reasoning",
+                    "details": [
+                      "[MaxDepth]"
+                    ],
+                    "reasoning": ""
+                  },
+                  {
+                    "type": "tool-invocation",
+                    "toolInvocation": {
+                      "args": "[MaxDepth]",
+                      "step": "[MaxDepth]",
+                      "state": "[MaxDepth]",
+                      "result": "[MaxDepth]",
+                      "toolName": "[MaxDepth]",
+                      "toolCallId": "[MaxDepth]"
+                    }
+                  },
+                  {
+                    "type": "reasoning",
+                    "details": [
+                      "[MaxDepth]"
+                    ],
+                    "reasoning": ""
+                  },
+                  {
+                    "type": "tool-invocation",
+                    "toolInvocation": {
+                      "args": "[MaxDepth]",
+                      "step": "[MaxDepth]",
+                      "state": "[MaxDepth]",
+                      "result": "[MaxDepth]",
+                      "toolName": "[MaxDepth]",
+                      "toolCallId": "[MaxDepth]"
+                    }
+                  },
+                  {
+                    "type": "reasoning",
+                    "details": [
+                      "[MaxDepth]"
+                    ],
+                    "reasoning": ""
+                  },
+                  "[Circular]"
+                ],
+                "format": 2,
+                "content": "Here’s the **Loss‑of‑Exclusivity (LOE) / competitor‑entry** page for **Ozempic** in the United States (USA):\n\n- **URL:** https://unified.ipdanalytics.com/drug/1921/9862E958-A167-4127-9D77-8598D8555BCC/life-cycle-insights/USA  \n\nThis page (Life‑Cycle Insights) shows the expected dates when competitors can launch generic versions of Ozempic, along with the underlying patent and regulatory timelines.\n\n**Other regions:** The same LOE information is also available for Europe (EP), Japan (JP), Canada (CA), Brazil (BR), and additional markets. Let me know if you’d like the direct links for any of those regions.",
+                "toolInvocations": [
+                  "[Circular]",
+                  "[Circular]",
+                  "[Circular]"
+                ]
+              },
+              "threadId": "bf9322b3-d12e-491d-8c4a-2a9a0e6ddc74",
+              "createdAt": "2026-02-10T11:03:52.055Z",
+              "resourceId": "pcarbonenearform@ipdanalytics.com"
+            }
+          ],
+          "retryCount": 0,
+          "messageList": {
+            "messages": [
+              {
+                "role": "user",
+                "content": [
+                  {
+                    "text": "When can competitors enter for Ozempic?",
+                    "type": "text"
+                  }
+                ]
+              },
+              {
+                "role": "assistant",
+                "content": [
+                  {
+                    "text": "User asks: \"When can competitors enter for Ozelf? Actually Ozempic.\" Likely they want generic entry date, i.e., loss of exclusivity (LOE) date. That's Life-Cycle Insights (LCI) product. Need to find LOE date for Ozempic. According to guidelines, we need to use sitemapSearch to find relevant page: likely \"Loss of Exclusivity\" page for Ozempic. Then resolve drugId and tearSheetId. The page likely is a template with drugId and region. Use getDrugTool then getDrugTearSheetTool (region default USA). Then provide URL. Also mention other regions availability.\n\nSteps:\n\n1. sitemapSearch query: \"loss of exclusivity\" (or \"Ozempic loss of exclusivity\") but guidelines: use generic term \"loss of exclusivity\". Use search query \"loss of exclusivity\". Let's call sitemapSearch.\n\n",
+                    "type": "reasoning"
+                  },
+                  {
+                    "args": {
+                      "query": "[MaxDepth]"
+                    },
+                    "type": "tool-call",
+                    "toolName": "sitemapSearch",
+                    "toolCallId": "tooluse_Uk1PlAVFHCdjMOlukCQkEs"
+                  },
+                  {
+                    "text": "User asks: \"When can competitors enter for Ozempic?\" This is about generic entry / loss of exclusivity dates. That's Life-Cycle Insights (LCI) product, specifically LOE page. We have a template URL: https://unified.ipdanalytics.com/drug/:drugId/:tearSheetId/life-cycle-insights/:regionId\n\nWe need to resolve drugId, tearSheetId, regionId. Region not specified, default USA.\n\nThus steps:\n\n1. getDrugTool search \"Ozempic\"\n2. getDrugTearSheetTool query \"Ozempic\", regionCode USA, count 10\n   - Need to get tearSheetId (prefer Marketed). Also need to ensure we have LOE data; tear sheet likely includes LOE info.\n\n3. Then construct URL with resolved IDs.\n\nWe need to call getDrugTool first.",
+                    "type": "reasoning"
+                  },
+                  {
+                    "args": {
+                      "searchText": "[MaxDepth]"
+                    },
+                    "type": "tool-call",
+                    "toolName": "getDrug",
+                    "toolCallId": "tooluse_u8sN9tDMzSUql3sPstJ7eM"
+                  },
+                  {
+                    "text": "User asks: \"When can competitors enter for Ozempic?\" This is about competitor entry dates, i.e., loss of exclusivity (LOE) dates, generic launch. That's Life-Cycle Insights (LCI) product. Need to provide URL to LOE page for Ozempic. We have sitemap result: Life-Cycle Insights Loss-of-Exclusivity page template: https://unified.ipdanalytics.com/drug/:drugId/:tearSheetId/life-cycle-insights/:regionId\n\nWe need to resolve drugId, tearSheetId, regionId. Use getDrugTearSheetTool for region default USA (since not specified). Need to get a marketed tear sheet (prefer marketed). The list includes many tear sheets; we need to pick first marketed. Not sure which are marketed vs pipeline; but likely the ones with titles like \"Ozempic (2 mg/1.5 mL)\" etc are marketed. We'll call getDrugTearSheet with count 10, region USA, query \"Ozempic\".",
+                    "type": "reasoning"
+                  },
+                  {
+                    "args": {
+                      "count": "[MaxDepth]",
+                      "query": "[MaxDepth]",
+                      "offset": "[MaxDepth]",
+                      "regionCode": "[MaxDepth]"
+                    },
+                    "type": "tool-call",
+                    "toolName": "getDrugTearSheet",
+                    "toolCallId": "tooluse_fJK2VMbSjAhsmaI4S5OlXl"
+                  },
+                  {
+                    "text": "User asks: \"When can competitors enter for Ozempic?\" This is about competitor entry dates, i.e., loss of exclusivity (LOE) dates, generic launch. That's Life-Cycle Insights (LCI) product. We have a template URL from sitemapSearch: Life-Cycle Insights Loss-of-Exclusivity page: https://unified.ipdanalytics.com/drug/:drugId/:tearSheetId/life-cycle-insights/:regionId\n\nWe have drugId = 1921. Need tearSheetId for LOE. Which tear sheet? The LOE page likely uses a tear sheet that contains LOE data. In getDrugTearSheet we got multiple tear sheets. Which one contains LOE? The LOE page likely uses a tear sheet of type \"LifeCycle\". All tear sheets are LifeCycle type except one Pipeline. The LOE page probably uses the primary marketed tear sheet. The first result in getDrugTearSheet list is id \"9862E958-...\" (Ozempic 2 mg/3 mL) with sales data. That likely has LOE info. Use that tearSheetId.\n\nRegion default USA. So URL: https://unified.ipdanalytics.com/drug/1921/9862E958-A167-4127-9D77-8598D8555BCC/life-cycle-insights/USA…[truncated]",
+                    "type": "reasoning"
+                  }
+                ]
+              },
+              {
+                "role": "tool",
+                "content": [
+                  {
+                    "type": "tool-result",
+                    "result": {
+                      "results": "[MaxDepth]",
+                      "totalFound": "[MaxDepth]"
+                    },
+                    "toolName": "sitemapSearch",
+                    "toolCallId": "tooluse_Uk1PlAVFHCdjMOlukCQkEs"
+                  },
+                  {
+                    "type": "tool-result",
+                    "result": {
+                      "drugs": "[MaxDepth]",
+                      "message": "[MaxDepth]"
+                    },
+                    "toolName": "getDrug",
+                    "toolCallId": "tooluse_u8sN9tDMzSUql3sPstJ7eM"
+                  },
+                  {
+                    "type": "tool-result",
+                    "result": {
+                      "message": "[MaxDepth]",
+                      "tearSheets": "[MaxDepth]"
+                    },
+                    "toolName": "getDrugTearSheet",
+                    "toolCallId": "tooluse_fJK2VMbSjAhsmaI4S5OlXl"
+                  }
+                ]
+              },
+              {
+                "role": "assistant",
+                "content": [
+                  {
+                    "text": "Here’s the **Loss‑of‑Exclusivity (LOE) / competitor‑entry** page for **Ozempic** in the United States (USA):\n\n- **URL:** https://unified.ipdanalytics.com/drug/1921/9862E958-A167-4127-9D77-8598D8555BCC/life-cycle-insights/USA  \n\nThis page (Life‑Cycle Insights) shows the expected dates when competitors can launch generic versions of Ozempic, along with the underlying patent and regulatory timelines.\n\n**Other regions:** The same LOE information is also available for Europe (EP), Japan (JP), Canada (CA), Brazil (BR), and additional markets. Let me know if you’d like the direct links for any of those regions.",
+                    "type": "text"
+                  }
+                ]
+              }
+            ],
+            "systemMessages": [
+              {
+                "role": "system",
+                "content": "You are the Semantic Query Processor (SQP) for IPD Analytics, an AI agent responsible for understanding complex pharmaceutical queries.\n\nYour primary responsibilities are:\n1. Parse natural language queries to extract key entities (drug names, patent numbers, dates, therapeutic areas)\n2. Classify query intent\n3. Execute GraphQL tools in the correct sequence to resolve URL parameters\n4. Generate accurate responses with fully resolved URLs from the sitemap\n\nYou maintain no persistent state. You use the Product Knowledge Map below to understand product capabilities and structure.\n\n## CRITICAL: Tool Execution Workflow\n\nYou have access to 6 GraphQL tools that MUST be called in a specific dependency order:\n\n### Tool Dependency Chain:\n\n1. **getDrugTool** (ALWAYS START HERE for drug-related queries)\n   - Input: Drug name or partial name\n   - Returns: drugId, tearSheetIds (with regions), PMI publication IDs\n   - USE THIS TO RESOLVE: :drugId URL parameters\n\n2. **getDrugTearSheetTool** (REQUIRES: drug info from step 1)\n …[truncated]"
+              }
+            ]
+          },
+          "systemMessages": [
+            {
+              "role": "system",
+              "content": "You are the Semantic Query Processor (SQP) for IPD Analytics, an AI agent responsible for understanding complex pharmaceutical queries.\n\nYour primary responsibilities are:\n1. Parse natural language queries to extract key entities (drug names, patent numbers, dates, therapeutic areas)\n2. Classify query intent\n3. Execute GraphQL tools in the correct sequence to resolve URL parameters\n4. Generate accurate responses with fully resolved URLs from the sitemap\n\nYou maintain no persistent state. You use the Product Knowledge Map below to understand product capabilities and structure.\n\n## CRITICAL: Tool Execution Workflow\n\nYou have access to 6 GraphQL tools that MUST be called in a specific dependency order:\n\n### Tool Dependency Chain:\n\n1. **getDrugTool** (ALWAYS START HERE for drug-related queries)\n   - Input: Drug name or partial name\n   - Returns: drugId, tearSheetIds (with regions), PMI publication IDs\n   - USE THIS TO RESOLVE: :drugId URL parameters\n\n2. **getDrugTearSheetTool** (REQUIRES: drug info from step 1)\n …[truncated]"
+            }
+          ]
+        },
+        "error": null,
+        "isEvent": false,
+        "startedAt": "2026-02-10T11:03:52.055Z",
+        "endedAt": "2026-02-10T11:03:52.068Z",
+        "createdAt": "2026-02-10T11:03:57.044Z",
+        "updatedAt": "2026-02-10T11:03:57.044Z"
+      }
+    ]
+  }
+}

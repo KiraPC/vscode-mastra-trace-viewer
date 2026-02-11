@@ -1,0 +1,139 @@
+{
+  "name": "mastra-trace-viewer",
+  "displayName": "Mastra Trace Viewer",
+  "description": "View and analyze Mastra tracing data in VSCode",
+  "version": "0.0.1",
+  "publisher": "dev",
+  "engines": {
+    "vscode": "^1.95.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "mastraTraceViewer",
+          "title": "Mastra Traces",
+          "icon": "$(telescope)"
+        }
+      ]
+    },
+    "views": {
+      "mastraTraceViewer": [
+        {
+          "id": "mastraTraceList",
+          "name": "Traces"
+        }
+      ]
+    },
+    "commands": [
+      {
+        "command": "mastraTraceViewer.refresh",
+        "title": "Refresh Traces",
+        "icon": "$(refresh)"
+      },
+      {
+        "command": "mastraTraceViewer.loadMore",
+        "title": "Load More Traces"
+      },
+      {
+        "command": "mastraTraceViewer.saveAsJson",
+        "title": "Save as JSON",
+        "icon": "$(save)"
+      },
+      {
+        "command": "mastraTraceViewer.openJson",
+        "title": "Open JSON",
+        "icon": "$(json)"
+      },
+      {
+        "command": "mastra-trace-viewer.open-trace",
+        "title": "Open Trace in Viewer",
+        "icon": "$(open-preview)"
+      }
+    ],
+    "menus": {
+      "view/title": [
+        {
+          "command": "mastraTraceViewer.refresh",
+          "when": "view == mastraTraceList",
+          "group": "navigation"
+        }
+      ],
+      "view/item/context": [
+        {
+          "command": "mastraTraceViewer.saveAsJson",
+          "when": "view == mastraTraceList && viewItem == trace",
+          "group": "inline"
+        },
+        {
+          "command": "mastraTraceViewer.saveAsJson",
+          "when": "view == mastraTraceList && viewItem == span",
+          "group": "inline"
+        },
+        {
+          "command": "mastraTraceViewer.saveAsJson",
+          "when": "view == mastraTraceList && viewItem == trace"
+        },
+        {
+          "command": "mastraTraceViewer.saveAsJson",
+          "when": "view == mastraTraceList && viewItem == span"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "Mastra Trace Viewer",
+      "properties": {
+        "mastraTraceViewer.endpoint": {
+          "type": "string",
+          "default": "http://localhost:4100",
+          "scope": "window",
+          "description": "Mastra instance endpoint URL",
+          "markdownDescription": "The URL of your Mastra instance for trace retrieval. Typically `http://localhost:4111` for local development.\n\n**Examples:**\n- Local: `http://localhost:4111`\n- Remote: `https://mastra.example.com`",
+          "pattern": "^https?://",
+          "patternErrorMessage": "Must be a valid HTTP or HTTPS URL"
+        }
+      }
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run package",
+    "compile": "npm run compile:extension && npm run compile:webview",
+    "compile:extension": "esbuild ./src/extension.ts --outfile=out/extension.js --bundle --external:vscode --format=cjs --platform=node --sourcemap",
+    "compile:webview": "vite build -c build/vite.config.ts",
+    "watch": "concurrently \"npm run watch:extension\" \"npm run watch:webview\"",
+    "watch:extension": "esbuild ./src/extension.ts --outfile=out/extension.js --bundle --external:vscode --format=cjs --platform=node --sourcemap --watch",
+    "watch:webview": "vite build -c build/vite.config.ts --watch",
+    "package": "npm run compile && vsce package",
+    "pretest": "npm run compile",
+    "lint": "eslint src",
+    "test": "vitest",
+    "test:unit": "vitest run",
+    "test:integration": "vscode-test"
+  },
+  "devDependencies": {
+    "@sveltejs/vite-plugin-svelte": "^6.2.4",
+    "@types/mocha": "^10.0.10",
+    "@types/node": "~22.x",
+    "@types/vscode": "^1.95.0",
+    "@typescript-eslint/eslint-plugin": "^8.20.0",
+    "@typescript-eslint/parser": "^8.20.0",
+    "@vitest/ui": "^4.0.18",
+    "@vscode/test-cli": "^0.0.10",
+    "@vscode/test-electron": "^2.4.1",
+    "concurrently": "^9.1.2",
+    "esbuild": "^0.24.2",
+    "eslint": "^9.18.0",
+    "jsdom": "^28.0.0",
+    "svelte": "^5.50.1",
+    "typescript": "^5.7.2",
+    "vite": "^7.3.1",
+    "vitest": "^4.0.18"
+  },
+  "dependencies": {
+    "@mastra/client-js": "^1.2.0"
+  }
+}
