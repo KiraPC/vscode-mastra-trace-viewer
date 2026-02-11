@@ -3,6 +3,7 @@
  */
 
 import { writable, get } from 'svelte/store';
+import type { WebviewState } from '../../models/webviewState.types';
 
 /**
  * Loading state - true while waiting for trace data
@@ -128,4 +129,36 @@ export function setSelectedSpan(spanId: string | null): void {
  */
 export function clearSelection(): void {
   selectedSpanId.set(null);
+}
+
+/**
+ * Scroll position in pixels for state preservation
+ */
+export const scrollPosition = writable<number>(0);
+
+/**
+ * Set scroll position
+ */
+export function setScrollPosition(position: number): void {
+  scrollPosition.set(position);
+}
+
+/**
+ * Get current webview state for persistence
+ */
+export function getState(): WebviewState {
+  return {
+    expandedSpans: Array.from(get(expandedSpans)),
+    scrollPosition: get(scrollPosition),
+    selectedSpanId: get(selectedSpanId)
+  };
+}
+
+/**
+ * Restore webview state from saved state
+ */
+export function restoreState(state: WebviewState): void {
+  expandedSpans.set(new Set(state.expandedSpans));
+  selectedSpanId.set(state.selectedSpanId);
+  scrollPosition.set(state.scrollPosition);
 }

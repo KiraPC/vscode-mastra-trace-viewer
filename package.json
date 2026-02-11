@@ -53,6 +53,11 @@
         "command": "mastra-trace-viewer.open-trace",
         "title": "Open Trace in Viewer",
         "icon": "$(open-preview)"
+      },
+      {
+        "command": "mastra-trace-viewer.closeAllTraces",
+        "title": "Mastra: Close All Trace Tabs",
+        "icon": "$(close-all)"
       }
     ],
     "menus": {
@@ -134,6 +139,7 @@
     "vitest": "^4.0.18"
   },
   "dependencies": {
-    "@mastra/client-js": "^1.2.0"
+    "@mastra/client-js": "^1.2.0",
+    "svelte-virtual-list": "^3.0.1"
   }
 }

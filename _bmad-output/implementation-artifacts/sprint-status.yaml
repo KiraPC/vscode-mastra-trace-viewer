@@ -50,7 +50,7 @@ development_status:
   epic-1-retrospective: optional
 
   # Epic 2: Trace List Discovery
-  epic-2: in-progress
+  epic-2: done
   2-1-trace-list-treeview-provider: done
   2-2-fetch-and-display-trace-list: done
   2-3-refresh-trace-list: done
@@ -68,10 +68,10 @@ development_status:
   epic-3-retrospective: optional
 
   # Epic 4: Performance & Multi-Tab Support
-  epic-4: backlog
-  4-1-virtual-scrolling-for-large-traces: backlog
-  4-2-multiple-trace-tabs-management: backlog
-  4-3-tab-state-preservation: backlog
+  epic-4: done
+  4-1-virtual-scrolling-large-traces: done
+  4-2-multiple-trace-tabs-management: done
+  4-3-tab-state-preservation: done
   epic-4-retrospective: optional
 
   # Epic 5: Trace Search & Navigation

@@ -11,6 +11,7 @@ import {
   expandedSpans,
   focusedSpanId,
   selectedSpanId,
+  scrollPosition,
   setLoading,
   clearLoading,
   setError,
@@ -23,6 +24,9 @@ import {
   setFocusedSpan,
   setSelectedSpan,
   clearSelection,
+  setScrollPosition,
+  getState,
+  restoreState,
 } from './uiStore';
 
 describe('uiStore', () => {
@@ -31,6 +35,7 @@ describe('uiStore', () => {
     collapseAll();
     setFocusedSpan(null);
     clearSelection();
+    setScrollPosition(0);
   });
 
   describe('loadingStore', () => {
@@ -248,6 +253,110 @@ describe('uiStore', () => {
       setSelectedSpan('span-1');
       setSelectedSpan(null);
       expect(get(selectedSpanId)).toBeNull();
+    });
+  });
+
+  describe('scrollPosition', () => {
+    it('should start as 0', () => {
+      expect(get(scrollPosition)).toBe(0);
+    });
+
+    it('should update when setScrollPosition is called', () => {
+      setScrollPosition(100);
+      expect(get(scrollPosition)).toBe(100);
+    });
+
+    it('should update to new position', () => {
+      setScrollPosition(100);
+      setScrollPosition(250);
+      expect(get(scrollPosition)).toBe(250);
+    });
+  });
+
+  describe('getState', () => {
+    it('should return current state as WebviewState', () => {
+      toggleExpand('span-1');
+      toggleExpand('span-2');
+      setSelectedSpan('span-1');
+      setScrollPosition(150);
+
+      const state = getState();
+
+      expect(state.expandedSpans).toContain('span-1');
+      expect(state.expandedSpans).toContain('span-2');
+      expect(state.selectedSpanId).toBe('span-1');
+      expect(state.scrollPosition).toBe(150);
+    });
+
+    it('should return empty state when nothing is set', () => {
+      const state = getState();
+
+      expect(state.expandedSpans).toEqual([]);
+      expect(state.selectedSpanId).toBeNull();
+      expect(state.scrollPosition).toBe(0);
+    });
+  });
+
+  describe('restoreState', () => {
+    it('should restore expandedSpans from array', () => {
+      restoreState({
+        expandedSpans: ['span-a', 'span-b'],
+        scrollPosition: 0,
+        selectedSpanId: null
+      });
+
+      expect(get(expandedSpans).has('span-a')).toBe(true);
+      expect(get(expandedSpans).has('span-b')).toBe(true);
+    });
+
+    it('should restore selectedSpanId', () => {
+      restoreState({
+        expandedSpans: [],
+        scrollPosition: 0,
+        selectedSpanId: 'span-test'
+      });
+
+      expect(get(selectedSpanId)).toBe('span-test');
+    });
+
+    it('should restore scrollPosition', () => {
+      restoreState({
+        expandedSpans: [],
+        scrollPosition: 500,
+        selectedSpanId: null
+      });
+
+      expect(get(scrollPosition)).toBe(500);
+    });
+
+    it('should restore complete state', () => {
+      restoreState({
+        expandedSpans: ['span-1', 'span-2'],
+        scrollPosition: 300,
+        selectedSpanId: 'span-1'
+      });
+
+      expect(get(expandedSpans).has('span-1')).toBe(true);
+      expect(get(expandedSpans).has('span-2')).toBe(true);
+      expect(get(selectedSpanId)).toBe('span-1');
+      expect(get(scrollPosition)).toBe(300);
+    });
+
+    it('should overwrite existing state', () => {
+      toggleExpand('old-span');
+      setSelectedSpan('old-span');
+      setScrollPosition(999);
+
+      restoreState({
+        expandedSpans: ['new-span'],
+        scrollPosition: 100,
+        selectedSpanId: 'new-span'
+      });
+
+      expect(get(expandedSpans).has('old-span')).toBe(false);
+      expect(get(expandedSpans).has('new-span')).toBe(true);
+      expect(get(selectedSpanId)).toBe('new-span');
+      expect(get(scrollPosition)).toBe(100);
     });
   });
 });

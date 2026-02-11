@@ -7,22 +7,13 @@
 
 import * as vscode from 'vscode';
 import type { Trace } from '../models/trace.types';
+import type { WebviewState } from '../models/webviewState.types';
+import { DEFAULT_WEBVIEW_STATE } from '../models/webviewState.types';
+import type { ExtensionMessage, WebviewMessage } from '../models/messages.types';
 import { truncateString } from '../utils/formatters';
 
-/**
- * Message types for Extension → Webview communication
- */
-export type WebviewMessage =
-  | { type: 'loadTrace'; payload: { trace: Trace; selectedSpanId?: string } }
-  | { type: 'loading'; payload: { message: string } }
-  | { type: 'error'; payload: { message: string } };
-
-/**
- * Message types for Webview → Extension communication
- */
-export type ExtensionMessage =
-  | { type: 'retry' }
-  | { type: 'ready' };
+// Re-export message types for backwards compatibility
+export type { ExtensionMessage, WebviewMessage } from '../models/messages.types';
 
 export class TraceViewerPanel {
   /**
@@ -40,6 +31,11 @@ export class TraceViewerPanel {
   private readonly _extensionUri: vscode.Uri;
   private _disposed = false;
   private _disposables: vscode.Disposable[] = [];
+  
+  /**
+   * State preservation for tab switching
+   */
+  private _state: WebviewState = { ...DEFAULT_WEBVIEW_STATE };
 
   /**
    * Callback for retry requests from webview
@@ -76,6 +72,23 @@ export class TraceViewerPanel {
   }
 
   /**
+   * Dispose all open panels (call on extension deactivation)
+   */
+  public static disposeAll(): void {
+    for (const panel of TraceViewerPanel.panels.values()) {
+      panel._dispose();
+    }
+    TraceViewerPanel.panels.clear();
+  }
+
+  /**
+   * Get count of open panels
+   */
+  public static get panelCount(): number {
+    return TraceViewerPanel.panels.size;
+  }
+
+  /**
    * Private constructor - use createOrShow() instead
    */
   private constructor(traceId: string, extensionUri: vscode.Uri) {
@@ -96,12 +109,15 @@ export class TraceViewerPanel {
       }
     );
 
+    // Set panel icon (uses VSCode ThemeIcon)
+    this._panel.iconPath = new vscode.ThemeIcon('telescope');
+
     // Set initial HTML content
     this._panel.webview.html = this._getHtmlForWebview();
 
     // Handle messages from webview
     this._panel.webview.onDidReceiveMessage(
-      (message: ExtensionMessage) => this._handleWebviewMessage(message),
+      (message: WebviewMessage) => this._handleWebviewMessage(message),
       null,
       this._disposables
     );
@@ -112,6 +128,44 @@ export class TraceViewerPanel {
       null,
       this._disposables
     );
+
+    // Handle visibility changes for state restoration
+    // Note: With retainContextWhenHidden: true, webview state persists naturally.
+    // We only restore on 'ready' message (webview reload).
+    // This handler is kept for potential future use or if retainContextWhenHidden is disabled.
+    this._panel.onDidChangeViewState(
+      (e) => this._handleViewStateChange(e),
+      null,
+      this._disposables
+    );
+  }
+
+  /**
+   * Handle panel visibility changes
+   * With retainContextWhenHidden: true, we don't need to restore state
+   * because the webview keeps its state. We only restore on webview reload
+   * (handled by 'ready' message).
+   */
+  private _handleViewStateChange(_e: vscode.WebviewPanelOnDidChangeViewStateEvent): void {
+    // Intentionally empty - state is preserved by retainContextWhenHidden
+    // State restoration only happens on 'ready' message (webview reload)
+  }
+
+  /**
+   * Send saved state to webview for restoration
+   */
+  private _restoreState(): void {
+    if (!this._disposed) {
+      const message: ExtensionMessage = { type: 'restoreState', payload: this._state };
+      this._panel.webview.postMessage(message);
+    }
+  }
+
+  /**
+   * Get the current saved state for this panel
+   */
+  public get state(): WebviewState {
+    return { ...this._state };
   }
 
   /**
@@ -121,7 +175,7 @@ export class TraceViewerPanel {
    */
   public sendTrace(trace: Trace, selectedSpanId?: string): void {
     if (!this._disposed) {
-      const message: WebviewMessage = { type: 'loadTrace', payload: { trace, selectedSpanId } };
+      const message: ExtensionMessage = { type: 'loadTrace', payload: { trace, selectedSpanId } };
       this._panel.webview.postMessage(message);
     }
   }
@@ -131,7 +185,7 @@ export class TraceViewerPanel {
    */
   public sendLoading(message = 'Loading trace...'): void {
     if (!this._disposed) {
-      const msg: WebviewMessage = { type: 'loading', payload: { message } };
+      const msg: ExtensionMessage = { type: 'loading', payload: { message } };
       this._panel.webview.postMessage(msg);
     }
   }
@@ -141,7 +195,7 @@ export class TraceViewerPanel {
    */
   public sendError(message: string): void {
     if (!this._disposed) {
-      const msg: WebviewMessage = { type: 'error', payload: { message } };
+      const msg: ExtensionMessage = { type: 'error', payload: { message } };
       this._panel.webview.postMessage(msg);
     }
   }
@@ -179,13 +233,21 @@ export class TraceViewerPanel {
   /**
    * Handle messages from webview
    */
-  private _handleWebviewMessage(message: ExtensionMessage): void {
+  private _handleWebviewMessage(message: WebviewMessage): void {
     switch (message.type) {
       case 'retry':
         this._onRetry?.();
         break;
       case 'ready':
-        // Webview is ready to receive messages
+        // Webview is ready to receive messages, restore state
+        this._restoreState();
+        break;
+      case 'showWarning':
+        vscode.window.showWarningMessage(message.payload.message);
+        break;
+      case 'saveState':
+        // Webview is saving its state
+        this._state = message.payload;
         break;
     }
   }

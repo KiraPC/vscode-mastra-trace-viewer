@@ -141,6 +141,19 @@ export async function activate(context: vscode.ExtensionContext) {
 	);
 	context.subscriptions.push(openTraceCommand);
 
+	// Register close all traces command
+	const closeAllTracesCommand = vscode.commands.registerCommand(
+		'mastra-trace-viewer.closeAllTraces',
+		() => {
+			const count = TraceViewerPanel.panelCount;
+			TraceViewerPanel.disposeAll();
+			if (count > 0) {
+				vscode.window.showInformationMessage(`Closed ${count} trace tab${count > 1 ? 's' : ''}`);
+			}
+		}
+	);
+	context.subscriptions.push(closeAllTracesCommand);
+
 	// Register open JSON command (click on item)
 	const openJsonCommand = vscode.commands.registerCommand(
 		'mastraTraceViewer.openJson',
@@ -243,5 +256,7 @@ async function handleEndpointChange(
 }
 
 export function deactivate() {
+	// Dispose all open trace panels
+	TraceViewerPanel.disposeAll();
 	connectionManager?.disconnect();
 }

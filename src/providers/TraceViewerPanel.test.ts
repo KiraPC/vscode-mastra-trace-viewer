@@ -12,6 +12,7 @@ const mockDispose = vi.fn();
 const mockReveal = vi.fn();
 const mockOnDidDispose = vi.fn();
 const mockOnDidReceiveMessage = vi.fn();
+const mockOnDidChangeViewState = vi.fn();
 
 const mockWebviewPanel = {
   webview: {
@@ -24,6 +25,9 @@ const mockWebviewPanel = {
   dispose: mockDispose,
   reveal: mockReveal,
   onDidDispose: mockOnDidDispose,
+  onDidChangeViewState: mockOnDidChangeViewState,
+  iconPath: undefined as any,
+  visible: true,
 };
 
 vi.mock('vscode', () => ({
@@ -35,6 +39,12 @@ vi.mock('vscode', () => ({
   },
   Uri: {
     joinPath: vi.fn((...args) => args.join('/')),
+  },
+  ThemeIcon: class ThemeIcon {
+    public id: string;
+    constructor(id: string) {
+      this.id = id;
+    }
   },
 }));
 
@@ -68,6 +78,11 @@ describe('TraceViewerPanel', () => {
     mockOnDidReceiveMessage.mockImplementation((callback) => {
       return { dispose: vi.fn() };
     });
+    mockOnDidChangeViewState.mockImplementation((callback) => {
+      return { dispose: vi.fn() };
+    });
+    // Reset iconPath
+    mockWebviewPanel.iconPath = undefined;
   });
 
   afterEach(() => {
@@ -99,6 +114,13 @@ describe('TraceViewerPanel', () => {
       expect(panel1.traceId).toBe('trace-1');
       expect(panel2.traceId).toBe('trace-2');
     });
+
+    it('should set iconPath on panel', () => {
+      TraceViewerPanel.createOrShow(testTraceId, mockExtensionUri);
+      
+      expect(mockWebviewPanel.iconPath).toBeDefined();
+      expect(mockWebviewPanel.iconPath.id).toBe('telescope');
+    });
   });
 
   describe('getPanel', () => {
@@ -112,6 +134,56 @@ describe('TraceViewerPanel', () => {
       const retrieved = TraceViewerPanel.getPanel(testTraceId);
       
       expect(retrieved).toBe(created);
+    });
+  });
+
+  describe('disposeAll', () => {
+    it('should dispose all open panels', () => {
+      // Create multiple panels
+      TraceViewerPanel.createOrShow('trace-1', mockExtensionUri);
+      TraceViewerPanel.createOrShow('trace-2', mockExtensionUri);
+      TraceViewerPanel.createOrShow('trace-3', mockExtensionUri);
+      
+      expect(TraceViewerPanel.panelCount).toBe(3);
+      
+      // Dispose all
+      TraceViewerPanel.disposeAll();
+      
+      expect(TraceViewerPanel.panelCount).toBe(0);
+      expect(TraceViewerPanel.getPanel('trace-1')).toBeUndefined();
+      expect(TraceViewerPanel.getPanel('trace-2')).toBeUndefined();
+      expect(TraceViewerPanel.getPanel('trace-3')).toBeUndefined();
+    });
+
+    it('should work when no panels are open', () => {
+      expect(TraceViewerPanel.panelCount).toBe(0);
+      
+      // Should not throw
+      TraceViewerPanel.disposeAll();
+      
+      expect(TraceViewerPanel.panelCount).toBe(0);
+    });
+  });
+
+  describe('panelCount', () => {
+    it('should return 0 when no panels are open', () => {
+      expect(TraceViewerPanel.panelCount).toBe(0);
+    });
+
+    it('should return correct count of open panels', () => {
+      TraceViewerPanel.createOrShow('trace-1', mockExtensionUri);
+      expect(TraceViewerPanel.panelCount).toBe(1);
+      
+      TraceViewerPanel.createOrShow('trace-2', mockExtensionUri);
+      expect(TraceViewerPanel.panelCount).toBe(2);
+    });
+
+    it('should not increase count for same traceId', () => {
+      TraceViewerPanel.createOrShow(testTraceId, mockExtensionUri);
+      expect(TraceViewerPanel.panelCount).toBe(1);
+      
+      TraceViewerPanel.createOrShow(testTraceId, mockExtensionUri);
+      expect(TraceViewerPanel.panelCount).toBe(1);
     });
   });
 
@@ -225,6 +297,66 @@ describe('TraceViewerPanel', () => {
   describe('viewType', () => {
     it('should have correct viewType', () => {
       expect(TraceViewerPanel.viewType).toBe('mastraTraceViewer');
+    });
+  });
+
+  describe('state preservation', () => {
+    it('should initialize with default state', () => {
+      const panel = TraceViewerPanel.createOrShow(testTraceId, mockExtensionUri);
+      
+      const state = panel.state;
+      expect(state.expandedSpans).toEqual([]);
+      expect(state.scrollPosition).toBe(0);
+      expect(state.selectedSpanId).toBeNull();
+    });
+
+    it('should save state when receiving saveState message', () => {
+      TraceViewerPanel.createOrShow(testTraceId, mockExtensionUri);
+      
+      // Get the message handler
+      const messageHandler = mockOnDidReceiveMessage.mock.calls[0][0];
+      
+      // Simulate saveState message
+      messageHandler({
+        type: 'saveState',
+        payload: {
+          expandedSpans: ['span-a', 'span-b'],
+          scrollPosition: 200,
+          selectedSpanId: 'span-a'
+        }
+      });
+      
+      const panel = TraceViewerPanel.getPanel(testTraceId);
+      expect(panel?.state.expandedSpans).toContain('span-a');
+      expect(panel?.state.scrollPosition).toBe(200);
+      expect(panel?.state.selectedSpanId).toBe('span-a');
+    });
+
+    it('should send restoreState on ready message', () => {
+      TraceViewerPanel.createOrShow(testTraceId, mockExtensionUri);
+      
+      // Get the message handler
+      const messageHandler = mockOnDidReceiveMessage.mock.calls[0][0];
+      
+      // Clear previous calls
+      mockPostMessage.mockClear();
+      
+      // Simulate ready message
+      messageHandler({ type: 'ready' });
+      
+      expect(mockPostMessage).toHaveBeenCalledWith({
+        type: 'restoreState',
+        payload: expect.objectContaining({
+          expandedSpans: expect.any(Array),
+          scrollPosition: expect.any(Number),
+        })
+      });
+    });
+
+    it('should register onDidChangeViewState handler', () => {
+      TraceViewerPanel.createOrShow(testTraceId, mockExtensionUri);
+      
+      expect(mockOnDidChangeViewState).toHaveBeenCalled();
     });
   });
 });

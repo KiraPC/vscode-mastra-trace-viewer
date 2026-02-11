@@ -14,9 +14,12 @@
     setError, 
     clearUIState,
     expandAll,
-    setSelectedSpan
+    setSelectedSpan,
+    getState,
+    restoreState
   } from './stores/uiStore';
   import { onMessage, sendMessage } from './utils/messageHandler';
+  import { initStateHandler } from './utils/stateHandler';
   import { buildTree } from '../utils/spanTreeBuilder';
   import type { SpanTreeNode } from '../models/tree.types';
   import LoadingSpinner from './components/LoadingSpinner.svelte';
@@ -75,7 +78,27 @@
     return null;
   }
   
+  // Threshold for showing large trace warning
+  const LARGE_TRACE_THRESHOLD = 1000;
+  
+  /**
+   * Check if trace is large and show warning to user
+   */
+  function checkLargeTrace(spanCount: number): void {
+    if (spanCount > LARGE_TRACE_THRESHOLD) {
+      sendMessage({
+        type: 'showWarning',
+        payload: {
+          message: `Large trace detected (${spanCount} spans). Some features may be slower.`
+        }
+      });
+    }
+  }
+  
   onMount(() => {
+    // Initialize state handler for tab state preservation
+    const cleanupStateHandler = initStateHandler(getState, restoreState);
+    
     // Subscribe to messages from extension
     const unsubscribe = onMessage((message) => {
       switch (message.type) {
@@ -86,6 +109,10 @@
           // Build tree and set up initial expand state
           const tree = trace.spans ? buildTree(trace.spans) : [];
           const rootIds = collectRootSpanIds(tree);
+          
+          // Check for large trace and show warning
+          const spanCount = trace.spans?.length || 0;
+          checkLargeTrace(spanCount);
           
           if (initialSpanId) {
             // If a specific span is targeted, expand path to it and select it
@@ -112,7 +139,10 @@
     // Signal to extension that webview is ready
     sendMessage({ type: 'ready' });
     
-    return unsubscribe;
+    return () => {
+      unsubscribe();
+      cleanupStateHandler();
+    };
   });
 </script>
 

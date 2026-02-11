@@ -1,7 +1,7 @@
 <script lang="ts">
   /**
    * SpanNode component - Renders a single span in the tree
-   * Recursively renders children with increasing depth
+   * Recursively renders children with increasing depth (when not in virtual mode)
    * Supports expand/collapse functionality and selection
    */
   import type { SpanTreeNode } from '../../models/tree.types';
@@ -12,12 +12,24 @@
   interface Props {
     node: SpanTreeNode;
     depth?: number;
+    /** Virtual mode disables recursive rendering and internal indentation (handled by virtual list wrapper) */
+    virtualMode?: boolean;
+    /** Override hasChildren check when in virtual mode */
+    hasChildrenOverride?: boolean;
+    /** Override isExpanded check when in virtual mode */
+    isExpandedOverride?: boolean;
   }
   
-  let { node, depth = 0 }: Props = $props();
+  let { 
+    node, 
+    depth = 0, 
+    virtualMode = false,
+    hasChildrenOverride,
+    isExpandedOverride
+  }: Props = $props();
   
-  // Calculate indentation based on depth (reactive)
-  const indentPx = $derived(depth * 20);
+  // Calculate indentation based on depth (skip in virtual mode - handled by wrapper)
+  const indentPx = $derived(virtualMode ? 0 : depth * 20);
   
   // Format duration for display
   const duration = $derived(formatDuration(node.startedAt, node.endedAt));
@@ -35,11 +47,18 @@
     'success'
   );
   
-  // Check if this node has children
-  const hasChildren = $derived(node.children.length > 0);
+  // Check if this node has children (use override in virtual mode)
+  const hasChildren = $derived(
+    hasChildrenOverride !== undefined ? hasChildrenOverride : node.children.length > 0
+  );
   
-  // Check if this node is expanded (reactive to store)
-  let isExpanded = $derived($expandedSpans.has(node.spanId));
+  // Check if this node is expanded (use override in virtual mode, otherwise reactive to store)
+  let isExpanded = $derived(
+    isExpandedOverride !== undefined ? isExpandedOverride : $expandedSpans.has(node.spanId)
+  );
+  
+  // Whether to show children (never in virtual mode - handled by virtual list)
+  const showChildren = $derived(!virtualMode && hasChildren && isExpanded);
   
 
   // Check if this node is selected
@@ -123,7 +142,7 @@
     {/if}
   </div>
   
-  {#if hasChildren && isExpanded}
+  {#if showChildren}
     <div class="children">
       {#each node.children as child (child.spanId)}
         <SpanNode node={child} depth={depth + 1} />
