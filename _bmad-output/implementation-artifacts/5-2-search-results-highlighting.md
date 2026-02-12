@@ -1,6 +1,6 @@
 # Story 5.2: Search Results Highlighting
 
-Status: review
+Status: done
 
 ## Story
 
@@ -268,7 +268,19 @@ Claude Opus 4.5
 - Task 4: Svelte reactivity handles clearing automatically - when searchStore.results clears, isMatch becomes false and CSS classes are removed.
 - Task 5: All 296 unit tests pass. Compile succeeds with no errors.
 
+### Code Review Fixes Applied
+
+- **CR-1 (HIGH)**: Created missing unit tests. Extracted `countHiddenMatches`, `isSpanMatch`, `createResultsSet` to [highlightHelper.ts](src/webview/utils/highlightHelper.ts). Added 16 comprehensive tests in [highlightHelper.test.ts](src/webview/utils/highlightHelper.test.ts) covering edge cases and performance.
+- **CR-2 (MEDIUM)**: Optimized isMatch lookup from O(n) `includes()` to O(1) `Set.has()` by creating resultsSet with `createResultsSet()` once per results change.
+- **CR-3 (MEDIUM)**: Simplified countHiddenMatches logic by removing redundant if/else branches.
+
+**Post-review tests:** 345 tests passing. Compile clean.
+
 ### File List
+
+**Created:**
+- src/webview/utils/highlightHelper.ts
+- src/webview/utils/highlightHelper.test.ts
 
 **Modified:**
 - src/webview/components/SpanNode.svelte

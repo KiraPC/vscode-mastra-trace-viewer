@@ -192,4 +192,89 @@ describe('searchStore', () => {
       expect(get(currentIndex)).toBe(-1);
     });
   });
+
+  describe('navigation callback scenarios', () => {
+    it('should provide correct spanId for callback after next navigation', () => {
+      setResults(['span-1', 'span-2', 'span-3']);
+      
+      // Simulate what TraceSearch.triggerNavigate() does
+      expect(getCurrentResultSpanId()).toBe('span-1');
+      
+      nextResult();
+      expect(getCurrentResultSpanId()).toBe('span-2');
+      
+      nextResult();
+      expect(getCurrentResultSpanId()).toBe('span-3');
+    });
+
+    it('should provide correct spanId for callback after prev navigation', () => {
+      setResults(['span-1', 'span-2', 'span-3']);
+      
+      // Start at first, go to last via prev (wrap)
+      prevResult();
+      expect(getCurrentResultSpanId()).toBe('span-3');
+      
+      prevResult();
+      expect(getCurrentResultSpanId()).toBe('span-2');
+    });
+
+    it('should handle rapid sequential navigation', () => {
+      setResults(['span-1', 'span-2', 'span-3', 'span-4', 'span-5']);
+      
+      // Rapid forward navigation
+      nextResult(); // 1
+      nextResult(); // 2
+      nextResult(); // 3
+      expect(getCurrentResultSpanId()).toBe('span-4');
+      
+      // Rapid backward navigation
+      prevResult(); // 3
+      prevResult(); // 2
+      expect(getCurrentResultSpanId()).toBe('span-2');
+    });
+
+    it('should cycle through all results with repeated next calls', () => {
+      const spanIds = ['span-1', 'span-2', 'span-3'];
+      setResults(spanIds);
+      
+      // Collect all spanIds visited in order
+      const visited: string[] = [getCurrentResultSpanId()!];
+      for (let i = 0; i < spanIds.length; i++) {
+        nextResult();
+        visited.push(getCurrentResultSpanId()!);
+      }
+      
+      // Should visit: span-1, span-2, span-3, span-1 (wrapped)
+      expect(visited).toEqual(['span-1', 'span-2', 'span-3', 'span-1']);
+    });
+
+    it('should cycle through all results with repeated prev calls', () => {
+      const spanIds = ['span-1', 'span-2', 'span-3'];
+      setResults(spanIds);
+      
+      // Collect all spanIds visited in order (starting from first, going backwards)
+      const visited: string[] = [getCurrentResultSpanId()!];
+      for (let i = 0; i < spanIds.length; i++) {
+        prevResult();
+        visited.push(getCurrentResultSpanId()!);
+      }
+      
+      // Should visit: span-1, span-3 (wrapped), span-2, span-1
+      expect(visited).toEqual(['span-1', 'span-3', 'span-2', 'span-1']);
+    });
+
+    it('should handle single result navigation correctly', () => {
+      setResults(['only-span']);
+      
+      expect(getCurrentResultSpanId()).toBe('only-span');
+      
+      const wrappedNext = nextResult();
+      expect(wrappedNext).toBe(true);
+      expect(getCurrentResultSpanId()).toBe('only-span');
+      
+      const wrappedPrev = prevResult();
+      expect(wrappedPrev).toBe(true);
+      expect(getCurrentResultSpanId()).toBe('only-span');
+    });
+  });
 });

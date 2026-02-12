@@ -4,6 +4,8 @@ import { MastraApiError } from './models/errors.types';
 import { ConnectionStateManager } from './utils/connectionStateManager';
 import { MastraClientWrapper } from './api/MastraClientWrapper';
 import { TraceListProvider, TraceTreeItem } from './providers/TraceListProvider';
+import { TraceDragController } from './providers/TraceDragController';
+import { TraceDropEditProvider } from './providers/TraceDropEditProvider';
 import { TraceViewerPanel } from './providers/TraceViewerPanel';
 
 let connectionManager: ConnectionStateManager | undefined;
@@ -39,11 +41,26 @@ export async function activate(context: vscode.ExtensionContext) {
 
 	// Create trace list provider and register view
 	traceListProvider = new TraceListProvider(apiClient);
+	const dragController = new TraceDragController(traceListProvider);
 	const treeView = vscode.window.createTreeView('mastraTraceList', {
 		treeDataProvider: traceListProvider,
-		showCollapseAll: true
+		dragAndDropController: dragController,
+		showCollapseAll: true,
+		canSelectMany: false
 	});
 	context.subscriptions.push(treeView);
+
+	// Register document drop edit provider for dropping traces into editors
+	const dropProvider = new TraceDropEditProvider();
+	const dropRegistration = vscode.languages.registerDocumentDropEditProvider(
+		{ scheme: '*', language: '*' },
+		dropProvider,
+		{
+			id: 'mastra-trace-viewer.traceDropProvider',
+			dropMimeTypes: TraceDropEditProvider.mimeTypes as string[]
+		}
+	);
+	context.subscriptions.push(dropRegistration);
 
 	// Register refresh command
 	const refreshCommand = vscode.commands.registerCommand(
@@ -97,6 +114,27 @@ export async function activate(context: vscode.ExtensionContext) {
 		}
 	);
 	context.subscriptions.push(saveAsJsonCommand);
+
+	// Register copy trace JSON command (for Copilot chat integration)
+	const copyTraceJsonCommand = vscode.commands.registerCommand(
+		'mastraTraceViewer.copyTraceJson',
+		async (item: TraceTreeItem) => {
+			if (!item?.trace) {
+				return;
+			}
+
+			const fullTrace = await traceListProvider?.fetchFullTrace(item.trace.traceId);
+			if (!fullTrace) {
+				vscode.window.showErrorMessage('Failed to fetch trace');
+				return;
+			}
+
+			const json = JSON.stringify(fullTrace, null, 2);
+			await vscode.env.clipboard.writeText(json);
+			vscode.window.showInformationMessage('Trace JSON copied to clipboard');
+		}
+	);
+	context.subscriptions.push(copyTraceJsonCommand);
 
 	// Register open-trace command (opens webview panel)
 	const openTraceCommand = vscode.commands.registerCommand(

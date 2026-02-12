@@ -30,6 +30,22 @@
   let wrapTimeout: ReturnType<typeof setTimeout> | null = null;
 
   /**
+   * Cleanup timeouts on component unmount to prevent memory leaks
+   */
+  $effect(() => {
+    return () => {
+      if (debounceTimeout) {
+        clearTimeout(debounceTimeout);
+        debounceTimeout = null;
+      }
+      if (wrapTimeout) {
+        clearTimeout(wrapTimeout);
+        wrapTimeout = null;
+      }
+    };
+  });
+
+  /**
    * Handle input changes with 300ms debounce
    */
   function handleInput(event: Event): void {
@@ -148,8 +164,12 @@
    * Clear search when spans change (new trace loaded)
    */
   $effect(() => {
-    // When spans reference changes, clear search
+    // When spans reference changes, clear search and cancel pending debounce
     if (spans) {
+      if (debounceTimeout) {
+        clearTimeout(debounceTimeout);
+        debounceTimeout = null;
+      }
       inputValue = '';
       clearSearch();
     }

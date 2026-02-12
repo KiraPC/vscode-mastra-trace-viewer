@@ -1,6 +1,6 @@
 # Story 5.3: Navigate Through Search Results
 
-Status: review
+Status: done
 
 ## Story
 
@@ -394,6 +394,13 @@ Claude Opus 4.5
 - Task 5: Added handleKeydown() to TraceSearch with Enter (next), Shift+Enter (prev), and Escape (clear + focus tree) support.
 - Task 6: Added wrapMessage state with 1.5s auto-dismiss toast showing "Wrapped to first/last" using CSS animation.
 - Task 7: All 296 unit tests pass. Compile succeeds with no errors.
+
+### Code Review Fixes Applied
+
+- **CR-1 (MEDIUM)**: Added 6 comprehensive navigation callback tests to searchStore.test.ts covering: next/prev callback scenarios, rapid sequential navigation, wrap-around cycling, single result edge case.
+- **CR-2 (LOW)**: Test count inconsistency - actual count is 351 tests after review additions.
+
+**Post-review tests:** 351 tests passing. Compile clean.
 
 ### File List
 

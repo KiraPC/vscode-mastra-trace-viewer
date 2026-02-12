@@ -8,6 +8,7 @@
   import { formatDuration, getSpanTypeIcon, getSpanTypeColor } from '../../utils/spanTreeBuilder';
   import { expandedSpans, toggleExpand, selectedSpanId, setSelectedSpan } from '../stores/uiStore';
   import { results, currentIndex } from '../stores/searchStore';
+  import { countHiddenMatches, createResultsSet } from '../utils/highlightHelper';
   import SpanNode from './SpanNode.svelte';
   
   interface Props {
@@ -61,45 +62,21 @@
   // Whether to show children (never in virtual mode - handled by virtual list)
   const showChildren = $derived(!virtualMode && hasChildren && isExpanded);
   
-  // Check if this span matches the current search
-  const isMatch = $derived($results.includes(node.spanId));
+  // Create Set from results for O(1) lookups (recalculated when results change)
+  const resultsSet = $derived(createResultsSet($results));
+  
+  // Check if this span matches the current search (O(1) with Set)
+  const isMatch = $derived(resultsSet.has(node.spanId));
   
   // Check if this is the currently focused search result
   const isCurrentMatch = $derived(
     isMatch && $currentIndex >= 0 && $results[$currentIndex] === node.spanId
   );
   
-  /**
-   * Count hidden matches in collapsed children
-   */
-  function countHiddenMatches(
-    children: SpanTreeNode[],
-    searchResults: string[],
-    expanded: Set<string>
-  ): number {
-    if (children.length === 0) return 0;
-    
-    let count = 0;
-    function traverse(nodes: SpanTreeNode[]): void {
-      for (const n of nodes) {
-        if (searchResults.includes(n.spanId)) count++;
-        // Only traverse children if this node is NOT expanded
-        if (n.children.length > 0 && !expanded.has(n.spanId)) {
-          traverse(n.children);
-        } else if (n.children.length > 0 && expanded.has(n.spanId)) {
-          // If expanded, still count but we need to check if children are collapsed
-          traverse(n.children);
-        }
-      }
-    }
-    traverse(children);
-    return count;
-  }
-  
   // Calculate hidden match count when this node is collapsed
   const hiddenMatchCount = $derived(
     !isExpanded && hasChildren 
-      ? countHiddenMatches(node.children, $results, $expandedSpans)
+      ? countHiddenMatches(node.children, $results)
       : 0
   );
 

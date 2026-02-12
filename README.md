@@ -16,6 +16,39 @@ This extension solves both problems: trace visualization directly in VS Code and
 - Search and filter capabilities
 - Multiple trace tab support
 
+## Copilot Integration & Export
+
+### Using Traces with Copilot Chat
+
+There are two ways to share trace data with Copilot:
+
+#### Method 1: Drag via Editor (Recommended for Copilot)
+
+Due to VSCode API limitations, direct drag from TreeView to Copilot Chat is not supported. Use this workaround:
+
+1. Drag a trace from the "Mastra Traces" sidebar into any **text editor**
+2. The trace JSON file path is inserted in the editor
+3. From the editor, drag the opened file's **tab** into Copilot Chat
+4. Copilot will recognize the JSON file and attach it as context
+
+#### Method 2: Copy & Paste
+
+Right-click any trace and select **Copy Trace JSON**, then paste directly into Copilot Chat with Ctrl/Cmd+V.
+
+**Example prompts:**
+- "Analyze this trace and explain what the agent did"
+- "Why did this agent call the tool multiple times?"
+- "Find any errors or unexpected behavior in this trace"
+- "Summarize the LLM calls in this trace"
+
+### Drop into Text Editors
+
+Drag traces directly into any VSCode text editor. The file path to the trace JSON is inserted at the cursor position. The trace is saved as a temporary JSON file that you can open or reference.
+
+### Save as JSON
+
+Right-click any trace or span and select **Save as JSON** to save the data to a file for offline analysis or comparison.
+
 ## Development Setup
 
 ### Prerequisites

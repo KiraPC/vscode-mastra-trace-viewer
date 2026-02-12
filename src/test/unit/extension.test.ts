@@ -38,6 +38,9 @@ vi.mock('vscode', () => ({
     executeCommand: vi.fn(),
     registerCommand: mockRegisterCommand,
   },
+  languages: {
+    registerDocumentDropEditProvider: vi.fn(() => ({ dispose: vi.fn() })),
+  },
   StatusBarAlignment: {
     Left: 1,
   },

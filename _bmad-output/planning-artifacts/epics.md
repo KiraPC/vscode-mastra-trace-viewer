@@ -42,6 +42,12 @@ This document provides the complete epic and story breakdown for mastra-trace-vi
 - Tab navigation via keyboard shortcuts
 - Preservation of expand/collapse state per trace
 
+**FR5: Drag & Drop Export**
+- Drag traces from sidebar TreeView with visual drag indicator
+- Full JSON trace data attached to drag operation
+- Drop into Copilot chat for AI-assisted debugging
+- Drop into VSCode editors/windows to paste trace content
+
 ### Non-Functional Requirements
 
 **NFR1: Performance**
@@ -131,6 +137,12 @@ This document provides the complete epic and story breakdown for mastra-trace-vi
 - Keyboard shortcuts
 - State preservation
 
+**FR5 (Drag & Drop Export):** Epic 6 - Drag & Drop Export
+- Drag traces from sidebar TreeView
+- Full JSON trace data attached to drag
+- Drop into Copilot chat
+- Drop into VSCode editors
+
 ## Epic List
 
 ### Epic 1: Mastra Connection & Extension Foundation
@@ -216,6 +228,24 @@ Developers can search within traces to quickly find specific spans, data, or pat
 - 300ms debouncing for responsive typing
 - Highlight matching spans
 - Prev/Next navigation through results
+
+---
+
+### Epic 6: Drag & Drop Export
+Developers can drag traces from the sidebar and drop them into Copilot chat or VSCode editors to quickly share trace context for AI-assisted debugging.
+
+**User Outcome:** Developers share trace context with Copilot or paste into editors in a single drag-drop action
+
+**FRs covered:** FR5 (Drag & Drop Export)
+
+**NFRs covered:** NFR5 (Developer Workflow - no context switching)
+
+**Implementation Notes:**
+- VSCode TreeDragAndDropController for drag operations
+- Full JSON payload attached via DataTransfer
+- Support for Copilot chat drop target
+- Support for text editor drop targets
+- Visual drag indicator during operation
 
 ---
 
@@ -1193,3 +1223,118 @@ So that I can review all matches systematically.
 **And** Virtual scrolling handles scroll-to-match efficiently
 **And** UI updates are instant and responsive removes all entries
 **And** All cache tests pass
+
+---
+
+## Epic 6: Drag & Drop Export
+
+Developers can drag traces from the sidebar and drop them into Copilot chat or VSCode editors to quickly share trace context for AI-assisted debugging.
+
+### Story 6.1: Implement TreeView Drag Support
+
+As a developer,
+I want to drag a trace item from the sidebar TreeView,
+So that I can quickly transfer trace data to other applications.
+
+**Acceptance Criteria:**
+
+**Given** I have traces displayed in the Mastra Traces sidebar
+**When** I click and hold on a trace item
+**Then** A visual drag indicator appears
+**And** The cursor changes to indicate dragging is active
+**And** The trace item visual feedback shows it is being dragged
+
+**Given** TraceListProvider is implemented
+**When** I implement TreeDragAndDropController interface
+**Then** handleDrag method is called when drag starts
+**And** DataTransfer object is populated with trace data
+**And** dragMimeTypes include 'application/json' and 'text/plain'
+
+**Given** A trace item is being dragged
+**When** The drag starts
+**Then** Full trace JSON is serialized and attached to DataTransfer
+**And** JSON is formatted for readability (pretty-printed)
+**And** Performance remains acceptable for typical trace sizes (50-200 spans)
+
+**Given** Drag is in progress
+**When** I move the cursor over valid drop targets
+**Then** Visual feedback indicates drop is possible
+**And** Extension does not crash or freeze
+**And** Drag operation can be cancelled with ESC
+
+**Given** Drag controller is implemented
+**When** I create unit tests for drag functionality
+**Then** Tests verify DataTransfer contains valid JSON
+**And** Tests verify mime types are correctly set
+**And** All drag tests pass
+
+---
+
+### Story 6.2: Enable Drop into Copilot Chat
+
+As a developer,
+I want to drop a trace into the Copilot chat,
+So that I can get AI-assisted debugging with full trace context.
+
+**Acceptance Criteria:**
+
+**Given** I am dragging a trace item
+**When** I drag over the Copilot chat input area
+**Then** The chat area shows it can accept the drop
+**And** A drop indicator appears
+
+**Given** I am dropping a trace onto Copilot chat
+**When** I release the mouse button over the chat
+**Then** The trace JSON content is inserted into the chat context
+**And** Copilot can analyze the trace data
+**And** A confirmation message appears (e.g., "Trace attached to chat")
+
+**Given** The trace data is large
+**When** I drop it into Copilot
+**Then** The data is transferred completely without truncation
+**And** Performance remains acceptable
+**And** User can proceed to ask questions about the trace
+
+**Given** Copilot integration is working
+**When** I ask "Why did this agent call the tool multiple times?"
+**Then** Copilot can reference the dropped trace data in its response
+**And** The debugging workflow is seamless
+
+---
+
+### Story 6.3: Enable Drop into VSCode Editors
+
+As a developer,
+I want to drop a trace into a VSCode editor or window,
+So that I can paste the trace JSON for analysis or sharing.
+
+**Acceptance Criteria:**
+
+**Given** I am dragging a trace item
+**When** I drag over a VSCode text editor
+**Then** The editor shows it can accept the drop
+**And** A cursor position indicator appears
+
+**Given** I am dropping a trace onto a text editor
+**When** I release the mouse button over the editor
+**Then** The formatted trace JSON is inserted at cursor position
+**And** The JSON is properly indented and readable
+**And** No additional characters or formatting issues appear
+
+**Given** I am dropping onto a new untitled file
+**When** I drop the trace
+**Then** The trace JSON is inserted into the new file
+**And** The file language mode is set to JSON
+**And** Syntax highlighting is applied
+
+**Given** I am dropping onto a markdown file
+**When** I drop the trace
+**Then** The trace JSON is wrapped in a markdown code block
+**And** The code block is marked as JSON for syntax highlighting
+
+**Given** Drop functionality is complete
+**When** All drop targets are tested
+**Then** Copilot chat accepts drops correctly
+**And** Text editors accept drops correctly
+**And** All edge cases handle gracefully (readonly files, etc.)
+**And** User documentation explains drag & drop usage

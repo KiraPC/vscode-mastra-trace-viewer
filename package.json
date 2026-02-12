@@ -45,6 +45,11 @@
         "icon": "$(save)"
       },
       {
+        "command": "mastraTraceViewer.copyTraceJson",
+        "title": "Copy Trace JSON",
+        "icon": "$(copy)"
+      },
+      {
         "command": "mastraTraceViewer.openJson",
         "title": "Open JSON",
         "icon": "$(json)"
@@ -90,6 +95,11 @@
           "group": "inline"
         },
         {
+          "command": "mastraTraceViewer.copyTraceJson",
+          "when": "view == mastraTraceList && viewItem == trace",
+          "group": "1_clipboard"
+        },
+        {
           "command": "mastraTraceViewer.saveAsJson",
           "when": "view == mastraTraceList && viewItem == trace"
         },
@@ -132,7 +142,7 @@
   "devDependencies": {
     "@sveltejs/vite-plugin-svelte": "^6.2.4",
     "@types/mocha": "^10.0.10",
-    "@types/node": "~22.x",
+    "@types/node": "^22.19.11",
     "@types/vscode": "^1.95.0",
     "@typescript-eslint/eslint-plugin": "^8.20.0",
     "@typescript-eslint/parser": "^8.20.0",

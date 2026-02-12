@@ -34,7 +34,7 @@
 # - Dev moves story to 'review', then runs code-review (fresh context, different LLM recommended)
 
 generated: 2026-02-11
-updated: 2026-02-11
+updated: 2026-02-12
 project: mastra-trace-viewer
 project_key: NOKEY
 tracking_system: file-system
@@ -75,8 +75,15 @@ development_status:
   epic-4-retrospective: optional
 
   # Epic 5: Trace Search & Navigation
-  epic-5: in-progress
-  5-1-client-side-search-implementation: review
-  5-2-search-results-highlighting: review
-  5-3-navigate-through-search-results: review
+  epic-5: done
+  5-1-client-side-search-implementation: done
+  5-2-search-results-highlighting: done
+  5-3-navigate-through-search-results: done
   epic-5-retrospective: optional
+
+  # Epic 6: Drag & Drop Export
+  epic-6: done
+  6-1-implement-treeview-drag-support: done
+  6-2-enable-drop-into-copilot-chat: done
+  6-3-enable-drop-into-vscode-editors: done
+  epic-6-retrospective: optional

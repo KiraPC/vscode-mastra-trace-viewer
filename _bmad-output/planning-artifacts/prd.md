@@ -71,6 +71,7 @@ date: '2026-02-10'
 - Time from "run agent" to "understand behavior" is reduced compared to manual export workflows
 - Developers can debug without leaving their primary development environment
 - Context switching between code and traces is eliminated
+- Developers can share trace context with Copilot in a single drag-drop action (no manual copy/export)
 
 **Adoption Success:**
 - Extension is actively used (not just installed)
@@ -103,6 +104,13 @@ date: '2026-02-10'
    - Multiple traces open in separate tabs
    - Standard VSCode tab navigation
    - Search within trace tree
+
+5. **Drag & Drop Export**
+   - Drag traces from sidebar TreeView
+   - Full JSON trace data attached to drag operation
+   - Drop into Copilot chat for AI-assisted debugging
+   - Drop into VSCode editors/windows to paste trace content
+   - Visual drag indicator during operation
 
 **What's NOT in MVP:**
 - No timeline/Gantt view (tree only)

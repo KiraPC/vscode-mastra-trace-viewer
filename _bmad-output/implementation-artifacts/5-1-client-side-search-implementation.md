@@ -1,6 +1,6 @@
 # Story 5.1: Client-Side Search Implementation
 
-Status: review
+Status: done
 
 ## Story
 
@@ -307,6 +307,14 @@ Claude Opus 4.5
 - Task 3: Created TraceSearch.svelte component with search input, 300ms debounce, VSCode CSS variable styling, result count badge, and clear button. Connected to searchStore for reactive updates.
 - Task 4: Integrated TraceSearch into App.svelte above TraceToolbar, passing spans data for search. Component clears search on trace change via $effect.
 - Task 5: All 296 unit tests pass. Compile succeeds with no errors.
+
+### Code Review Fixes Applied
+
+- **CR-1**: Added documentation to `escapeRegexChars` explaining it's a utility for future regex-based search/highlighting features.
+- **CR-2**: Added cleanup $effect in TraceSearch.svelte to clear debounceTimeout and wrapTimeout on component unmount, preventing memory leaks.
+- **CR-3**: Fixed stale search execution on trace change by clearing debounceTimeout when spans change.
+
+**Post-review tests:** 329 tests passing. Compile clean.
 
 ### File List
 

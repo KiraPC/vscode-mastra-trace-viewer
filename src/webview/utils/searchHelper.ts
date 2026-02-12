@@ -90,7 +90,13 @@ function stringifyAndSearch(value: unknown, query: string): boolean {
 
 /**
  * Escape special regex characters in a string
- * Used when query might contain special characters
+ * Utility function for future regex-based search features.
+ * Note: Current searchSpans() uses String.includes() which handles
+ * special characters natively, but this is kept for:
+ * - Potential regex search mode
+ * - Highlighting search matches in UI (story 5.2)
+ * @param str - String to escape
+ * @returns Escaped string safe for use in RegExp
  */
 export function escapeRegexChars(str: string): string {
   return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
