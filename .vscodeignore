@@ -1,11 +1,12 @@
-.vscode/**
-.vscode-test/**
-src/**
-build/**
-.gitignore
-.yarnrc
-vsc-extension-quickstart.md
-**/tsconfig.json
-**/.eslintrc.json
-**/*.map
-**/*.ts
+# Ignore everything by default
+**
+
+# Whitelist files to include
+!package.json
+!README.md
+!LICENSE
+!images/**
+!out/**
+
+# Exclude source maps
+out/**/*.map

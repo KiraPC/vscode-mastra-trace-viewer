@@ -1,13 +1,35 @@
 {
   "name": "mastra-trace-viewer",
   "displayName": "Mastra Trace Viewer",
-  "description": "View and analyze Mastra tracing data in VSCode",
-  "version": "0.0.1",
-  "publisher": "dev",
+  "description": "View and analyze Mastra tracing data directly in VS Code. Visualize agent traces, export to JSON, and integrate with GitHub Copilot for AI-powered trace analysis.",
+  "version": "0.1.0",
+  "publisher": "KiraPC",
+  "license": "MIT",
+  "icon": "images/icon.png",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/KiraPC/vscode-mastra-trace-viewer"
+  },
+  "bugs": {
+    "url": "https://github.com/KiraPC/vscode-mastra-trace-viewer/issues"
+  },
+  "homepage": "https://github.com/KiraPC/vscode-mastra-trace-viewer#readme",
+  "keywords": [
+    "mastra",
+    "trace",
+    "tracing",
+    "observability",
+    "ai",
+    "agent",
+    "llm",
+    "debugging"
+  ],
   "engines": {
     "vscode": "^1.95.0"
   },
   "categories": [
+    "Debuggers",
+    "Visualization",
     "Other"
   ],
   "main": "./out/extension.js",
@@ -125,14 +147,15 @@
     }
   },
   "scripts": {
-    "vscode:prepublish": "npm run package",
+    "vscode:prepublish": "npm run compile",
     "compile": "npm run compile:extension && npm run compile:webview",
     "compile:extension": "esbuild ./src/extension.ts --outfile=out/extension.js --bundle --external:vscode --format=cjs --platform=node --sourcemap",
     "compile:webview": "vite build -c build/vite.config.ts",
     "watch": "concurrently \"npm run watch:extension\" \"npm run watch:webview\"",
     "watch:extension": "esbuild ./src/extension.ts --outfile=out/extension.js --bundle --external:vscode --format=cjs --platform=node --sourcemap --watch",
     "watch:webview": "vite build -c build/vite.config.ts --watch",
-    "package": "npm run compile && vsce package",
+    "package": "vsce package",
+    "publish": "vsce publish",
     "pretest": "npm run compile",
     "lint": "eslint src",
     "test": "vitest",
@@ -149,6 +172,7 @@
     "@vitest/ui": "^4.0.18",
     "@vscode/test-cli": "^0.0.10",
     "@vscode/test-electron": "^2.4.1",
+    "@vscode/vsce": "^3.7.1",
     "concurrently": "^9.1.2",
     "esbuild": "^0.24.2",
     "eslint": "^9.18.0",
