@@ -26,6 +26,9 @@ vi.mock('vscode', () => ({
       inspect: vi.fn(),
     })),
     onDidChangeConfiguration: mockOnDidChangeConfiguration,
+    fs: {
+      createDirectory: vi.fn().mockResolvedValue(undefined),
+    },
   },
   window: {
     showInformationMessage: vi.fn(),
@@ -127,7 +130,8 @@ describe('Extension Activation', () => {
       subscriptions: mockSubscriptions,
       workspaceState: {},
       globalState: {},
-      extensionPath: '/test/path'
+      extensionPath: '/test/path',
+      globalStorageUri: { fsPath: '/test/storage', toString: () => 'file:///test/storage' }
     };
     
     // Should not throw error when called with context
@@ -139,7 +143,8 @@ describe('Extension Activation', () => {
       subscriptions: mockSubscriptions,
       workspaceState: {},
       globalState: {},
-      extensionPath: '/test/path'
+      extensionPath: '/test/path',
+      globalStorageUri: { fsPath: '/test/storage', toString: () => 'file:///test/storage' }
     };
 
     await activate(mockContext as any);
@@ -153,7 +158,8 @@ describe('Extension Activation', () => {
       subscriptions: mockSubscriptions,
       workspaceState: {},
       globalState: {},
-      extensionPath: '/test/path'
+      extensionPath: '/test/path',
+      globalStorageUri: { fsPath: '/test/storage', toString: () => 'file:///test/storage' }
     };
 
     await activate(mockContext as any);

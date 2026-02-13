@@ -41,7 +41,10 @@ export async function activate(context: vscode.ExtensionContext) {
 
 	// Create trace list provider and register view
 	traceListProvider = new TraceListProvider(apiClient);
-	const dragController = new TraceDragController(traceListProvider);
+	
+	// Ensure globalStorageUri directory exists for drag temp files
+	await vscode.workspace.fs.createDirectory(context.globalStorageUri);
+	const dragController = new TraceDragController(traceListProvider, context.globalStorageUri);
 	const treeView = vscode.window.createTreeView('mastraTraceList', {
 		treeDataProvider: traceListProvider,
 		dragAndDropController: dragController,
@@ -56,7 +59,6 @@ export async function activate(context: vscode.ExtensionContext) {
 		{ scheme: '*', language: '*' },
 		dropProvider,
 		{
-			id: 'mastra-trace-viewer.traceDropProvider',
 			dropMimeTypes: TraceDropEditProvider.mimeTypes as string[]
 		}
 	);

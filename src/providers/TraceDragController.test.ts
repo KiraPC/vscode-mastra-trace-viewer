@@ -8,15 +8,11 @@ import { TraceDragController } from './TraceDragController';
 import { TraceTreeItem } from './TraceListProvider';
 import type { Trace, Span } from '../models/trace.types';
 
-// Mock os module
-vi.mock('os', () => ({
-  tmpdir: vi.fn(() => '/tmp'),
-}));
-
-// Mock path module
-vi.mock('path', () => ({
-  join: vi.fn((...args: string[]) => args.join('/')),
-}));
+// Mock storage URI for tests
+const mockStorageUri = {
+  fsPath: '/mock/storage',
+  toString: () => 'file:///mock/storage',
+};
 
 // Mock vscode module
 vi.mock('vscode', () => ({
@@ -56,6 +52,13 @@ vi.mock('vscode', () => ({
       fsPath: path, 
       toString: () => `file://${path}` 
     })),
+    joinPath: vi.fn((base: { fsPath: string }, ...segments: string[]) => {
+      const path = [base.fsPath, ...segments].join('/');
+      return {
+        fsPath: path,
+        toString: () => `file://${path}`,
+      };
+    }),
   },
   workspace: {
     fs: {
@@ -127,49 +130,49 @@ describe('TraceDragController', () => {
   describe('dragMimeTypes', () => {
     it('should define files for native file drag', () => {
       const mockProvider = createMockProvider();
-      const controller = new TraceDragController(mockProvider as any);
+      const controller = new TraceDragController(mockProvider as any, mockStorageUri as any);
       
       expect(controller.dragMimeTypes).toContain('files');
     });
 
     it('should define resourceurls for VSCode explorer format', () => {
       const mockProvider = createMockProvider();
-      const controller = new TraceDragController(mockProvider as any);
+      const controller = new TraceDragController(mockProvider as any, mockStorageUri as any);
       
       expect(controller.dragMimeTypes).toContain('resourceurls');
     });
 
     it('should define application/vnd.code.uri-list for VSCode internal use', () => {
       const mockProvider = createMockProvider();
-      const controller = new TraceDragController(mockProvider as any);
+      const controller = new TraceDragController(mockProvider as any, mockStorageUri as any);
       
       expect(controller.dragMimeTypes).toContain('application/vnd.code.uri-list');
     });
 
     it('should define correct dragMimeTypes including text/uri-list', () => {
       const mockProvider = createMockProvider();
-      const controller = new TraceDragController(mockProvider as any);
+      const controller = new TraceDragController(mockProvider as any, mockStorageUri as any);
       
       expect(controller.dragMimeTypes).toContain('text/uri-list');
     });
 
     it('should define application/json for JSON content', () => {
       const mockProvider = createMockProvider();
-      const controller = new TraceDragController(mockProvider as any);
+      const controller = new TraceDragController(mockProvider as any, mockStorageUri as any);
       
       expect(controller.dragMimeTypes).toContain('application/json');
     });
 
     it('should define correct dragMimeTypes including text/plain', () => {
       const mockProvider = createMockProvider();
-      const controller = new TraceDragController(mockProvider as any);
+      const controller = new TraceDragController(mockProvider as any, mockStorageUri as any);
       
       expect(controller.dragMimeTypes).toContain('text/plain');
     });
 
     it('should have exactly 6 mime types', () => {
       const mockProvider = createMockProvider();
-      const controller = new TraceDragController(mockProvider as any);
+      const controller = new TraceDragController(mockProvider as any, mockStorageUri as any);
       
       expect(controller.dragMimeTypes).toHaveLength(6);
     });
@@ -178,7 +181,7 @@ describe('TraceDragController', () => {
   describe('dropMimeTypes', () => {
     it('should define empty dropMimeTypes (drag-only)', () => {
       const mockProvider = createMockProvider();
-      const controller = new TraceDragController(mockProvider as any);
+      const controller = new TraceDragController(mockProvider as any, mockStorageUri as any);
       
       expect(controller.dropMimeTypes).toEqual([]);
     });
@@ -187,7 +190,7 @@ describe('TraceDragController', () => {
   describe('handleDrag', () => {
     it('should create temp file and populate DataTransfer with file path', async () => {
       const mockProvider = createMockProvider(testTrace);
-      const controller = new TraceDragController(mockProvider as any);
+      const controller = new TraceDragController(mockProvider as any, mockStorageUri as any);
       const dataTransfer = createMockDataTransfer();
       const token = createMockCancellationToken();
 
@@ -206,16 +209,16 @@ describe('TraceDragController', () => {
         expect.objectContaining({ value: expect.stringContaining('file://') })
       );
 
-      // Verify DataTransfer.set was called for text/plain with file path
+      // Verify DataTransfer.set was called for text/plain with file path (using extension storage)
       expect(dataTransfer.set).toHaveBeenCalledWith(
         'text/plain',
-        expect.objectContaining({ value: expect.stringContaining('/tmp/') })
+        expect.objectContaining({ value: expect.stringContaining('/mock/storage/') })
       );
     });
 
     it('should use trace ID in filename', async () => {
       const mockProvider = createMockProvider(testTrace);
-      const controller = new TraceDragController(mockProvider as any);
+      const controller = new TraceDragController(mockProvider as any, mockStorageUri as any);
       const dataTransfer = createMockDataTransfer();
       const token = createMockCancellationToken();
 
@@ -238,7 +241,7 @@ describe('TraceDragController', () => {
         spans: [{ traceId: testTraceId, spanId: 'span-1', parentSpanId: null, name: 'root', spanType: 'agent_run', startedAt: '' }],
       };
       const mockProvider = createMockProvider(incompleteTrace, testTrace);
-      const controller = new TraceDragController(mockProvider as any);
+      const controller = new TraceDragController(mockProvider as any, mockStorageUri as any);
       const dataTransfer = createMockDataTransfer();
       const token = createMockCancellationToken();
 
@@ -251,7 +254,7 @@ describe('TraceDragController', () => {
 
     it('should skip non-trace items (span items)', async () => {
       const mockProvider = createMockProvider(testTrace);
-      const controller = new TraceDragController(mockProvider as any);
+      const controller = new TraceDragController(mockProvider as any, mockStorageUri as any);
       const dataTransfer = createMockDataTransfer();
       const token = createMockCancellationToken();
 
@@ -274,7 +277,7 @@ describe('TraceDragController', () => {
 
     it('should skip load-more items', async () => {
       const mockProvider = createMockProvider(testTrace);
-      const controller = new TraceDragController(mockProvider as any);
+      const controller = new TraceDragController(mockProvider as any, mockStorageUri as any);
       const dataTransfer = createMockDataTransfer();
       const token = createMockCancellationToken();
 
@@ -294,7 +297,7 @@ describe('TraceDragController', () => {
 
     it('should handle missing trace gracefully', async () => {
       const mockProvider = createMockProvider(undefined, undefined);
-      const controller = new TraceDragController(mockProvider as any);
+      const controller = new TraceDragController(mockProvider as any, mockStorageUri as any);
       const dataTransfer = createMockDataTransfer();
       const token = createMockCancellationToken();
 
@@ -310,7 +313,7 @@ describe('TraceDragController', () => {
 
     it('should respect cancellation token', async () => {
       const mockProvider = createMockProvider(undefined, testTrace);
-      const controller = new TraceDragController(mockProvider as any);
+      const controller = new TraceDragController(mockProvider as any, mockStorageUri as any);
       const dataTransfer = createMockDataTransfer();
       const token = createMockCancellationToken(true); // cancelled
 
@@ -323,7 +326,7 @@ describe('TraceDragController', () => {
 
     it('should handle empty source array', async () => {
       const mockProvider = createMockProvider(testTrace);
-      const controller = new TraceDragController(mockProvider as any);
+      const controller = new TraceDragController(mockProvider as any, mockStorageUri as any);
       const dataTransfer = createMockDataTransfer();
       const token = createMockCancellationToken();
 
@@ -334,7 +337,7 @@ describe('TraceDragController', () => {
     it('should use first trace item when multiple are selected', async () => {
       const trace2: Trace = { traceId: 'trace-2', spans: [] };
       const mockProvider = createMockProvider(testTrace);
-      const controller = new TraceDragController(mockProvider as any);
+      const controller = new TraceDragController(mockProvider as any, mockStorageUri as any);
       const dataTransfer = createMockDataTransfer();
       const token = createMockCancellationToken();
 
@@ -352,7 +355,7 @@ describe('TraceDragController', () => {
   describe('handleDrop', () => {
     it('should return undefined (no drop support)', () => {
       const mockProvider = createMockProvider();
-      const controller = new TraceDragController(mockProvider as any);
+      const controller = new TraceDragController(mockProvider as any, mockStorageUri as any);
       
       const result = controller.handleDrop();
       expect(result).toBeUndefined();

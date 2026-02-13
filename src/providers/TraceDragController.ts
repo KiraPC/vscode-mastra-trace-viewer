@@ -4,8 +4,6 @@
  */
 
 import * as vscode from 'vscode';
-import * as os from 'os';
-import * as path from 'path';
 import { TraceTreeItem } from './TraceListProvider';
 import type { TraceListProvider } from './TraceListProvider';
 
@@ -39,7 +37,14 @@ export class TraceDragController implements vscode.TreeDragAndDropController<Tra
     'text/plain'
   ];
 
-  constructor(private traceListProvider: TraceListProvider) {}
+  private storageUri: vscode.Uri;
+
+  constructor(
+    private traceListProvider: TraceListProvider,
+    storageUri: vscode.Uri
+  ) {
+    this.storageUri = storageUri;
+  }
 
   /**
    * Handle drag operation by creating a temp JSON file and populating DataTransfer
@@ -92,11 +97,10 @@ export class TraceDragController implements vscode.TreeDragAndDropController<Tra
       // Serialize trace to pretty-printed JSON (2-space indent)
       const jsonString = JSON.stringify(fullTrace, null, 2);
 
-      // Create temp file with trace JSON
-      const tempDir = os.tmpdir();
+      // Create file in extension storage (guaranteed to be accessible by VSCode)
       const fileName = `trace-${traceId.slice(0, 8)}.json`;
-      const filePath = path.join(tempDir, fileName);
-      const fileUri = vscode.Uri.file(filePath);
+      const fileUri = vscode.Uri.joinPath(this.storageUri, fileName);
+      const filePath = fileUri.fsPath;
 
       // Write JSON to temp file
       await vscode.workspace.fs.writeFile(fileUri, Buffer.from(jsonString, 'utf-8'));
