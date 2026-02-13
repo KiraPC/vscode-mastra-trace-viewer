@@ -16,6 +16,30 @@ This extension solves both problems: trace visualization directly in VS Code and
 - Search and filter capabilities
 - Multiple trace tab support
 
+## Configuration
+
+The extension can be configured via VS Code settings. Open settings (`Cmd+,` on macOS, `Ctrl+,` on Windows/Linux) and search for "Mastra".
+
+| Setting | Default | Description |
+|---------|---------|-------------|
+| `mastraTraceViewer.endpoint` | `http://localhost:4100` | The URL of your Mastra instance for trace retrieval. Use `http://localhost:4111` for local development or your remote Mastra URL for deployed instances. |
+
+**Example configurations:**
+
+```json
+{
+  "mastraTraceViewer.endpoint": "http://localhost:4111"
+}
+```
+
+For remote instances:
+
+```json
+{
+  "mastraTraceViewer.endpoint": "https://mastra.example.com"
+}
+```
+
 ## Copilot Integration & Export
 
 ### Using Traces with Copilot Chat
