@@ -41,17 +41,17 @@ const createMockDocument = (overrides: Partial<{
   ...overrides,
 });
 
-// Create mock DataTransfer with file path
+// Create mock DataTransfer with JSON content
 const createMockDataTransfer = (
-  filePath?: string,
-  options: { useUriList?: boolean } = { useUriList: true }
+  jsonContent?: string,
+  options: { useJson?: boolean } = { useJson: true }
 ) => {
   const data = new Map<string, { asString: () => Promise<string> }>();
-  if (filePath !== undefined) {
-    if (options.useUriList) {
-      data.set('text/uri-list', { asString: async () => `file://${filePath}` });
+  if (jsonContent !== undefined) {
+    if (options.useJson) {
+      data.set('application/json', { asString: async () => jsonContent });
     }
-    data.set('text/plain', { asString: async () => filePath });
+    data.set('text/plain', { asString: async () => jsonContent });
   }
   return {
     get: (mimeType: string) => data.get(mimeType),
@@ -71,7 +71,7 @@ const createMockPosition = (line = 0, character = 0) => ({
 });
 
 describe('TraceDropEditProvider', () => {
-  const testFilePath = '/tmp/trace-test1234.json';
+  const testJsonContent = '{"traceId": "test-123", "spans": []}';
 
   let provider: TraceDropEditProvider;
 
@@ -85,8 +85,8 @@ describe('TraceDropEditProvider', () => {
   });
 
   describe('mimeTypes', () => {
-    it('should expose text/uri-list mime type', () => {
-      expect(TraceDropEditProvider.mimeTypes).toContain('text/uri-list');
+    it('should expose application/json mime type', () => {
+      expect(TraceDropEditProvider.mimeTypes).toContain('application/json');
     });
 
     it('should expose text/plain mime type', () => {
@@ -99,10 +99,10 @@ describe('TraceDropEditProvider', () => {
   });
 
   describe('provideDocumentDropEdits', () => {
-    it('should return DocumentDropEdit with file path for text files', async () => {
+    it('should return DocumentDropEdit with JSON content for text files', async () => {
       const document = createMockDocument({ languageId: 'plaintext' });
       const position = createMockPosition();
-      const dataTransfer = createMockDataTransfer(testFilePath);
+      const dataTransfer = createMockDataTransfer(testJsonContent);
       const token = createMockCancellationToken();
 
       const result = await provider.provideDocumentDropEdits(
@@ -113,14 +113,14 @@ describe('TraceDropEditProvider', () => {
       );
 
       expect(result).toBeDefined();
-      expect(result?.insertText).toBe(testFilePath);
-      expect(result?.title).toBe('Insert Trace File Path');
+      expect(result?.insertText).toBe(testJsonContent);
+      expect(result?.title).toBe('Insert Trace JSON');
     });
 
-    it('should return file path for markdown files', async () => {
+    it('should return JSON content for markdown files', async () => {
       const document = createMockDocument({ languageId: 'markdown' });
       const position = createMockPosition();
-      const dataTransfer = createMockDataTransfer(testFilePath);
+      const dataTransfer = createMockDataTransfer(testJsonContent);
       const token = createMockCancellationToken();
 
       const result = await provider.provideDocumentDropEdits(
@@ -131,13 +131,13 @@ describe('TraceDropEditProvider', () => {
       );
 
       expect(result).toBeDefined();
-      expect(result?.insertText).toBe(testFilePath);
+      expect(result?.insertText).toBe(testJsonContent);
     });
 
-    it('should return file path for JSON files', async () => {
+    it('should return JSON content for JSON files', async () => {
       const document = createMockDocument({ languageId: 'json' });
       const position = createMockPosition();
-      const dataTransfer = createMockDataTransfer(testFilePath);
+      const dataTransfer = createMockDataTransfer(testJsonContent);
       const token = createMockCancellationToken();
 
       const result = await provider.provideDocumentDropEdits(
@@ -148,13 +148,13 @@ describe('TraceDropEditProvider', () => {
       );
 
       expect(result).toBeDefined();
-      expect(result?.insertText).toBe(testFilePath);
+      expect(result?.insertText).toBe(testJsonContent);
     });
 
     it('should handle untitled documents', async () => {
       const document = createMockDocument({ isUntitled: true, languageId: 'plaintext' });
       const position = createMockPosition();
-      const dataTransfer = createMockDataTransfer(testFilePath);
+      const dataTransfer = createMockDataTransfer(testJsonContent);
       const token = createMockCancellationToken();
 
       const result = await provider.provideDocumentDropEdits(
@@ -165,7 +165,7 @@ describe('TraceDropEditProvider', () => {
       );
 
       expect(result).toBeDefined();
-      expect(result?.insertText).toBe(testFilePath);
+      expect(result?.insertText).toBe(testJsonContent);
     });
 
     it('should return undefined for empty dataTransfer', async () => {
@@ -187,7 +187,7 @@ describe('TraceDropEditProvider', () => {
     it('should respect cancellation token', async () => {
       const document = createMockDocument();
       const position = createMockPosition();
-      const dataTransfer = createMockDataTransfer(testFilePath);
+      const dataTransfer = createMockDataTransfer(testJsonContent);
       const token = createMockCancellationToken(true); // Cancelled
 
       const result = await provider.provideDocumentDropEdits(
@@ -200,14 +200,14 @@ describe('TraceDropEditProvider', () => {
       expect(result).toBeUndefined();
     });
 
-    it('should prefer text/uri-list over text/plain', async () => {
+    it('should prefer application/json over text/plain', async () => {
       const document = createMockDocument();
       const position = createMockPosition();
       
       // DataTransfer with both mime types
       const data = new Map<string, { asString: () => Promise<string> }>();
-      data.set('text/uri-list', { asString: async () => 'file:///uri/list/path.json' });
-      data.set('text/plain', { asString: async () => '/plain/text/path.json' });
+      data.set('application/json', { asString: async () => '{"from": "json"}' });
+      data.set('text/plain', { asString: async () => '{"from": "plain"}' });
       
       const dataTransfer = {
         get: (mimeType: string) => data.get(mimeType),
@@ -222,13 +222,13 @@ describe('TraceDropEditProvider', () => {
       );
 
       expect(result).toBeDefined();
-      expect(result?.insertText).toContain('/uri/list/path.json');
+      expect(result?.insertText).toBe('{"from": "json"}');
     });
 
-    it('should fall back to text/plain if text/uri-list missing', async () => {
+    it('should fall back to text/plain if application/json missing', async () => {
       const document = createMockDocument();
       const position = createMockPosition();
-      const dataTransfer = createMockDataTransfer(testFilePath, { useUriList: false });
+      const dataTransfer = createMockDataTransfer(testJsonContent, { useJson: false });
       const token = createMockCancellationToken();
 
       const result = await provider.provideDocumentDropEdits(
@@ -239,7 +239,7 @@ describe('TraceDropEditProvider', () => {
       );
 
       expect(result).toBeDefined();
-      expect(result?.insertText).toBe(testFilePath);
+      expect(result?.insertText).toBe(testJsonContent);
     });
   });
 });

@@ -2,7 +2,7 @@
   "name": "mastra-trace-viewer",
   "displayName": "Mastra Trace Viewer",
   "description": "View and analyze Mastra tracing data directly in VS Code. Visualize agent traces, export to JSON, and integrate with GitHub Copilot for AI-powered trace analysis.",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "publisher": "KiraPC",
   "license": "MIT",
   "icon": "images/icon.png",

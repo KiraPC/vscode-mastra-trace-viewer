@@ -13,7 +13,7 @@ export class TraceDropEditProvider implements vscode.DocumentDropEditProvider {
   /**
    * MIME types this provider can handle
    */
-  static readonly mimeTypes: readonly string[] = ['text/uri-list', 'text/plain'];
+  static readonly mimeTypes: readonly string[] = ['application/json', 'text/plain'];
 
   /**
    * Provide document drop edits when a trace file is dropped onto an editor
@@ -28,25 +28,16 @@ export class TraceDropEditProvider implements vscode.DocumentDropEditProvider {
     dataTransfer: vscode.DataTransfer,
     token: vscode.CancellationToken
   ): Promise<vscode.DocumentDropEdit | undefined> {
-    // Extract file path from DataTransfer
-    const uriListItem = dataTransfer.get('text/uri-list');
+    // Try to get JSON content directly (most reliable for remote environments)
+    const jsonItem = dataTransfer.get('application/json');
     const plainTextItem = dataTransfer.get('text/plain');
     
-    let filePath: string | undefined;
+    let content: string | undefined;
     
-    if (uriListItem) {
-      const uriString = await uriListItem.asString();
-      if (uriString) {
-        // Parse file:// URI to get path
-        try {
-          const uri = vscode.Uri.parse(uriString);
-          filePath = uri.fsPath;
-        } catch {
-          filePath = uriString;
-        }
-      }
+    if (jsonItem) {
+      content = await jsonItem.asString();
     } else if (plainTextItem) {
-      filePath = await plainTextItem.asString();
+      content = await plainTextItem.asString();
     }
 
     // Check cancellation after async operation
@@ -54,14 +45,14 @@ export class TraceDropEditProvider implements vscode.DocumentDropEditProvider {
       return undefined;
     }
 
-    // Validate we have a file path
-    if (!filePath) {
+    // Validate we have content
+    if (!content) {
       return undefined;
     }
 
-    // Insert file path for all file types
-    const dropEdit = new vscode.DocumentDropEdit(filePath);
-    dropEdit.title = 'Insert Trace File Path';
+    // Insert JSON content directly
+    const dropEdit = new vscode.DocumentDropEdit(content);
+    dropEdit.title = 'Insert Trace JSON';
     return dropEdit;
   }
 }

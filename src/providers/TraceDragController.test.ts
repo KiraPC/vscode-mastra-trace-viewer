@@ -11,6 +11,8 @@ import type { Trace, Span } from '../models/trace.types';
 // Mock storage URI for tests
 const mockStorageUri = {
   fsPath: '/mock/storage',
+  path: '/mock/storage',
+  scheme: 'file',
   toString: () => 'file:///mock/storage',
 };
 
@@ -48,17 +50,31 @@ vi.mock('vscode', () => ({
     }
   },
   Uri: {
-    file: vi.fn((path: string) => ({ 
-      fsPath: path, 
-      toString: () => `file://${path}` 
+    file: vi.fn((filePath: string) => ({
+      fsPath: filePath,
+      path: filePath,
+      scheme: 'file',
+      toString: () => `file://${filePath}`,
     })),
     joinPath: vi.fn((base: { fsPath: string }, ...segments: string[]) => {
       const path = [base.fsPath, ...segments].join('/');
       return {
         fsPath: path,
+        path: path,
+        scheme: 'file',
         toString: () => `file://${path}`,
       };
     }),
+    from: vi.fn((components: { scheme: string; authority: string; path: string }) => ({
+      scheme: components.scheme,
+      authority: components.authority,
+      path: components.path,
+      fsPath: components.path,
+      toString: () => `${components.scheme}://${components.authority}${components.path}`,
+    })),
+  },
+  env: {
+    remoteName: undefined,
   },
   workspace: {
     fs: {
@@ -128,28 +144,7 @@ describe('TraceDragController', () => {
   });
 
   describe('dragMimeTypes', () => {
-    it('should define files for native file drag', () => {
-      const mockProvider = createMockProvider();
-      const controller = new TraceDragController(mockProvider as any, mockStorageUri as any);
-      
-      expect(controller.dragMimeTypes).toContain('files');
-    });
-
-    it('should define resourceurls for VSCode explorer format', () => {
-      const mockProvider = createMockProvider();
-      const controller = new TraceDragController(mockProvider as any, mockStorageUri as any);
-      
-      expect(controller.dragMimeTypes).toContain('resourceurls');
-    });
-
-    it('should define application/vnd.code.uri-list for VSCode internal use', () => {
-      const mockProvider = createMockProvider();
-      const controller = new TraceDragController(mockProvider as any, mockStorageUri as any);
-      
-      expect(controller.dragMimeTypes).toContain('application/vnd.code.uri-list');
-    });
-
-    it('should define correct dragMimeTypes including text/uri-list', () => {
+    it('should define text/uri-list for file URI drag', () => {
       const mockProvider = createMockProvider();
       const controller = new TraceDragController(mockProvider as any, mockStorageUri as any);
       
@@ -163,18 +158,18 @@ describe('TraceDragController', () => {
       expect(controller.dragMimeTypes).toContain('application/json');
     });
 
-    it('should define correct dragMimeTypes including text/plain', () => {
+    it('should define text/plain for plain text fallback', () => {
       const mockProvider = createMockProvider();
       const controller = new TraceDragController(mockProvider as any, mockStorageUri as any);
       
       expect(controller.dragMimeTypes).toContain('text/plain');
     });
 
-    it('should have exactly 6 mime types', () => {
+    it('should have exactly 3 mime types', () => {
       const mockProvider = createMockProvider();
       const controller = new TraceDragController(mockProvider as any, mockStorageUri as any);
       
-      expect(controller.dragMimeTypes).toHaveLength(6);
+      expect(controller.dragMimeTypes).toHaveLength(3);
     });
   });
 
@@ -209,10 +204,10 @@ describe('TraceDragController', () => {
         expect.objectContaining({ value: expect.stringContaining('file://') })
       );
 
-      // Verify DataTransfer.set was called for text/plain with file path (using extension storage)
+      // Verify DataTransfer.set was called for text/plain with JSON content (for remote compatibility)
       expect(dataTransfer.set).toHaveBeenCalledWith(
         'text/plain',
-        expect.objectContaining({ value: expect.stringContaining('/mock/storage/') })
+        expect.objectContaining({ value: expect.stringContaining('traceId') })
       );
     });
 
@@ -225,13 +220,13 @@ describe('TraceDragController', () => {
       const treeItem = new TraceTreeItem('test-trace', 0, testTrace);
       await controller.handleDrag([treeItem], dataTransfer as any, token as any);
 
-      // Get the file path that was set
-      const plainItem = dataTransfer.getData().get('text/plain');
-      expect(plainItem).toBeDefined();
+      // Get the URI that was set
+      const uriItem = dataTransfer.getData().get('text/uri-list');
+      expect(uriItem).toBeDefined();
       
-      // Should contain first 8 chars of trace ID
-      expect(plainItem!.value).toContain('trace-test-tra');
-      expect(plainItem!.value).toContain('.json');
+      // Should contain first 8 chars of trace ID in filename
+      expect(uriItem!.value).toContain('trace-test-tra');
+      expect(uriItem!.value).toContain('.json');
     });
 
     it('should fetch full trace if cache has incomplete data', async () => {

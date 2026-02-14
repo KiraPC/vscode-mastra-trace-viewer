@@ -10,7 +10,7 @@ import type { TraceListProvider } from './TraceListProvider';
 /**
  * Controller implementing drag support for trace items in the TreeView.
  * Enables dragging traces to Copilot chat, text editors, and other drop targets.
- * Creates temporary JSON files for drag operations.
+ * Uses extension globalStorageUri for file storage (works in remote environments).
  */
 export class TraceDragController implements vscode.TreeDragAndDropController<TraceTreeItem> {
   /**
@@ -20,18 +20,12 @@ export class TraceDragController implements vscode.TreeDragAndDropController<Tra
 
   /**
    * MIME types provided during drag operations
-   * Multiple formats for compatibility with different drop targets:
-   * - files: Native file drag format
-   * - resourceurls: VSCode explorer format (JSON array of URIs)
-   * - application/vnd.code.uri-list: VSCode internal URI format
-   * - text/uri-list: Standard file URI for editors
+   * Multiple formats for maximum compatibility:
+   * - text/uri-list: File URI for drop targets that open files
    * - application/json: JSON content directly
-   * - text/plain: File path as plain text
+   * - text/plain: JSON content as plain text fallback
    */
   readonly dragMimeTypes: readonly string[] = [
-    'files',
-    'resourceurls',
-    'application/vnd.code.uri-list', 
     'text/uri-list',
     'application/json', 
     'text/plain'
@@ -97,32 +91,37 @@ export class TraceDragController implements vscode.TreeDragAndDropController<Tra
       // Serialize trace to pretty-printed JSON (2-space indent)
       const jsonString = JSON.stringify(fullTrace, null, 2);
 
-      // Create file in extension storage (guaranteed to be accessible by VSCode)
+      // Create file in extension globalStorageUri (guaranteed to work in remote environments)
       const fileName = `trace-${traceId.slice(0, 8)}.json`;
       const fileUri = vscode.Uri.joinPath(this.storageUri, fileName);
-      const filePath = fileUri.fsPath;
-
-      // Write JSON to temp file
+      
+      // Write file using vscode.workspace.fs (handles remote file systems correctly)
       await vscode.workspace.fs.writeFile(fileUri, Buffer.from(jsonString, 'utf-8'));
 
-      // Set file URI for drag in multiple formats for maximum compatibility
+      // Build correct URI for remote environments
+      let uriForDrop: string;
+      if (vscode.env.remoteName && fileUri.scheme === 'file') {
+        // In remote environment with file:// scheme, construct vscode-remote URI
+        const remoteUri = vscode.Uri.from({
+          scheme: 'vscode-remote',
+          authority: `${vscode.env.remoteName}+default`,
+          path: fileUri.path,
+        });
+        uriForDrop = remoteUri.toString();
+      } else {
+        uriForDrop = fileUri.toString();
+      }
+
+      // Set file URI for drop targets that want to open files
+      dataTransfer.set('text/uri-list', new vscode.DataTransferItem(uriForDrop));
       
-      // VSCode explorer format (resourceurls) - JSON array of URIs
-      dataTransfer.set('resourceurls', new vscode.DataTransferItem(JSON.stringify([fileUri.toString()])));
-      
-      // VSCode internal format (for Copilot Chat and other VSCode features)
-      dataTransfer.set('application/vnd.code.uri-list', new vscode.DataTransferItem(fileUri.toString()));
-      
-      // Standard URI list format
-      dataTransfer.set('text/uri-list', new vscode.DataTransferItem(fileUri.toString()));
-      
-      // Include JSON content directly as fallback
+      // Also include JSON content directly for providers that prefer content
       dataTransfer.set('application/json', new vscode.DataTransferItem(jsonString));
-      
-      // Plain text fallback with file path
-      dataTransfer.set('text/plain', new vscode.DataTransferItem(filePath));
-    } catch {
-      // Silently fail on errors - don't crash drag operation
+      dataTransfer.set('text/plain', new vscode.DataTransferItem(jsonString));
+    } catch (error) {
+      // Show error message to user
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+      vscode.window.showErrorMessage(`Failed to create trace file for drag: ${errorMessage}`);
       return;
     }
   }
