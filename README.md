@@ -168,7 +168,7 @@ Extension activates only when the Mastra Traces view is opened (`onView:mastraTr
 
 ## Contributing
 
-See [CONTRIBUTING.md](CONTRIBUTING.md) for development guidelines and coding standards.
+Contributions are welcome! Fork the repo, create a feature branch, and submit a pull request.
 
 ## License
 
